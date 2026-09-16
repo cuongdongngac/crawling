@@ -53,7 +53,7 @@ export default async function ResearcherDetailPage(props: any) {
             <div>
               <h1 className="text-2xl font-bold text-stone-900 flex items-center gap-2">
                 {user.email}
-                {isOpsAdmin && <ShieldCheck className="w-5 h-5 text-amber-600" title="Quản trị viên" />}
+                {isOpsAdmin && <ShieldCheck className="w-5 h-5 text-amber-600" />}
               </h1>
               <div className="text-sm text-stone-500 mt-1">ID: <span className="font-mono bg-stone-100 px-1.5 rounded">{user.id}</span></div>
             </div>

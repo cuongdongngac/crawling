@@ -48,7 +48,7 @@ export default async function ResearchersPage() {
                         <div>
                           <div className="font-semibold text-stone-900 flex items-center gap-2">
                             {user?.email || 'Unknown'}
-                            {user?.is_admin && <ShieldCheck className="w-3.5 h-3.5 text-amber-600" title="Quản trị viên" />}
+                            {user?.is_admin && <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />}
                           </div>
                           <div className="text-xs text-stone-500">ID: {user?.id?.slice(0,8)}</div>
                         </div>
