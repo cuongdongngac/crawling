@@ -3,7 +3,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
-// Helper để lấy Admin Client
 async function getAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceRoleKey) throw new Error("Missing Service Role Key");
@@ -26,7 +25,6 @@ export async function adminCreateUser(formData: FormData) {
 
   try {
     const adminClient = await getAdminClient();
-
     const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
       email,
       password,
@@ -49,6 +47,7 @@ export async function adminCreateUser(formData: FormData) {
     }
 
     revalidatePath("/dashboard/users");
+    revalidatePath("/dashboard/researchers");
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
@@ -66,6 +65,7 @@ export async function changeUserRole(userId: string, isAdmin: boolean) {
     if (error) return { error: error.message };
 
     revalidatePath("/dashboard/users");
+    revalidatePath("/dashboard/researchers");
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
@@ -75,14 +75,12 @@ export async function changeUserRole(userId: string, isAdmin: boolean) {
 export async function deleteUser(userId: string) {
   try {
     const adminClient = await getAdminClient();
-    
-    // Auth admin delete automatically cascades to profiles if ON DELETE CASCADE is set
-    // But let's delete auth user directly
     const { error } = await adminClient.auth.admin.deleteUser(userId);
 
     if (error) return { error: error.message };
 
     revalidatePath("/dashboard/users");
+    revalidatePath("/dashboard/researchers");
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
@@ -97,7 +95,6 @@ export async function resetUserPassword(userId: string, newPassword: string) {
     });
 
     if (error) return { error: error.message };
-
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
@@ -107,8 +104,6 @@ export async function resetUserPassword(userId: string, newPassword: string) {
 export async function fetchUsers() {
   try {
     const supabase = await createClient();
-    
-    // Check if the caller is an admin
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return [];
 
@@ -120,7 +115,6 @@ export async function fetchUsers() {
 
     if (!profile?.is_admin) return [];
 
-    // Use adminClient to bypass RLS and fetch all users
     const adminClient = await getAdminClient();
     const { data, error } = await adminClient
       .from("profiles")
@@ -132,5 +126,23 @@ export async function fetchUsers() {
   } catch (error) {
     console.error(error);
     return [];
+  }
+}
+
+export async function updateAssignedScope(userId: string, assignedScope: any) {
+  try {
+    const adminClient = await getAdminClient();
+    const { error } = await adminClient
+      .from("profiles")
+      .update({ assigned_scope: assignedScope })
+      .eq("id", userId);
+
+    if (error) return { error: error.message };
+
+    revalidatePath(`/dashboard/researchers/${userId}`);
+    revalidatePath("/dashboard/researchers");
+    return { success: true };
+  } catch (error: any) {
+    return { error: error.message };
   }
 }

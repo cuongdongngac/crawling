@@ -7,7 +7,9 @@ import {
   LogOut,
   UserCircle,
   Users,
-  Tags
+  Tags,
+  Database,
+  Settings
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -77,7 +79,15 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     <Users className="size-4" />
-                    Quản lý Người dùng
+                    Quản trị Hệ thống (IT)
+                  </Link>
+                  <Link
+                    href="/dashboard/researchers"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
+                  >
+                    <UserCircle className="size-4" />
+                    Giám sát & Phân công
                   </Link>
                   <Link
                     href="/dashboard/hashtag-groups"
@@ -95,19 +105,33 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     <Tags className="size-4" />
                     Từ khóa (Hashtags)
                   </Link>
+                  <Link
+                    href="/dashboard/actors"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
+                  >
+                    <Database className="size-4" />
+                    Công cụ Cào (Actors)
+                  </Link>
+                  <Link
+                    href="/dashboard/settings"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-rose-700 hover:bg-rose-50 transition-colors"
+                  >
+                    <Settings className="size-4" />
+                    Cấu hình Hệ thống
+                  </Link>
                 </>
               )}
               
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  alert("Tính năng đổi mật khẩu sẽ được cập nhật sau!");
-                }}
-                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors w-full text-left"
+              <Link
+                href="/dashboard/profile"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
               >
-                <KeyRound className="size-4" />
-                Đổi mật khẩu
-              </button>
+                <UserCircle className="size-4" />
+                Tài khoản cá nhân
+              </Link>
 
               <form action="/auth/signout" method="post" className="w-full">
                 <button

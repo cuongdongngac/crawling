@@ -4,14 +4,23 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function checkHasUsers() {
-  const supabase = await createClient();
-  const { count, error } = await supabase
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!serviceRoleKey) return false;
+  
+  const { createClient: createAdminClient } = await import("@supabase/supabase-js");
+  const adminClient = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    serviceRoleKey,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+
+  const { count, error } = await adminClient
     .from("profiles")
     .select("*", { count: "exact", head: true });
     
   if (error) {
     console.error("Error checking users:", error);
-    return false; // Default to false if error
+    return false;
   }
   
   return (count || 0) > 0;
