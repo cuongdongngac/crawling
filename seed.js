@@ -12,20 +12,73 @@ async function seed() {
     {
       actor_id: 'clockwork/tiktok-scraper',
       actor_name: 'TikTok Data Extractor',
-      platform: 'Tiktok',
-      default_config: { maxItems: 100 }
+      platform: 'TIKTOK',
+      default_config: {
+        maxItems: 100,
+        shouldDownloadVideos: false,
+        shouldDownloadCovers: false,
+        maxConcurrency: 5,
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
     },
     {
       actor_id: 'apify/facebook-pages-scraper',
       actor_name: 'Facebook Pages Scraper',
-      platform: 'Facebook',
-      default_config: { resultsLimit: 50 }
+      platform: 'FACEBOOK_PAGE',
+      default_config: {
+        resultsLimit: 50,
+        maxComments: 0,
+        startUrls: [],
+        searchWords: [],
+        onlyPostsNewerThan: null,
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
+    },
+    {
+      actor_id: 'alexey/facebook-search-scraper',
+      actor_name: 'Facebook Search (Alexey community · Toàn mạng)',
+      platform: 'FACEBOOK_SEARCH',
+      default_config: {
+        resultsLimit: 50,
+        queries: [],
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
+    },
+    {
+      actor_id: 'apify/facebook-search-scraper',
+      actor_name: 'Facebook Search (Official Apify · ✅ maintained)',
+      platform: 'FACEBOOK_SEARCH',
+      default_config: {
+        resultsLimit: 50,
+        queries: [],
+        searchTerms: [],
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
+    },
+    {
+      actor_id: 'apify/facebook-hashtag-scraper',
+      actor_name: 'Facebook Hashtag Scraper (💯 chuẩn theo hashtag)',
+      platform: 'FACEBOOK_HASHTAG',
+      default_config: {
+        maxPostCount: 50,
+        hashtags: [],
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
     },
     {
       actor_id: 'streamer/youtube-scraper',
       actor_name: 'YouTube Comments Extractor',
-      platform: 'YouTube',
-      default_config: { maxComments: 200 }
+      platform: 'YOUTUBE',
+      default_config: {
+        maxVideos: 20,
+        maxComments: 200,
+        sortVideosBy: 'NEWEST',
+        sortCommentsBy: 'NEWEST_FIRST',
+        videoUrls: [],
+        channelUrls: [],
+        searchTerms: [],
+        proxy: { useApifyProxy: true, apifyProxyGroups: ['RESIDENTIAL'] }
+      }
     }
   ], { onConflict: 'actor_id' });
 
