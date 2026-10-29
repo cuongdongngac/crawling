@@ -1,0 +1,12 @@
+# Next.js
+.next/
+out/
+build/
+node_modules/
+
+# C# .NET / WPF
+bin/
+obj/
+TestResults/
+*.suo
+*.user

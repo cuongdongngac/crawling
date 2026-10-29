@@ -43,6 +43,15 @@ function postId(url) {
 function authorHash(platform, nativeId) {
   return sha256hex(String(platform || "").toUpperCase() + ":" + String(nativeId || "").trim());
 }
+// Alias: các adapter Facebook/YouTube bên dưới gọi hashPostId/hashAuthor
+const hashPostId = postId;
+const hashAuthor = authorHash;
+// Pipeline dùng chung: lọc ngôn ngữ + dedupe (giống CLI test-adapter-core.js)
+const { runPostPipeline } = require("./lib/post-pipeline.cjs");
+// Ngôn ngữ giữ lại mặc định. "other" = caption chỉ toàn hashtag không dấu (vd "#vape #pod"),
+// giữ lại để không mất bài Việt gõ không dấu. Ghi đè bằng apify_actors.default_config.allow_langs.
+const DEFAULT_ALLOW_LANGS = ["vi", "other"];
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -701,7 +710,18 @@ async function pollAndIngestOne(token, run) {
         }
 
         const parsed = datasetItems.map((it, i) => adapter.parseOne(it, i, cfgRuntime));
-        counts = await ingestRun(run, cfgRuntime, parsed);
+        const allowLangs = Array.isArray(defaultCfg.allow_langs) && defaultCfg.allow_langs.length
+          ? defaultCfg.allow_langs
+          : DEFAULT_ALLOW_LANGS;
+        const { finalized, report } = runPostPipeline(parsed, { allowLangs });
+        console.log(
+          "[worker] run_id=" + run.run_id + " pipeline: raw=" + report.totalRaw +
+          " null=" + report.skippedNullNormalized +
+          " loại_ngôn_ngữ=" + report.langRemoved.length +
+          " gộp_trùng=" + report.dedupeRemoved.reduce((a, d) => a + d.removedCount, 0) +
+          " còn=" + report.finalCount + " phân_bố=" + JSON.stringify(report.langDistribution),
+        );
+        counts = await ingestRun(run, cfgRuntime, finalized);
 
         if (apifyStatus !== "SUCCEEDED") finalStatus = apifyStatus === "FAILED" ? "FAILED" : "PARTIAL_SUCCESS";
       }
@@ -821,7 +841,7 @@ async function dispatchQueued(systemToken) {
 async function pollRunning(systemToken) {
   const { data, error } = await supabase
     .from("collection_runs")
-    .select("run_id, researcher_code, platform, actor_id, apify_run_id, apify_dataset_id, query_parameters, apify_api_token_override")
+    .select("run_id, researcher_code, platform, actor_id, apify_run_id, apify_dataset_id, query_parameters, apify_api_token_override, apify_actors(default_config)")
     .eq("status", "RUNNING")
     .not("apify_run_id", "is", null)
     .order("run_id", { ascending: true })
@@ -835,6 +855,7 @@ async function pollRunning(systemToken) {
       ? String(r.apify_api_token_override)
       : systemToken;
     if (!token) continue;
+    r.actor_default_config = (r.apify_actors && r.apify_actors.default_config) || {};
     await pollAndIngestOne(token, r);
   }
 }

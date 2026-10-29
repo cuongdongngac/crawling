@@ -1,5 +1,6 @@
-import { createClient } from "@/utils/supabase/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth/guards";
+import ProfileInfoForm from "@/components/ProfileInfoForm";
 import Link from "next/link";
 import { ArrowLeft, UserCircle, ShieldCheck, Activity } from "lucide-react";
 import ScopeConfigForm from "@/components/ScopeConfigForm";
@@ -8,7 +9,11 @@ export default async function ResearcherDetailPage(props: any) {
   const params = await props.params;
   const id = params.id;
 
-  const supabase = await createClient();
+  // Chỉ quản trị viên được xem trang này (trang dùng service role)
+  const me = await getCurrentUser();
+  if (!me) redirect("/login");
+  if (!me.isAdmin) redirect("/dashboard");
+
   
   // Need to use admin key to bypass RLS for viewing other profiles if caller is admin
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -76,6 +81,12 @@ export default async function ResearcherDetailPage(props: any) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Lớp 2 - Tab 1: Phân công (2/3 width) */}
           <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
+              <h2 className="text-lg font-bold text-stone-900 mb-4 flex items-center gap-2">
+                <UserCircle className="w-5 h-5 text-stone-400" /> Thông tin cộng tác viên
+              </h2>
+              <ProfileInfoForm userId={user.id} initialName={user.full_name ?? null} initialProvince={user.province ?? null} />
+            </div>
             <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-6 flex items-center gap-2">
                 <UserCircle className="w-5 h-5 text-stone-400" /> Phạm vi Phân công (Assigned Scope)

@@ -12,16 +12,10 @@ import {
   Zap,
   SignalHigh,
   FlaskConical,
-  ExternalLink,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import {
-  testAdapterBuildInput,
-  testAdapterRunApify,
-  type BuildInputResult,
-  type RunApifyResult,
-} from "@/app/actions/test-adapter";
+import Link from "next/link";
 
 const STATUS_LABEL: Record<string, string> = {
   PLANNED: "LÊN KẾ HOẠCH",
@@ -61,22 +55,6 @@ export default function ScrapingStudio({
   const [priority, setPriority] = useState<number>(1);
   const [apifyTokenOverride, setApifyTokenOverride] = useState<string>("");
   const [loading, setLoading] = useState(false);
-
-  // Card Test nhanh Adapter Core (không insert DB, không liên quan collection)
-  const [testActorId, setTestActorId] = useState<string>(
-    allowedActors[0]?.actor_id || "",
-  );
-  const [testHashtag, setTestHashtag] = useState<string>("");
-  const [testApiKey, setTestApiKey] = useState<string>("");
-  const [testMaxItems, setTestMaxItems] = useState<number>(1);
-  const [testBusy, setTestBusy] = useState<"build" | "run" | null>(null);
-  const [testResult, setTestResult] = useState<
-    BuildInputResult | RunApifyResult | null
-  >(null);
-
-  const isRunResult = (
-    r: BuildInputResult | RunApifyResult | null,
-  ): r is RunApifyResult => !!r && typeof r === "object" && "apify_run_id" in r;
 
   useEffect(() => {
     const tzOffset = new Date().getTimezoneOffset() * 60000;
@@ -172,7 +150,9 @@ export default function ScrapingStudio({
 
       const nowIso = new Date().toISOString();
       const isImmediate = scheduleMode === "IMMEDIATE";
-      const targetStatus = isImmediate ? "RUNNING" : "QUEUED";
+      // Luôn QUEUED: worker chỉ dispatch QUEUED/PLANNED. "Chạy ngay" = scheduled_at = now,
+      // worker sẽ gửi lên Apify ở tick kế tiếp (≤15s) và tự chuyển sang RUNNING.
+      const targetStatus = "QUEUED";
 
       const insertPayload: any = {
         actor_id: selectedActor,
@@ -184,7 +164,7 @@ export default function ScrapingStudio({
         scheduled_at: isImmediate
           ? nowIso
           : new Date(scheduledAt).toISOString(),
-        started_at: isImmediate ? nowIso : null,
+        started_at: null,
         query_parameters: {
           hashtags: selectedHashtags,
           maxItems: maxItems,
@@ -511,446 +491,16 @@ export default function ScrapingStudio({
             </div>
           </div>
 
-          {/* ===================== CARD TEST NHANH ADAPTER CORE ===================== */}
-          <div className="mt-6 border-2 border-dashed border-amber-300 rounded-2xl bg-gradient-to-br from-amber-50 via-white to-yellow-50 shadow-sm p-5">
-            <h2 className="text-base font-bold text-amber-900 mb-3 flex items-center gap-2">
-              <FlaskConical className="w-5 h-5 text-amber-600" /> TEST NHANH
-              ADAPTER CỐT LÕI
-              <span className="ml-auto text-[10px] font-semibold text-amber-700 bg-amber-100 px-2 py-1 rounded-full">
-                Không ghi DB • Không dùng collection
-              </span>
-            </h2>
-
-            <form
-              action={async (fd) => {
-                fd.set("actor_id", testActorId);
-                fd.set("hashtag_text", testHashtag.replace(/^#+/, ""));
-                fd.set("api_key", testApiKey);
-                fd.set("max_items", String(testMaxItems || 1));
-                setTestBusy("build");
-                setTestResult(null);
-                const r = await testAdapterBuildInput(fd);
-                setTestResult(r);
-                setTestBusy(null);
-              }}
-              className="grid grid-cols-1 md:grid-cols-4 gap-3 items-start"
-            >
-              <div>
-                <label className="block text-xs font-semibold text-amber-900 mb-1">
-                  1. Actor (Công cụ)
-                </label>
-                <select
-                  value={testActorId}
-                  onChange={(e) => setTestActorId(e.target.value)}
-                  className="w-full p-2 bg-white border border-amber-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-400 outline-none"
-                  required
-                >
-                  {allowedActors.length > 0
-                    ? allowedActors.map((a) => (
-                        <option key={a.actor_id} value={a.actor_id}>
-                          {a.platform} · {a.actor_name}
-                        </option>
-                      ))
-                    : [
-                        {
-                          actor_id: "clockworks/tiktok-hashtag-scraper",
-                          platform: "TIKTOK",
-                          actor_name: "TikTok Hashtag Scraper (💯 chuyên hashtag, bạn vừa dùng trên Apify)",
-                        },
-                        {
-                          actor_id: "clockwork/tiktok-scraper",
-                          platform: "TIKTOK",
-                          actor_name: "TikTok Data Extractor (OLD - đa năng)",
-                        },
-                        {
-                          actor_id: "apify/facebook-hashtag-scraper",
-                          platform: "FACEBOOK_HASHTAG",
-                          actor_name:
-                            "Facebook Hashtag Scraper (💯 chuẩn theo hashtag)",
-                        },
-                        {
-                          actor_id: "apify/facebook-pages-scraper",
-                          platform: "FACEBOOK_PAGE",
-                          actor_name: "Facebook Pages Scraper (cần startUrls)",
-                        },
-                        {
-                          actor_id: "apify/facebook-search-scraper",
-                          platform: "FACEBOOK_SEARCH",
-                          actor_name:
-                            "Facebook Search (Official Apify · ✅ maintained)",
-                        },
-                        {
-                          actor_id: "alexey/facebook-search-scraper",
-                          platform: "FACEBOOK_SEARCH",
-                          actor_name:
-                            "Facebook Search (Alexey community · Toàn mạng)",
-                        },
-                        {
-                          actor_id: "easyapi/facebook-hashtag-search-scraper",
-                          platform: "FACEBOOK_HASHTAG",
-                          actor_name: "Facebook Hashtag Search (easyapi)",
-                        },
-                        {
-                          actor_id: "streamer/youtube-scraper",
-                          platform: "YOUTUBE",
-                          actor_name: "YouTube Scraper",
-                        },
-                      ].map((a) => (
-                        <option key={a.actor_id} value={a.actor_id}>
-                          {a.platform} · {a.actor_name}
-                        </option>
-                      ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-amber-900 mb-1">
-                  2. Hashtag (không #)
-                </label>
-                <input
-                  type="text"
-                  placeholder="pod  hoặc vape  hoặc thuocladientu..."
-                  value={testHashtag}
-                  onChange={(e) => setTestHashtag(e.target.value)}
-                  className="w-full p-2 bg-white border border-amber-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-400 outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-amber-900 mb-1">
-                  3. API Key Apify
-                </label>
-                <input
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="apify_api_XXXXXX (bỏ trống nếu chỉ test build)"
-                  value={testApiKey}
-                  onChange={(e) => setTestApiKey(e.target.value)}
-                  className="w-full p-2 bg-white border border-amber-300 rounded-lg text-xs font-mono focus:ring-2 focus:ring-amber-400 outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="block text-xs font-semibold text-amber-900 mb-1 opacity-0">
-                  &nbsp;
-                </label>
-                <div className="flex gap-2 flex-wrap">
-                  <button
-                    type="submit"
-                    disabled={testBusy !== null}
-                    className="flex-1 px-3 py-2 text-xs font-bold rounded-lg bg-white border-2 border-amber-400 text-amber-800 hover:bg-amber-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    🧪 Dry-Run Build
-                  </button>
-                  <button
-                    formAction={async (fd) => {
-                      if (!testApiKey || testApiKey.trim().length < 8) {
-                        alert(
-                          "Vui lòng điền API Key Apify (bắt đầu apify_api_...) để chạy thật.",
-                        );
-                        return;
-                      }
-                      fd.set("actor_id", testActorId);
-                      fd.set("hashtag_text", testHashtag.replace(/^#+/, ""));
-                      fd.set("api_key", testApiKey);
-                      fd.set("max_items", String(testMaxItems || 1));
-                      setTestBusy("run");
-                      setTestResult(null);
-                      const r = await testAdapterRunApify(fd);
-                      setTestResult(r);
-                      setTestBusy(null);
-                    }}
-                    type="submit"
-                    disabled={testBusy !== null}
-                    className="flex-1 px-3 py-2 text-xs font-bold rounded-lg bg-amber-500 text-white hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {testBusy === "run"
-                      ? "⏳ Đang chạy Apify..."
-                      : "🚀 Run Thật"}
-                  </button>
-                  <label className="flex items-center gap-1 text-[10px] text-amber-800 px-1">
-                    Max
-                    <input
-                      type="number"
-                      min={1}
-                      max={5}
-                      value={testMaxItems}
-                      onChange={(e) =>
-                        setTestMaxItems(
-                          Math.min(5, Math.max(1, Number(e.target.value) || 1)),
-                        )
-                      }
-                      className="w-14 p-1.5 bg-white border border-amber-300 rounded text-xs font-bold text-center"
-                    />
-                  </label>
-                </div>
-              </div>
-            </form>
-
-            {/* Kết quả Test */}
-            {testResult && (
-              <div className="mt-4 bg-white rounded-xl border border-amber-200 shadow-sm overflow-hidden">
-                {/* Header trạng thái */}
-                <div
-                  className={`px-4 py-2.5 text-sm font-bold flex items-center gap-2 ${
-                    testResult.ok
-                      ? "bg-green-50 text-green-800 border-b border-green-100"
-                      : "bg-red-50 text-red-800 border-b border-red-100"
-                  }`}
-                >
-                  {testResult.ok ? (
-                    <CheckCircle2 className="w-4 h-4" />
-                  ) : (
-                    <AlertCircle className="w-4 h-4" />
-                  )}
-                  <span className="mr-auto">
-                    {testResult.ok
-                      ? isRunResult(testResult)
-                        ? "RUN thành công (" +
-                          (testResult.final_status || "?") +
-                          ")"
-                        : "BUILD cấu hình OK"
-                      : "LỖI: " + (testResult.error || "Unknown")}
-                  </span>
-                  {isRunResult(testResult) && testResult.console_apify_link && (
-                    <a
-                      href={testResult.console_apify_link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[11px] font-semibold text-amber-700 hover:text-amber-900 inline-flex items-center gap-1 bg-white px-2 py-1 rounded border border-amber-300"
-                    >
-                      Xem trên Apify Console{" "}
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-
-                <div className="p-4 space-y-4">
-                  {/* Warnings */}
-                  {testResult.warnings?.length > 0 && (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                      <div className="text-xs font-bold text-yellow-900 mb-1">
-                        ⚠️ Cảnh báo cấu hình:
-                      </div>
-                      <ul className="text-[11px] text-yellow-800 list-disc list-inside space-y-0.5">
-                        {testResult.warnings.map((w, i) => (
-                          <li key={i}>{w}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Input Payload */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock className="w-3.5 h-3.5 text-indigo-600" />
-                      <span className="text-xs font-bold text-stone-700">
-                        📤 1. INPUT PAYLOAD (gửi lên Apify /v2/acts/X/runs POST)
-                      </span>
-                    </div>
-                    <pre className="text-[11px] leading-relaxed font-mono bg-stone-50 text-stone-800 border border-stone-200 rounded-lg p-3 max-h-56 overflow-auto whitespace-pre-wrap break-words">
-                      {JSON.stringify(testResult.input_payload, null, 2)}
-                    </pre>
-                  </div>
-
-                  {/* Nếu Run thật thì hiển thị dòng run info + parse posts */}
-                  {isRunResult(testResult) && testResult.ok && (
-                    <>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]">
-                        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
-                          <div className="font-bold text-indigo-900 mb-0.5">
-                            Run ID
-                          </div>
-                          <div className="font-mono break-all text-indigo-700">
-                            {testResult.apify_run_id || "null"}
-                          </div>
-                        </div>
-                        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
-                          <div className="font-bold text-indigo-900 mb-0.5">
-                            Dataset ID
-                          </div>
-                          <div className="font-mono break-all text-indigo-700">
-                            {testResult.apify_dataset_id || "null"}
-                          </div>
-                        </div>
-                        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
-                          <div className="font-bold text-indigo-900 mb-0.5">
-                            Dataset items (tải tối đa 5)
-                          </div>
-                          <div className="text-2xl font-black text-indigo-700">
-                            {testResult.raw_items_count ?? 0}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Parse bài viết */}
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Activity className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-xs font-bold text-stone-700">
-                            🧩 2. PARSER (parse dataset → NormalizedPost. không
-                            ghi posts/post_snapshots DB)
-                          </span>
-                        </div>
-                        {(testResult.parsed_posts?.filter((p) => p.normalized)
-                          .length ?? 0) === 0 ? (
-                          <div className="bg-stone-50 border border-stone-200 rounded-lg p-4 text-xs text-stone-600">
-                            Không có post parse được. Kiểm tra: <br />
-                            - Hashtag có phổ biến không? (thay đổi hashtag phổ
-                            biến hơn) <br />
-                            - FB startUrls có cấu hình không? <br />- YT comment
-                            item được auto bỏ qua (chỉ parse video metadata)
-                          </div>
-                        ) : (
-                          <div className="space-y-2.5">
-                            {(testResult.parsed_posts || [])
-                              .filter((p) => p.normalized)
-                              .map((p, i) => {
-                                const n = p.normalized!;
-                                return (
-                                  <div
-                                    key={i}
-                                    className="border border-emerald-200 rounded-xl bg-emerald-50/40 overflow-hidden"
-                                  >
-                                    <div className="px-3 py-2 bg-emerald-100 text-[11px] font-bold text-emerald-900 flex items-center gap-3">
-                                      <span>#{i + 1}</span>
-                                      <span className="inline-block px-2 py-0.5 rounded-full bg-white text-emerald-800">
-                                        {n.platform}
-                                      </span>
-                                      <span>
-                                        Discovery Order = {p.discovery_order}
-                                      </span>
-                                    </div>
-                                    <div className="p-3 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1.5 text-[11px] text-stone-800">
-                                      <div>
-                                        <b className="text-stone-500 mr-1">
-                                          post_id (SHA256 URL):
-                                        </b>
-                                        <span className="font-mono break-all text-stone-900">
-                                          {n.post_id}
-                                        </span>
-                                      </div>
-                                      <div>
-                                        <b className="text-stone-500 mr-1">
-                                          post_url:
-                                        </b>
-                                        <a
-                                          href={n.post_url}
-                                          target="_blank"
-                                          rel="noreferrer"
-                                          className="font-semibold text-blue-700 hover:underline break-all inline-flex items-center gap-1"
-                                        >
-                                          {n.post_url}{" "}
-                                          <ExternalLink className="w-3 h-3 opacity-50" />
-                                        </a>
-                                      </div>
-                                      <div>
-                                        <b className="text-stone-500 mr-1">
-                                          author_hash (ẩn danh):
-                                        </b>
-                                        <span className="font-mono break-all">
-                                          {n.author_hash}
-                                        </span>
-                                      </div>
-                                      <div>
-                                        <b className="text-stone-500 mr-1">
-                                          published_at:
-                                        </b>
-                                        {n.published_at || "null"}
-                                      </div>
-                                      <div className="md:col-span-2 grid grid-cols-4 gap-2 pt-1">
-                                        <div className="bg-white rounded border border-emerald-200 p-2 text-center">
-                                          <div className="text-[9px] uppercase tracking-wide text-stone-500 font-bold">
-                                            view
-                                          </div>
-                                          <div className="text-lg font-black text-indigo-600">
-                                            {n.metrics.view_count ?? "—"}
-                                          </div>
-                                        </div>
-                                        <div className="bg-white rounded border border-emerald-200 p-2 text-center">
-                                          <div className="text-[9px] uppercase tracking-wide text-stone-500 font-bold">
-                                            like
-                                          </div>
-                                          <div className="text-lg font-black text-rose-500">
-                                            {n.metrics.like_count ?? "—"}
-                                          </div>
-                                        </div>
-                                        <div className="bg-white rounded border border-emerald-200 p-2 text-center">
-                                          <div className="text-[9px] uppercase tracking-wide text-stone-500 font-bold">
-                                            cmt
-                                          </div>
-                                          <div className="text-lg font-black text-amber-600">
-                                            {n.metrics.comment_count ?? "—"}
-                                          </div>
-                                        </div>
-                                        <div className="bg-white rounded border border-emerald-200 p-2 text-center">
-                                          <div className="text-[9px] uppercase tracking-wide text-stone-500 font-bold">
-                                            share
-                                          </div>
-                                          <div className="text-lg font-black text-emerald-600">
-                                            {n.metrics.share_count ?? "—"}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="md:col-span-2 pt-1">
-                                        <b className="text-stone-500 text-[10px]">
-                                          hashtags extracted từ caption:
-                                        </b>
-                                        <div className="mt-1 flex flex-wrap gap-1.5">
-                                          {p.caption_hashtags.length === 0 ? (
-                                            <span className="text-[10px] text-stone-400 italic">
-                                              không tìm thấy hashtag inline nào
-                                              trong raw_text
-                                            </span>
-                                          ) : (
-                                            p.caption_hashtags.map((h) => (
-                                              <span
-                                                key={h}
-                                                className="text-[10px] font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full border border-indigo-200"
-                                              >
-                                                {h}
-                                              </span>
-                                            ))
-                                          )}
-                                        </div>
-                                      </div>
-                                      <div className="md:col-span-2 pt-1">
-                                        <b className="text-stone-500 text-[10px]">
-                                          raw_text (180 ký tự đầu):
-                                        </b>
-                                        <div className="text-[11px] text-stone-700 bg-white border border-stone-200 rounded-md px-2 py-1.5 mt-0.5 whitespace-pre-wrap break-words leading-relaxed">
-                                          {(n.raw_text || "").slice(0, 180)}
-                                          {(n.raw_text || "").length > 180
-                                            ? "..."
-                                            : ""}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-
-                  {/* default_config (debug) */}
-                  <details className="text-[10px]">
-                    <summary className="cursor-pointer select-none text-stone-500 hover:text-stone-700">
-                      📄 Xem default_config gốc của actor "{testResult.actor_id}
-                      " được tải từ DB:
-                    </summary>
-                    <pre className="mt-2 font-mono text-[10px] leading-relaxed bg-stone-100 border border-stone-200 rounded-lg p-3 max-h-40 overflow-auto whitespace-pre-wrap break-words text-stone-700">
-                      {JSON.stringify(testResult.default_config, null, 2)}
-                    </pre>
-                  </details>
-                </div>
-              </div>
-            )}
-          </div>
-          {/* ===================== HẾT CARD TEST NHANH ===================== */}
+          {/* Quét thử cho cộng tác viên đã chuyển sang trang riêng */}
+          <Link
+            href="/dashboard/quet-thu"
+            className="mt-6 flex items-center gap-3 rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50 p-4 text-emerald-900 hover:bg-emerald-100"
+          >
+            <FlaskConical className="w-5 h-5 text-emerald-700 shrink-0" />
+            <span className="text-sm">
+              <strong>Quét thử</strong> (dùng API key cá nhân, không ghi DB, xuất Excel) nay ở trang riêng →
+            </span>
+          </Link>
 
           <RunHistoryTable userEmail={user.email} />
         </div>

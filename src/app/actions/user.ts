@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { requireAdmin, PROVINCES } from "@/lib/auth/guards";
 
 async function getAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -24,6 +25,7 @@ export async function adminCreateUser(formData: FormData) {
   if (!email || !password) return { error: "Email và mật khẩu là bắt buộc." };
 
   try {
+    await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
     const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
       email,
@@ -56,6 +58,7 @@ export async function adminCreateUser(formData: FormData) {
 
 export async function changeUserRole(userId: string, isAdmin: boolean) {
   try {
+    await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
     const { error } = await adminClient
       .from("profiles")
@@ -74,6 +77,7 @@ export async function changeUserRole(userId: string, isAdmin: boolean) {
 
 export async function deleteUser(userId: string) {
   try {
+    await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
     const { error } = await adminClient.auth.admin.deleteUser(userId);
 
@@ -89,6 +93,7 @@ export async function deleteUser(userId: string) {
 
 export async function resetUserPassword(userId: string, newPassword: string) {
   try {
+    await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
     const { error } = await adminClient.auth.admin.updateUserById(userId, { 
       password: newPassword 
@@ -131,6 +136,7 @@ export async function fetchUsers() {
 
 export async function updateAssignedScope(userId: string, assignedScope: any) {
   try {
+    await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
     const { error } = await adminClient
       .from("profiles")
@@ -144,5 +150,23 @@ export async function updateAssignedScope(userId: string, assignedScope: any) {
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
+  }
+}
+
+export async function updateProfileInfo(userId: string, fullName: string, province: string) {
+  try {
+    await requireAdmin();
+    const p = province && PROVINCES[province] ? province : null;
+    const adminClient = await getAdminClient();
+    const { error } = await adminClient
+      .from("profiles")
+      .update({ full_name: fullName.trim() || null, province: p })
+      .eq("id", userId);
+    if (error) return { error: error.message };
+    revalidatePath(`/dashboard/researchers/${userId}`);
+    revalidatePath("/dashboard/hoat-dong");
+    return { success: true };
+  } catch (error: unknown) {
+    return { error: error instanceof Error ? error.message : String(error) };
   }
 }

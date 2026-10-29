@@ -93,6 +93,12 @@ export function detectLanguage(rawText: string): LangDetection {
     return { lang: "zh", score: Math.round(Math.min(99, pct(han) * 1.5)), detail: { han: pct(han) } };
   }
 
+  // Dấu tiếng Việt (ơ, ư, đ, ă, dấu thanh) gần như không xuất hiện trong tiếng Anh:
+  // >= 2 ký tự và >= 5% chữ cái là đủ chắc chắn tiếng Việt (tránh câu ngắn bị nhận nhầm EN).
+  if (viDia >= 2 && pct(viDia) >= 5) {
+    return { lang: "vi", score: Math.min(99, Math.round(50 + pct(viDia))), detail: { viDiaPct: Math.round(pct(viDia)) } };
+  }
+
   // Latin / Việt: tính điểm stopwords + dấu tiếng Việt
   let viScore = 0;
   let enScore = 0;
