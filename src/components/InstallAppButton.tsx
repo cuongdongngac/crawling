@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { Download, Share, PlusSquare, X } from "lucide-react";
 
 // Sự kiện Chrome/Edge/Samsung Internet trên Android bắn ra khi web cài được.
@@ -66,9 +67,11 @@ export default function InstallAppButton() {
         >
           <Download className="w-4 h-4" /> Cài ứng dụng
         </button>
-        {showIosHelp && (
+        {/* Gắn vào <body>: thanh đầu trang dùng backdrop-blur sẽ "nhốt" phần tử fixed nếu để bên trong */}
+        {showIosHelp &&
+          createPortal(
           <div
-            className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center p-3"
+            className="fixed inset-0 z-[100] bg-black/50 flex items-end justify-center p-3"
             onClick={() => setShowIosHelp(false)}
           >
             <div
@@ -104,7 +107,8 @@ export default function InstallAppButton() {
                 </li>
               </ol>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
       </>
     );
