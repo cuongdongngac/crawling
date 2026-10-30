@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [{ source: "/help", destination: "/help/index.html" }];
   },
+  // Phòng hờ: link cũ /dashboard.html (do router VitePress gắn đuôi .html) -> /dashboard.
+  async redirects() {
+    return [{ source: "/dashboard.html", destination: "/dashboard", permanent: false }];
+  },
   async headers() {
     return [
       {
