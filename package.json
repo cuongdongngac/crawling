@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "vitepress build help && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "help:dev": "vitepress dev help",
+    "help:build": "vitepress build help"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -31,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitepress": "^1.6.4"
   }
 }

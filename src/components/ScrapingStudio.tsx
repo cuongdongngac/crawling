@@ -53,7 +53,6 @@ export default function ScrapingStudio({
   const [scheduleMode, setScheduleMode] = useState<ScheduleMode>("IMMEDIATE");
   const [scheduledAt, setScheduledAt] = useState<string>("");
   const [priority, setPriority] = useState<number>(1);
-  const [apifyTokenOverride, setApifyTokenOverride] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -170,14 +169,8 @@ export default function ScrapingStudio({
           maxItems: maxItems,
           group_id: selectedGroup,
           schedule_mode: scheduleMode,
-          note: apifyTokenOverride
-            ? "[test] token tạm thời được đính kèm trên dòng kế hoạch."
-            : null,
         },
       };
-      if (apifyTokenOverride && apifyTokenOverride.trim().length > 6) {
-        insertPayload.apify_api_token_override = apifyTokenOverride.trim();
-      }
 
       const { data, error } = await supabase
         .from("collection_runs")
@@ -190,15 +183,11 @@ export default function ScrapingStudio({
       alert(
         isImmediate
           ? "✅ Đã gửi lệnh thu thập NGAY LẬP TỨC thành công!\n" +
-              (apifyTokenOverride.trim()
-                ? "(Kèm API Key tạm thời cho kế hoạch này.)\n"
-                : "(Chưa kèm API Key. Bạn cần điền trên màn hình này hoặc vào Cấu hình lưu token chung.)\n") +
+              "(Dùng Apify token hệ thống ở trang Cấu hình.)\n" +
               "Tiếp theo: chạy Worker (node scripts/worker.js --once) trên terminal để pick kế hoạch → gọi Apify → lưu kết quả."
           : `⏱️ Đưa vào HÀNG ĐỢI thành công!\n` +
               `Chạy lúc: ${new Date(scheduledAt).toLocaleString("vi-VN")}\n` +
-              (apifyTokenOverride.trim()
-                ? "(Kèm API Key tạm thời.)"
-                : "(Chưa có API Key.)"),
+              "(Dùng Apify token hệ thống ở trang Cấu hình.)",
       );
 
       setSelectedHashtags([]);
@@ -325,29 +314,7 @@ export default function ScrapingStudio({
 
             <div className="pt-4 border-t border-stone-100">
               <p className="block text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
-                🔑 5. API Key TEST nhanh (Lưu tạm trên kế hoạch này)
-              </p>
-              <div className="space-y-2">
-                <input
-                  type="password"
-                  autoComplete="new-password"
-                  placeholder="apify_api_XXXXXXXX (để trống → dùng token chung từ Cấu hình)"
-                  value={apifyTokenOverride}
-                  onChange={(e) => setApifyTokenOverride(e.target.value)}
-                  className="w-full p-2.5 bg-stone-50 border border-stone-300 rounded-xl text-xs font-mono focus:ring-2 focus:ring-amber-400 outline-none"
-                />
-                <div className="text-[11px] text-stone-500 leading-relaxed">
-                  ✅ <b>TEST NHANH</b>: Token chỉ lưu tạm trên dòng kế hoạch
-                  này. <br />
-                  📌 <b>CHUẨN SAU NÀY</b>: Admin → Cấu hình hệ thống → lưu
-                  APIFY_API_TOKEN dùng chung.
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-stone-100">
-              <p className="block text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
-                <ListTodo className="w-4 h-4 text-indigo-500" /> 6. Lên lịch
+                <ListTodo className="w-4 h-4 text-indigo-500" /> 5. Lên lịch
                 thực hiện
               </p>
 

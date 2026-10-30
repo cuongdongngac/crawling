@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1c1917">
+<title>Mất kết nối – VPHA M&amp;E</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fafaf9;color:#1c1917}
+  .box{max-width:340px;padding:24px;text-align:center}
+  img{width:72px;height:72px;border-radius:16px}
+  h1{font-size:20px;margin:16px 0 8px}
+  p{color:#57534e;font-size:15px;line-height:1.5;margin:0 0 20px}
+  button{background:#047857;color:#fff;border:0;border-radius:12px;padding:12px 22px;font-weight:700;font-size:15px}
+</style>
+</head>
+<body>
+<div class="box">
+  <img src="/icons/icon-192.png" alt="">
+  <h1>Đang mất kết nối mạng</h1>
+  <p>Quét hashtag cần Internet. Lần quét đang chạy trên Apify vẫn tiếp tục — có mạng lại, mở ứng dụng là thấy tiến độ.</p>
+  <button onclick="location.reload()">Thử lại</button>
+</div>
+<script>addEventListener("online",function(){location.reload()})</script>
+</body>
+</html>

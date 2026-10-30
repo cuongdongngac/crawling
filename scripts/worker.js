@@ -762,7 +762,7 @@ async function dispatchQueued(systemToken) {
     .from("collection_runs")
     .select(
       "run_id, researcher_code, platform, actor_id, status, priority, scheduled_at, query_parameters," +
-      " apify_api_token_override, apify_actors!inner(default_config)",
+      " apify_actors!inner(default_config)",
     )
     .in("status", ["QUEUED", "PLANNED"])
     .or("scheduled_at.is.null,scheduled_at.lte." + nowIso)
@@ -775,10 +775,8 @@ async function dispatchQueued(systemToken) {
     return;
   }
   for (const r of rows || []) {
-    // Ưu tiên: dùng token override trên dòng kế hoạch test; nếu không có mới dùng system token
-    const token = (r.apify_api_token_override && String(r.apify_api_token_override).length > 8)
-      ? String(r.apify_api_token_override)
-      : systemToken;
+    // Quét chính thức chỉ dùng Apify token hệ thống (trang Cấu hình) — không còn token riêng theo dòng.
+    const token = systemToken;
     if (!token) continue;
     try {
       const adapter = getAdapter(r.actor_id);
@@ -841,7 +839,7 @@ async function dispatchQueued(systemToken) {
 async function pollRunning(systemToken) {
   const { data, error } = await supabase
     .from("collection_runs")
-    .select("run_id, researcher_code, platform, actor_id, apify_run_id, apify_dataset_id, query_parameters, apify_api_token_override, apify_actors(default_config)")
+    .select("run_id, researcher_code, platform, actor_id, apify_run_id, apify_dataset_id, query_parameters, apify_actors(default_config)")
     .eq("status", "RUNNING")
     .not("apify_run_id", "is", null)
     .order("run_id", { ascending: true })
@@ -851,9 +849,7 @@ async function pollRunning(systemToken) {
     return;
   }
   for (const r of data || []) {
-    const token = (r.apify_api_token_override && String(r.apify_api_token_override).length > 8)
-      ? String(r.apify_api_token_override)
-      : systemToken;
+    const token = systemToken;
     if (!token) continue;
     r.actor_default_config = (r.apify_actors && r.apify_actors.default_config) || {};
     await pollAndIngestOne(token, r);
@@ -865,7 +861,7 @@ async function pollRunning(systemToken) {
 // ==========================================================
 async function tick() {
   const systemToken = await getSystemApifyToken();
-  // Test mode: system token chưa lưu vẫn được chạy (miễn là collection_runs dòng nào có apify_api_token_override)
+  if (!systemToken) return; // chưa khai báo Apify token hệ thống -> không làm gì
   await pollRunning(systemToken);
   await dispatchQueued(systemToken);
 }

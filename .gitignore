@@ -41,6 +41,11 @@ apify*.key
 *.private
 
 
+# trang trợ giúp: build tự sinh (npm run help:build)
+/public/help
+/help/.vitepress/cache
+/help/.vitepress/dist
+
 # vercel
 .vercel
 

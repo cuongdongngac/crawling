@@ -1,3 +1,4 @@
+import HelpLink from "@/components/HelpLink";
 import { redirect } from "next/navigation";
 import { Lightbulb } from "lucide-react";
 import { getCurrentUser, getServiceClient } from "@/lib/auth/guards";
@@ -79,6 +80,10 @@ export default async function DeXuatPage() {
                 ? "Duyệt các phiếu đề xuất từ cộng tác viên. Mọi quyết định cần ghi lý do; duyệt sẽ thêm hashtag vào danh mục (Track 2)."
                 : "Các phiếu bạn đã gửi và kết quả duyệt. Gửi phiếu mới từ tab “Hashtag đi kèm” trong Quét thử."}
             </p>
+            <HelpLink
+              slug={me.isAdmin ? "quan-tri/duyet-de-xuat" : "cong-tac-vien/de-xuat-hashtag"}
+              className="mt-1"
+            />
           </div>
         </div>
         {error ? (

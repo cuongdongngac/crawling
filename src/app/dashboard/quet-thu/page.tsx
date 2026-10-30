@@ -1,3 +1,4 @@
+import HelpLink from "@/components/HelpLink";
 import { redirect } from "next/navigation";
 import { Radar } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
@@ -40,6 +41,7 @@ export default async function QuetThuPage() {
               Quét bằng API key Apify của bạn, xem và đánh giá kết quả, xuất Excel. Kết quả{" "}
               <strong>không</strong> ghi vào cơ sở dữ liệu của dự án.
             </p>
+            <HelpLink slug="cong-tac-vien/quet-thu" label="Hướng dẫn quét thử" className="mt-1" />
           </div>
         </div>
         <TestScanner actors={actors} knownHashtags={knownHashtags} />

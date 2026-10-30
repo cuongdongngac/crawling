@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Trang trợ giúp VitePress (công cụ riêng) và bản build của nó
+    "help/**",
+    "public/help/**",
   ]),
 ]);
 

@@ -1,0 +1,31 @@
+import { ApifyClient } from 'apify-client';
+
+// Initialize the ApifyClient with API token
+const client = new ApifyClient({
+    token: '<YOUR_API_TOKEN>',
+});
+
+// Prepare Actor input
+const input = {
+    "hashtags": [
+        "followforfollowback"
+    ],
+    "resultsPerPage": 100,
+    "shouldDownloadVideos": false,
+    "shouldDownloadCovers": false,
+    "downloadSubtitlesOptions": "NEVER_DOWNLOAD_SUBTITLES",
+    "shouldDownloadSlideshowImages": false,
+    "videoKvStoreIdOrName": "tiktok-videos"
+};
+
+(async () => {
+    // Run the Actor and wait for it to finish
+    const run = await client.actor("f1ZeP0K58iwlqG2pY").call(input);
+
+    // Fetch and print Actor results from the run's dataset (if any)
+    console.log('Results from dataset');
+    const { items } = await client.dataset(run.defaultDatasetId).listItems();
+    items.forEach((item) => {
+        console.dir(item);
+    });
+})();
