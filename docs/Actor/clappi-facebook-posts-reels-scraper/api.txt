@@ -1,0 +1,24 @@
+// clappi/facebook-posts-reels-scraper (4MsceBpRNToLYaCfa) — ĐO LẠI THEO LINK BÀI (Facebook)
+// Input (OpenAPI 31/10/2026): postUrls[] (bắt buộc, >=1, không giới hạn trên), proxyConfiguration (mặc định không dùng proxy)
+// Output: url, originalUrl (chỉ có khi khác url), shortcode, status (available|unavailable), platform,
+//         author, authorName, authorId, authorUrl, views (chỉ reel; bài thường = 0), likes (tổng mọi loại reaction),
+//         comments, shares, caption, thumbnailUrl, datePosted (ISO), scrapedAt (ISO)
+import { ApifyClient } from 'apify-client';
+
+const client = new ApifyClient({ token: '<YOUR_API_TOKEN>' });
+
+// Mẫu chạy thử: lấy link từ "Facebook Posts Search/result.json" (đủ các dạng link mà actor quét trả về)
+const input = {
+    "postUrls": [
+        "https://www.facebook.com/wpxi/posts/pfbid02BJ3CsB4nCm1vKXGUxUseeGHRAWtcZmswgzkRSF5L7vRpnSJjphdz2YY96ebVwvDnl",
+        "https://www.facebook.com/permalink.php?story_fbid=pfbid032JT581Yzsra96UikTntjC4oVb7ntK98UGQ1qxSNq4LUuux6eXvXnFdPdFUfGVC2bl&id=100058055348764",
+        "https://www.facebook.com/reel/1639656234550227/",
+        "https://www.facebook.com/groups/1950207668876162/posts/2027426207820974/"
+    ]
+};
+
+(async () => {
+    const run = await client.actor("4MsceBpRNToLYaCfa").call(input);
+    const { items } = await client.dataset(run.defaultDatasetId).listItems();
+    items.forEach((item) => console.dir(item));
+})();

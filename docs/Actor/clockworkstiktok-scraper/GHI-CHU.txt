@@ -1,0 +1,5 @@
+DÙNG — ĐO LẠI THEO LINK BÀI (TikTok) — clockworks/tiktok-scraper (GdWCkxBtKWOsKjdch)
+Cùng định dạng kết quả với clockworks/tiktok-hashtag-scraper. Giữ vì nhận được danh sách link video
+→ dùng cho ảnh chụp số liệu mỗi đêm. CHƯA XÁC NHẬN.
+CẦN BỔ SUNG: mẫu chạy theo danh sách link video (postURLs); mẫu hashtag tiếng Việt.
+Xem: ../_DANH-GIA-ACTOR.md

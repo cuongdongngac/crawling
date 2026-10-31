@@ -1,0 +1,4 @@
+DỰ PHÒNG TikTok — api-ninja/tiktok-hashtag-scraper
+Đủ trường, rẻ (~0,5 USD/1.000 bài), đặt khu vực VN được. Tối thiểu 100 bài/hashtag. Không có sẵn ngôn ngữ.
+CẦN BỔ SUNG: api.txt đang trống (dán input mẫu); mẫu chạy region VN với hashtag tiếng Việt (mẫu hiện tại là 'dance').
+Xem: ../_DANH-GIA-ACTOR.md

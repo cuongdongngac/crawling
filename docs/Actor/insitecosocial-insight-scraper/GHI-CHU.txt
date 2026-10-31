@@ -1,0 +1,21 @@
+DỰ PHÒNG — ĐO LẠI THEO LINK (TikTok / YouTube / Instagram) — insiteco/social-insight-scraper (orcGsHWebo2bn4L9h)
+Đánh giá 31/10/2026 (mẫu: 2 video TikTok ví dụ của Apify — không phải bài của dự án).
+
+ĐIỂM TỐT
+- Nhận danh sách {url, inputId}; kết quả TRẢ LẠI ĐÚNG inputId → ghép số liệu về bài chắc chắn (có thể gửi post_id làm inputId).
+- Trả: referenceId (mã video gốc), authorId, publishedDate, likes, comments, shares, views, engagements (= like+bình luận+chia sẻ).
+- Đa nền tảng: TikTok, YouTube, Instagram — có ích nếu dự án thêm YouTube.
+
+ĐIỂM YẾU / RỦI RO
+- KHÔNG hỗ trợ Facebook.
+- Giá "từ 100 USD / 1.000 lần start scraper" (0,1 USD/lần). Chưa rõ tính theo lần chạy hay theo từng link:
+  theo link → đắt gấp ~20 lần clockworks (~0,005 USD/video) → loại; theo lần chạy → rẻ, đáng cân nhắc.
+- Trang Apify (31/10): 3,5 điểm / 5 lượt, ~198 người dùng, chỉ 1 người dùng hằng tháng, 8 tháng không cập nhật
+  → rủi ro ngừng hoạt động trong dự án 18 tháng.
+- saves = null; có trường keywords (không có trong tài liệu, nghi do AI sinh) → không dùng.
+- Trả username/screenName → KHÔNG lưu (chỉ băm authorId).
+
+CẦN BỔ SUNG
+1. Chi phí thật của lần chạy mẫu (trang chi tiết lần chạy trên Apify Console, mục Usage / chi phí) → biết tính theo lần hay theo link.
+2. Chạy với 5–10 link video TikTok của dự án (dạng https://www.tiktok.com/@ten/video/<id> lấy từ result.json của TikTok Hashtag Scraper) + 1 video đã xóa.
+Xem: ../_DANH-GIA-ACTOR.md

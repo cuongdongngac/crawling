@@ -1,0 +1,4 @@
+DỰ PHÒNG Facebook — scrapeforge/facebook-search-posts (F60Kx7YJNOmKmqQm3)
+Đủ trường. Không lọc được theo ngày (chỉ có 'bài mới nhất'). Chưa rõ giá.
+CẦN BỔ SUNG: mẫu ≥50 bài tiếng Việt (mẫu hiện tại 5 bài tiếng Pháp); một lần chạy recent_posts=true; run.json để biết giá.
+Xem: ../_DANH-GIA-ACTOR.md

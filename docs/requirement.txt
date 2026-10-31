@@ -1,0 +1,7 @@
+Bộ lọc thời gian (Time bounds): Đây là rào chắn quan trọng nhất. Thay vì quét toàn bộ, bạn truyền tham số giới hạn thời gian (ví dụ: since: "2026-10-30", until: "2026-10-31") để Actor chỉ lấy các bài đăng mới sinh ra trong 24 giờ qua.
+
+Giới hạn số lượng (Max items): Luôn thiết lập biến maxItems (ví dụ: 100 hoặc 200 bài). Ngay cả khi từ khóa đang "hot" và sinh ra hàng ngàn kết quả, tiến trình sẽ tự động dừng ở mốc này để khóa trần chi phí.
+
+Cơ chế chạy tiếp nối (Incremental Scraping): Các Actor cao cấp chuyên thu thập dữ liệu mạng xã hội thường có tuỳ chọn lưu lại trạng thái (bookmark) ở lần quét cuối. Bạn có thể truyền cờ này vào API để hệ thống tự động dò tiếp từ bài viết cuối cùng của phiên trước.
+
+Chặn trùng lặp tại cơ sở dữ liệu: Apify tính phí dựa trên compute, nên dù lọc tốt vẫn có rủi ro lẫn vài post cũ. Khi luồng API đổ dữ liệu về cơ sở dữ liệu của bạn, hãy thiết lập khóa duy nhất (Unique Key) theo Post_URL hoặc Post_ID. Bạn chỉ cho phép chèn (Insert) các dòng mới để đảm bảo không đẩy dữ liệu cũ qua LLM phân tích lại.

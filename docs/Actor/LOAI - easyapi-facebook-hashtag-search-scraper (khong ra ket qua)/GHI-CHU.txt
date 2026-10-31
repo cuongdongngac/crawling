@@ -1,0 +1,3 @@
+LOẠI (29/10/2026) — easyapi/facebook-hashtag-search-scraper (zSurer93palP8KcHc)
+Chạy thử không ra kết quả. Không có result.json.
+Xem: ../_DANH-GIA-ACTOR.md

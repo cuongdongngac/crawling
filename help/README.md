@@ -1,5 +1,6 @@
 # Trang trợ giúp (VitePress)
 
+- Mục `thiet-ke/` là **kênh trao đổi thiết kế tạm thời** (ý tưởng, trạng thái, hạn chế) — rút gọn/xóa khi hệ thống ổn định: xóa thư mục + nhóm "4. Thiết kế…" trong sidebar + mục nav "Thiết kế (tạm thời)" + link trong `quan-tri/quet-chinh-thuc.md`.
 - Viết bài: thêm file `.md` vào `bat-dau/`, `cong-tac-vien/`, `quan-tri/`, rồi thêm một dòng vào `sidebar` trong `.vitepress/config.mts`.
 - Xem thử khi viết: `npm run help:dev` → http://localhost:5173/help/
 - Build: `npm run help:build` (xuất ra `public/help`, đã nằm trong `npm run build` nên Vercel tự build).

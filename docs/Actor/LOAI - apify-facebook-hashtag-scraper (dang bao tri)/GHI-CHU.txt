@@ -1,0 +1,4 @@
+LOẠI (29/10/2026) — apify/facebook-hashtag-scraper (qgl7gVMdjLUUrMI5P)
+Apify đánh dấu UNDER_MAINTENANCE, không chạy được. Không có result.json.
+Lưu ý: scripts/worker.js (quét chính thức) vẫn còn adapter cho actor này.
+Xem: ../_DANH-GIA-ACTOR.md

@@ -22,6 +22,7 @@ import {
   logExport,
   lookupRun,
   startScan,
+  type RelatedRow,
   type ScanRow,
   type ScanRun,
 } from "@/app/actions/test-scan";
@@ -33,11 +34,15 @@ import ProposalDialog, { type ProposalTarget } from "@/components/ProposalDialog
 type ActorInfo = {
   id: string;
   label: string;
-  platform: "TIKTOK" | "FACEBOOK";
+  platform: "TIKTOK" | "FACEBOOK" | "INSTAGRAM";
   maxPerKeyword: number;
+  minPerKeyword?: number;
+  /** Có giá trị = actor tự quyết số bài, hiện chữ thay cho ô nhập */
+  perKeywordFixed?: string;
   defaultPerKeyword: number;
   estUsdPerItem: number;
   note: string;
+  capabilities?: { sortOrder?: boolean; dateRange?: boolean; periods?: number[] };
 };
 
 type Job = {
@@ -47,6 +52,8 @@ type Job = {
   createdAt: string;
   runs: ScanRun[];
   rows: ScanRow[] | null;
+  /** Hashtag liên quan do actor thống kê gợi ý */
+  related?: RelatedRow[];
   /** mã nhật ký trên server (test_scan_logs) */
   logId?: number | null;
   rawCount?: number;
@@ -73,6 +80,9 @@ const STATUS_VI: Record<string, { label: string; cls: string }> = {
   TIMING_OUT: { label: "Sắp quá giờ", cls: "bg-amber-100 text-amber-700" },
   ABORTING: { label: "Đang dừng", cls: "bg-amber-100 text-amber-700" },
 };
+
+const PLATFORM_VI: Record<string, string> = { TIKTOK: "TikTok", FACEBOOK: "Facebook", INSTAGRAM: "Instagram" };
+const platformVi = (p: string) => PLATFORM_VI[p] ?? p;
 
 const LANG_VI: Record<string, string> = {
   vi: "Tiếng Việt",
@@ -142,6 +152,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
   const [searchType, setSearchType] = useState<"top" | "latest">("top");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [period, setPeriod] = useState<number>(30);
   const [token, setToken] = useState("");
   const [rememberToken, setRememberToken] = useState(false);
 
@@ -251,7 +262,14 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
       setShown(PAGE);
       setJob((cur) =>
         cur
-          ? { ...cur, rows: res.data.rows, rawCount: res.data.rawCount, skipped: res.data.skipped, truncated: res.data.truncated }
+          ? {
+              ...cur,
+              rows: res.data.rows,
+              related: res.data.related,
+              rawCount: res.data.rawCount,
+              skipped: res.data.skipped,
+              truncated: res.data.truncated,
+            }
           : cur,
       );
     },
@@ -270,7 +288,11 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
   // ---------------- Hành động ----------------
   const keywords = parseKeywords(keywordsText);
-  const perKw = Math.min(Math.max(Math.floor(perKeyword || 1), 1), actor?.maxPerKeyword ?? 1);
+  const perKw = Math.min(
+    Math.max(Math.floor(perKeyword || 1), actor?.minPerKeyword ?? 1),
+    actor?.maxPerKeyword ?? 1,
+  );
+  const caps = actor?.capabilities ?? {};
   const estUsd = keywords.length * perKw * (actor?.estUsdPerItem ?? 0);
 
   async function onStart() {
@@ -284,7 +306,11 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
       actorId: actor.id,
       keywords,
       perKeyword: perKw,
-      options: actor.platform === "FACEBOOK" ? { searchType, startDate: startDate || undefined, endDate: endDate || undefined } : {},
+      options: {
+        ...(caps.sortOrder ? { searchType } : {}),
+        ...(caps.dateRange ? { startDate: startDate || undefined, endDate: endDate || undefined } : {}),
+        ...(caps.periods?.length ? { period } : {}),
+      },
     });
     setBusy(null);
     if (!res.ok) return setError(res.error);
@@ -423,6 +449,8 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     return Array.from(m.values()).sort((a, b) => b.posts - a.posts || b.like + b.comment - (a.like + a.comment));
   }, [filtered]);
 
+  const related = useMemo(() => job?.related ?? [], [job]);
+
   const tagStatus = (tag: string) => (scannedKw.has(tag) ? "Đang quét" : known.has(tag) ? "Đã có trong danh mục" : "Mới");
 
   const totalUsd = (job?.runs ?? []).reduce((a, r) => a + (r.usageUsd ?? 0), 0);
@@ -480,7 +508,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     filtered.forEach((r, i) => {
       ws.addRow({
         stt: i + 1,
-        platform: r.platform === "TIKTOK" ? "TikTok" : "Facebook",
+        platform: platformVi(r.platform),
         keywords: r.keywords.join(", "),
         published: r.published_at ? new Date(r.published_at) : null,
         lang: LANG_VI[r.lang] ?? r.lang,
@@ -517,6 +545,21 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     wh.getRow(1).font = { bold: true };
     wh.autoFilter = { from: "A1", to: "H1" };
 
+    if (related.length) {
+      const wr = wb.addWorksheet("Hashtag liên quan", { views: [{ state: "frozen", ySplit: 1 }] });
+      wr.columns = [
+        { header: "Hashtag", key: "tag", width: 28 },
+        { header: "Trạng thái", key: "status", width: 22 },
+        { header: "Thông tin từ nền tảng", key: "info", width: 30 },
+        { header: "Gợi ý từ từ khóa", key: "keywords", width: 30 },
+      ];
+      related.forEach((r) =>
+        wr.addRow({ tag: "#" + r.tag, status: tagStatus(r.tag), info: r.info ?? "", keywords: r.keywords.join(", ") }),
+      );
+      wr.getRow(1).font = { bold: true };
+      wr.autoFilter = { from: "A1", to: "D1" };
+    }
+
     const wi = wb.addWorksheet("Thông tin");
     wi.columns = [
       { header: "Mục", key: "k", width: 30 },
@@ -546,7 +589,8 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${String(d.getHours()).padStart(2, "0")}${String(d.getMinutes()).padStart(2, "0")}`;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `quet-thu_${job.actorId.includes("tiktok") ? "tiktok" : "facebook"}_${stamp}.xlsx`;
+    const plat = (actors.find((x) => x.id === job.actorId)?.platform ?? "scan").toLowerCase();
+    a.download = `quet-thu_${plat}_${stamp}.xlsx`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -573,6 +617,8 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                 setActorId(e.target.value);
                 const a = actors.find((x) => x.id === e.target.value);
                 if (a) setPerKeyword(a.defaultPerKeyword);
+                if (a?.capabilities?.periods?.length && !a.capabilities.periods.includes(period))
+                  setPeriod(a.capabilities.periods.includes(30) ? 30 : a.capabilities.periods[0]);
               }}
               className={inputCls}
             >
@@ -609,7 +655,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
               rows={3}
               value={keywordsText}
               onChange={(e) => setKeywordsText(e.target.value)}
-              placeholder={actor?.platform === "TIKTOK" ? "vapegiare\npodgiare" : "kẹo khói\n#podgiare"}
+              placeholder={actor?.platform === "FACEBOOK" ? "kẹo khói\n#podgiare" : "vapegiare\npodgiare"}
               className={inputCls}
             />
             <p className="text-xs text-stone-500 mt-1">
@@ -619,34 +665,60 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
           <div>
             <label className={labelCls}>Số bài tối đa mỗi từ khóa</label>
-            <input
-              type="number"
-              min={1}
-              max={actor?.maxPerKeyword}
-              value={perKeyword}
-              onChange={(e) => setPerKeyword(Number(e.target.value))}
-              className={inputCls}
-            />
-            <p className="text-xs text-stone-500 mt-1">Tối đa {actor?.maxPerKeyword}.</p>
+            {actor?.perKeywordFixed ? (
+              <p className="text-sm text-stone-700 py-2.5">{actor.perKeywordFixed}</p>
+            ) : (
+              <>
+                <input
+                  type="number"
+                  min={actor?.minPerKeyword ?? 1}
+                  max={actor?.maxPerKeyword}
+                  value={perKeyword}
+                  onChange={(e) => setPerKeyword(Number(e.target.value))}
+                  className={inputCls}
+                />
+                <p className="text-xs text-stone-500 mt-1">
+                  {actor?.minPerKeyword ? `Tối thiểu ${actor.minPerKeyword}, t` : "T"}ối đa {actor?.maxPerKeyword}.
+                </p>
+              </>
+            )}
           </div>
 
-          {actor?.platform === "FACEBOOK" && (
+          {(caps.sortOrder || caps.dateRange || !!caps.periods?.length) && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className={labelCls}>Thứ tự</label>
-                <select value={searchType} onChange={(e) => setSearchType(e.target.value as "top" | "latest")} className={inputCls}>
-                  <option value="top">Nổi bật</option>
-                  <option value="latest">Mới nhất</option>
-                </select>
-              </div>
-              <div>
-                <label className={labelCls}>Từ ngày</label>
-                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputCls} />
-              </div>
-              <div>
-                <label className={labelCls}>Đến ngày</label>
-                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputCls} />
-              </div>
+              {caps.sortOrder && (
+                <div>
+                  <label className={labelCls}>Thứ tự</label>
+                  <select value={searchType} onChange={(e) => setSearchType(e.target.value as "top" | "latest")} className={inputCls}>
+                    <option value="top">Nổi bật</option>
+                    <option value="latest">Mới nhất</option>
+                  </select>
+                </div>
+              )}
+              {caps.dateRange && (
+                <>
+                  <div>
+                    <label className={labelCls}>Từ ngày</label>
+                    <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Đến ngày</label>
+                    <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputCls} />
+                  </div>
+                </>
+              )}
+              {!!caps.periods?.length && (
+                <div>
+                  <label className={labelCls}>Số liệu trong</label>
+                  <select value={period} onChange={(e) => setPeriod(Number(e.target.value))} className={inputCls}>
+                    {caps.periods.map((d) => (
+                      <option key={d} value={d}>
+                        {d} ngày gần nhất
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -850,7 +922,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
           <div className="flex gap-1 border-b border-stone-200 mb-3">
             {[
               ["posts", `Bài viết (${filtered.length})`],
-              ["hashtags", `Hashtag đi kèm (${hashtagStats.length})`],
+              ["hashtags", `Hashtag đi kèm (${hashtagStats.length + related.length})`],
             ].map(([k, l]) => (
               <button
                 key={k}
@@ -875,7 +947,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                     <li key={r.platform + r.native_post_id} className="rounded-xl border border-stone-200 p-3">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-stone-500 mb-1">
                         <span className="font-bold text-stone-700">#{i + 1}</span>
-                        <span>{r.platform === "TIKTOK" ? "TikTok" : "Facebook"}</span>
+                        <span>{platformVi(r.platform)}</span>
                         <span>{dateVi(r.published_at)}</span>
                         <span>{LANG_VI[r.lang] ?? r.lang}</span>
                         {r.is_ad && <span className="text-amber-700 font-semibold">Quảng cáo</span>}
@@ -980,6 +1052,73 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                   </tbody>
                 </table>
               </div>
+              {related.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-sm font-bold text-stone-800 mb-1">Hashtag liên quan do nền tảng gợi ý ({related.length})</h3>
+                  <p className="text-xs text-stone-500 mb-2">
+                    Lấy từ công cụ thống kê hashtag, không gắn với bài cụ thể. Số bài là số nền tảng công bố (toàn cầu
+                    hoặc theo khu vực của công cụ). Hashtag <strong>“Mới”</strong> nên quét thử thêm để có bài minh chứng
+                    trước khi đề xuất.
+                  </p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-left text-stone-500 border-b border-stone-200">
+                          <th className="py-2 pr-3">Hashtag</th>
+                          <th className="py-2 pr-3">Trạng thái</th>
+                          <th className="py-2 pr-3">Thông tin</th>
+                          <th className="py-2 pr-3">Gợi ý từ</th>
+                          <th className="py-2 pr-3"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {related.slice(0, 300).map((r) => {
+                          const status = tagStatus(r.tag);
+                          return (
+                            <tr key={r.tag} className="border-b border-stone-100">
+                              <td className="py-1.5 pr-3 font-medium">
+                                <span className="inline-flex items-center gap-0.5">
+                                  <Hash className="w-3.5 h-3.5 text-stone-400" />
+                                  {r.tag}
+                                </span>
+                              </td>
+                              <td className="py-1.5 pr-3">
+                                <span
+                                  className={
+                                    "px-2 py-0.5 rounded-full text-xs font-semibold " +
+                                    (status === "Mới"
+                                      ? "bg-emerald-100 text-emerald-800"
+                                      : status === "Đang quét"
+                                        ? "bg-blue-100 text-blue-700"
+                                        : "bg-stone-100 text-stone-600")
+                                  }
+                                >
+                                  {status}
+                                </span>
+                              </td>
+                              <td className="py-1.5 pr-3 text-stone-600 tabular-nums">{r.info ?? "–"}</td>
+                              <td className="py-1.5 pr-3 text-stone-500">{r.keywords.join(", ")}</td>
+                              <td className="py-1.5 pr-3 text-right">
+                                {status === "Mới" &&
+                                  (proposedTags.has(r.tag) ? (
+                                    <span className="text-xs text-emerald-700 font-semibold">Đã đề xuất</span>
+                                  ) : (
+                                    <button
+                                      onClick={() => setProposing(buildTarget(r.tag))}
+                                      className="px-2.5 py-1 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800"
+                                    >
+                                      Đề xuất
+                                    </button>
+                                  ))}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>

@@ -1,0 +1,5 @@
+DÙNG — QUÉT CHÍNH TikTok — clockworks/tiktok-hashtag-scraper (f1ZeP0K58iwlqG2pY)
+Đủ trường (ngày, link, tác giả, like/bình luận/chia sẻ/xem/lưu, ngôn ngữ có sẵn).
+Không lọc được theo ngày đăng → lọc sau khi tải về.
+CẦN BỔ SUNG: mẫu chạy với hashtag tiếng Việt; file name.txt.
+Xem: ../_DANH-GIA-ACTOR.md

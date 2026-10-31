@@ -26,6 +26,7 @@ export default defineConfig({
       { text: "Bắt đầu", link: "/bat-dau/gioi-thieu" },
       { text: "Cộng tác viên", link: "/cong-tac-vien/quet-thu" },
       { text: "Quản trị", link: "/quan-tri/cau-hinh" },
+      { text: "Thiết kế (tạm thời)", link: "/thiet-ke/" },
       { text: "Hỏi đáp", link: "/hoi-dap" },
     ],
 
@@ -53,6 +54,20 @@ export default defineConfig({
           { text: "Cấu hình khóa hệ thống & AI", link: "/quan-tri/cau-hinh" },
           { text: "Duyệt phiếu đề xuất", link: "/quan-tri/duyet-de-xuat" },
           { text: "Quét chính thức (đang phát triển)", link: "/quan-tri/quet-chinh-thuc" },
+        ],
+      },
+      {
+        text: "4. Thiết kế đang phát triển (tạm thời)",
+        collapsed: false,
+        items: [
+          { text: "Đọc trước: trạng thái & cách góp ý", link: "/thiet-ke/" },
+          { text: "Hai luồng quét: Phát hiện / Đo tương tác", link: "/thiet-ke/hai-luong-quet" },
+          { text: "Sàng lọc bài: AI và người", link: "/thiet-ke/sang-loc-ai" },
+          { text: "Câu hỏi nghiên cứu và biểu đồ", link: "/thiet-ke/cau-hoi-nghien-cuu" },
+          { text: "Chọn công cụ quét", link: "/thiet-ke/chon-cong-cu-quet" },
+          { text: "Hạn chế của hệ thống", link: "/thiet-ke/han-che" },
+          { text: "Dữ liệu giả và dashboard", link: "/thiet-ke/du-lieu-gia-va-dashboard" },
+          { text: "Dữ liệu phẳng cho phân tích", link: "/thiet-ke/du-lieu-phang" },
         ],
       },
       { text: "Hỏi đáp", link: "/hoi-dap" },

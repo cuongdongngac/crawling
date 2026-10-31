@@ -1,0 +1,35 @@
+import { ApifyClient } from 'apify-client';
+
+// Initialize the ApifyClient with API token
+const client = new ApifyClient({
+    token: '<YOUR_API_TOKEN>',
+});
+
+// Prepare Actor input
+const input = {
+    "proxyConfiguration": {
+        "useApifyProxy": true
+    },
+    "input": [
+        {
+            "url": "https://www.tiktok.com/@MS4wLjABAAAAxDhA8QWkQ9XuHvP1CM7gRYovEReyVffxZHVL3fpqrMklzsKs7_us19HM9L9jQXzm/video/7346600892520467717",
+            "inputId": "bd85891d-8d55-cc56-e4c7-a9427007ec34"
+        },
+        {
+            "url": "https://www.tiktok.com/@MS4wLjABAAAA07z5ITZ_LmPz_J8EH7e5yCw9rL1lPUr7r7mF_VG71lvMpyu_og58145T1qKcqiL1/video/7325262360225041665",
+            "inputId": "f58a7ca0-5766-0089-8af9-f193b227c51b"
+        }
+    ]
+};
+
+(async () => {
+    // Run the Actor and wait for it to finish
+    const run = await client.actor("orcGsHWebo2bn4L9h").call(input);
+
+    // Fetch and print Actor results from the run's dataset (if any)
+    console.log('Results from dataset');
+    const { items } = await client.dataset(run.defaultDatasetId).listItems();
+    items.forEach((item) => {
+        console.dir(item);
+    });
+})();

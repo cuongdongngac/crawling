@@ -1,0 +1,4 @@
+LOẠI (31/10/2026) — apify/instagram-hashtag-analytics-scraper
+- Instagram ngoài phạm vi dự án (TikTok + Facebook, YouTube nếu đủ nguồn lực).
+- Gói Apify miễn phí không trả về bài viết, chỉ có tổng số bài và danh sách hashtag liên quan.
+Xem: ../_DANH-GIA-ACTOR.md

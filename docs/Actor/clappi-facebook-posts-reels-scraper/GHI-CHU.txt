@@ -1,0 +1,16 @@
+ĐỀ XUẤT DÙNG — ĐO LẠI THEO LINK BÀI (Facebook) — clappi/facebook-posts-reels-scraper (4MsceBpRNToLYaCfa)
+
+KẾT QUẢ MẪU 31/10/2026 (2 link /share/ ví dụ của Apify)
+- Chạy được, trạng thái available, trả like / bình luận / chia sẻ / lượt xem / ngày đăng.
+- Trường "url" trả lại ĐÚNG link đã gửi → ghép về bài theo link được.
+- Có trường realId (mã số bài, không ghi trong tài liệu) → có thể là cùng mã với postId của scraper_one
+  → nếu đúng, ghép bài bằng mã số, không phụ thuộc dạng link. CẦN KIỂM.
+- Reel: views có, shares = 0, authorId = null. Bài thường: views = 0 (ghi rỗng khi lưu).
+- run.json đang là input, chưa phải thông tin lần chạy (chưa biết chi phí thật).
+
+CẦN BỔ SUNG (chưa làm — mẫu hiện tại là ví dụ của Apify, không phải link do actor quét FB trả về)
+1. Chạy api.txt trong thư mục này (4 dạng link lấy từ "Facebook Posts Search/result.json") + 1 link bài đã xóa.
+2. So realId với postId của scraper_one cho cùng bài; so like/bình luận/chia sẻ (lệch < 10% thì nối chuỗi được).
+3. Chạy lại cùng danh sách sau 1–2 ngày.
+4. Chi phí thật: trang chi tiết lần chạy trên Apify Console (mục Usage).
+Xem: ../_DANH-GIA-ACTOR.md

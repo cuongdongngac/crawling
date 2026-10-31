@@ -51,6 +51,13 @@ export type ScanRow = {
   is_ad: boolean;
 };
 
+/** Hashtag liên quan do actor thống kê gợi ý (Instagram / TikTok analytics) */
+export type RelatedRow = {
+  tag: string;
+  info: string | null;
+  keywords: string[];
+};
+
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 
 // ---------------- Nhật ký quét thử (test_scan_logs) ----------------
@@ -165,7 +172,10 @@ export async function startScan(args: {
     );
     if (keywords.length === 0) throw new Error("Chưa nhập từ khóa nào.");
     if (keywords.length > MAX_KEYWORDS) throw new Error(`Tối đa ${MAX_KEYWORDS} từ khóa mỗi lần quét.`);
-    const max = Math.min(Math.max(Math.floor(Number(args.perKeyword) || 1), 1), actor.maxPerKeyword);
+    const max = Math.min(
+      Math.max(Math.floor(Number(args.perKeyword) || 1), actor.minPerKeyword ?? 1),
+      actor.maxPerKeyword,
+    );
 
     const runs = await Promise.all(
       keywords.map(async (kw): Promise<ScanRun> => {
@@ -300,7 +310,7 @@ export async function fetchScanResults(args: {
   actorId: string;
   runs: ScanRun[];
   logId?: number | null;
-}): Promise<Result<{ rows: ScanRow[]; rawCount: number; skipped: number; truncated: boolean }>> {
+}): Promise<Result<{ rows: ScanRow[]; related: RelatedRow[]; rawCount: number; skipped: number; truncated: boolean }>> {
   try {
     const user = await requireUser();
     const token = cleanToken(args.token);
@@ -308,6 +318,7 @@ export async function fetchScanResults(args: {
     if (!actor) throw new Error("Công cụ quét không hợp lệ.");
 
     const rows: ScanRow[] = [];
+    const related = new Map<string, RelatedRow>();
     let rawCount = 0;
     let skipped = 0;
     let truncated = false;
@@ -322,38 +333,53 @@ export async function fetchScanResults(args: {
           `/datasets/${encodeURIComponent(run.datasetId)}/items?clean=true&offset=${offset}&limit=1000`,
         );
         if (!Array.isArray(items) || items.length === 0) break;
-        for (const raw of items) {
+        for (const item of items) {
           rawCount++;
-          const p = actor.parseItem(raw);
-          if (!p) {
-            skipped++;
-            continue;
+          // Actor thống kê: lấy hashtag liên quan + bóc bài con
+          if (actor.relatedHashtags) {
+            for (const h of actor.relatedHashtags(item)) {
+              const prev = related.get(h.tag);
+              if (!prev) related.set(h.tag, { tag: h.tag, info: h.info, keywords: [run.keyword] });
+              else {
+                if (!prev.info && h.info) prev.info = h.info;
+                if (!prev.keywords.includes(run.keyword)) prev.keywords.push(run.keyword);
+              }
+            }
           }
-          if (rows.length >= MAX_ROWS_TOTAL) {
-            truncated = true;
-            break;
+          const children = actor.expandItem ? actor.expandItem(item) : [item];
+          for (const raw of children) {
+            const p = actor.parseItem(raw);
+            if (!p) {
+              skipped++;
+              continue;
+            }
+            if (rows.length >= MAX_ROWS_TOTAL) {
+              truncated = true;
+              break;
+            }
+            const lang = p.lang_hint || detectLanguage(p.text).lang;
+            rows.push({
+              keywords: [run.keyword],
+              platform: p.platform,
+              native_post_id: p.native_post_id,
+              post_url: p.post_url,
+              // Cùng cách băm với DB: sha256("PLATFORM:id")
+              author_hash: p.author_native_id
+                ? createHash("sha256").update(`${p.platform}:${p.author_native_id}`, "utf8").digest("hex")
+                : null,
+              published_at: p.published_at,
+              text: p.text.length > MAX_TEXT ? p.text.slice(0, MAX_TEXT) + "…" : p.text,
+              lang,
+              hashtags: p.hashtags,
+              like_count: p.like_count,
+              comment_count: p.comment_count,
+              share_count: p.share_count,
+              view_count: p.view_count,
+              save_count: p.save_count,
+              is_ad: p.is_ad,
+            });
           }
-          const lang = p.lang_hint || detectLanguage(p.text).lang;
-          rows.push({
-            keywords: [run.keyword],
-            platform: p.platform,
-            native_post_id: p.native_post_id,
-            post_url: p.post_url,
-            // Cùng cách băm với DB: sha256("PLATFORM:id")
-            author_hash: p.author_native_id
-              ? createHash("sha256").update(`${p.platform}:${p.author_native_id}`, "utf8").digest("hex")
-              : null,
-            published_at: p.published_at,
-            text: p.text.length > MAX_TEXT ? p.text.slice(0, MAX_TEXT) + "…" : p.text,
-            lang,
-            hashtags: p.hashtags,
-            like_count: p.like_count,
-            comment_count: p.comment_count,
-            share_count: p.share_count,
-            view_count: p.view_count,
-            save_count: p.save_count,
-            is_ad: p.is_ad,
-          });
+          if (truncated) break;
         }
         if (items.length < 1000 || truncated) break;
         offset += 1000;
@@ -374,8 +400,9 @@ export async function fetchScanResults(args: {
     }
 
     const finalRows = Array.from(byKey.values());
-    await updateLogStats(user.id, args.logId, token, args.runs || [], finalRows, actor.normalizeKeyword);
-    return { ok: true, data: { rows: finalRows, rawCount, skipped, truncated } };
+    const relatedRows = Array.from(related.values());
+    await updateLogStats(user.id, args.logId, token, args.runs || [], finalRows, relatedRows, actor.normalizeKeyword);
+    return { ok: true, data: { rows: finalRows, related: relatedRows, rawCount, skipped, truncated } };
   } catch (e) {
     return { ok: false, error: errMsg(e) };
   }
@@ -390,6 +417,7 @@ async function updateLogStats(
   token: string,
   runs: ScanRun[],
   rows: ScanRow[],
+  related: RelatedRow[],
   normalize: (k: string) => string,
 ) {
   try {
@@ -413,6 +441,8 @@ async function updateLogStats(
     const scanned = new Set((own.keywords || []).map((k: string) => normalize(k).replace(/^#+/, "").replace(/\s+/g, "").toLowerCase()));
     const count = new Map<string, number>();
     for (const row of rows) for (const h of row.hashtags) if (!known.has(h) && !scanned.has(h)) count.set(h, (count.get(h) ?? 0) + 1);
+    // Hashtag liên quan do actor thống kê gợi ý (không gắn bài) cũng tính là tìm được
+    for (const r of related) if (!known.has(r.tag) && !scanned.has(r.tag) && !count.has(r.tag)) count.set(r.tag, 0);
     const newTags = Array.from(count.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 200)

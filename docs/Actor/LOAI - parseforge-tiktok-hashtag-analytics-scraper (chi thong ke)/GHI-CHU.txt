@@ -1,0 +1,6 @@
+LOẠI (31/10/2026) — parseforge/tiktok-hashtag-analytics-scraper
+Chỉ thống kê độ phổ biến hashtag (TikTok Creative Center), không phải công cụ thu thập bài.
+- Mỗi hashtag chỉ có ~30 video nổi bật do TikTok chọn; mẫu: 2/3 hashtag không có video nào.
+- Không giới hạn được số bài, không đo lại được theo link.
+- Phải thuê 10 USD/tháng + phí chạy.
+Xem: ../_DANH-GIA-ACTOR.md

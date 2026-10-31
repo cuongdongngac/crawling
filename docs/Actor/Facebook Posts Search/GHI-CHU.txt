@@ -1,0 +1,4 @@
+DÙNG — QUÉT CHÍNH Facebook — scraper_one/facebook-posts-search (TMBawM4LZpKN15DZX)
+Đủ trường (Facebook không có lượt xem). Lọc được Từ ngày–Đến ngày, chọn Mới nhất. Gói free tối đa 100 bài/từ khóa.
+CẦN BỔ SUNG: mẫu ≥50 bài tiếng Việt; một lần chạy có startDate/endDate + searchType latest; file name.txt.
+Xem: ../_DANH-GIA-ACTOR.md
