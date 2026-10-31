@@ -61,6 +61,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: "Đọc trước: trạng thái & cách góp ý", link: "/thiet-ke/" },
+          { text: "Quy trình tổng thể: công cụ nào, vì sao", link: "/thiet-ke/quy-trinh-tong-the" },
           { text: "Hai luồng quét: Phát hiện / Đo tương tác", link: "/thiet-ke/hai-luong-quet" },
           { text: "Sàng lọc bài: AI và người", link: "/thiet-ke/sang-loc-ai" },
           { text: "Câu hỏi nghiên cứu và biểu đồ", link: "/thiet-ke/cau-hoi-nghien-cuu" },

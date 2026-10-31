@@ -27,6 +27,20 @@ Các xu hướng trên là **giả định để thử biểu đồ**, không ph
 
 Dữ liệu giả có nhãn riêng (tài khoản trong link bắt đầu bằng `mock_`) và được xóa sạch bằng một lệnh trước khi chạy thật.
 
+## Trang Tổng quan đã có gì (31/10/2026)
+
+![Trang Tổng quan với dữ liệu giả](/images/thiet-ke/du-lieu-gia-va-dashboard-01-tong-quan.png)
+<p class="img-caption">Hình 1: Trang Tổng quan — băng cảnh báo dữ liệu giả, bốn số chính, bài liên quan mới mỗi tuần theo nhóm (dữ liệu giả)</p>
+
+- **Bộ lọc nền tảng** (Tất cả / TikTok / Facebook) — áp cho mọi phần bên dưới.
+- **Bốn số chính:** bài đã phát hiện, bài liên quan (và tỷ lệ trên số bài đã sàng lọc), không liên quan, chờ sàng lọc / chưa rõ.
+- **Câu hỏi 1 — Bài liên quan mới mỗi tuần theo 4 nhóm hashtag**, có vạch mốc chính sách; chuyển được sang "tất cả bài" (trước sàng lọc) để thấy sàng lọc loại bớt bao nhiêu; rê chuột để xem số từng tuần; nút **Bảng** để xem số liệu dạng bảng. Tuần cuối chưa đủ 7 ngày được vẽ nét đứt để không bị đọc thành "giảm".
+- **Vận hành theo khâu:** số lần chạy, khối lượng, lỗi, chi phí của Phát hiện bài / Đo biến động / Nhiệt kế.
+- **Câu hỏi 3 — Bài tăng tương tác mạnh nhất** trong khoảng 7 ngày gần nhất (chỉ bài liên quan hoặc chưa rõ, còn tồn tại). **Chỉ quản trị viên** thấy danh sách này vì có đường dẫn bài. Đây là danh sách *đề xuất xem xét*, không phải danh sách chuyển tuyến.
+- Mỗi phần ghi rõ câu hỏi nó trả lời và **hạn chế**.
+
+Chưa có (làm tiếp): vòng đời hashtag (câu hỏi 2), đường tỷ lệ bài còn tồn tại (câu hỏi 4), AI so với người (câu hỏi 5), hai tỉnh (câu hỏi 6), nhiệt kế từ khóa đặt cạnh.
+
 ## Góp ý cho dashboard
 
 Khi xem dashboard, hãy góp ý: biểu đồ có trả lời đúng câu hỏi không, đọc có dễ không, thiếu thông tin gì để ra quyết định.

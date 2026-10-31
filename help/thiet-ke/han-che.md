@@ -18,6 +18,7 @@ Nói rõ hạn chế là một phần của tính trung thực khoa học. Khi �
 ## Về đo lường
 
 - **Phụ thuộc thuật toán nền tảng:** kết quả tìm theo hashtag do TikTok/Facebook quyết định và có thể đổi bất cứ lúc nào.
+- **Hai nguồn số liệu:** lần đo đầu lấy từ công cụ tìm bài (Apify), các lần sau từ công cụ đo (Social Fetch) — hai bên có thể đếm hơi khác nhau. Mỗi lần đo đều ghi nguồn; phép thử so sánh quyết định có nối hai nguồn không.
 - **Phụ thuộc công cụ quét bên ngoài:** actor có thể hỏng, đổi định dạng, đổi giá → có thể gãy chuỗi số liệu. Có dự phòng và đánh dấu ngày đổi công cụ.
 - **"Biến mất" không phải "bị gỡ":** bài không còn có thể do người đăng tự xóa, đặt riêng tư hoặc bị nền tảng gỡ — hệ thống không phân biệt được.
 - **Like, bình luận, chia sẻ là số tại thời điểm đo**, không phải số cuối cùng; lượt xem chỉ có ở video.

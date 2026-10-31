@@ -22,6 +22,7 @@
 }
 .vpha-back:hover { background: #065f46; }
 .vp-doc img { border-radius: 10px; border: 1px solid var(--vp-c-divider); }
+.vp-doc img[src*="-mobile"] { max-width: 360px; display: block; margin: 16px auto; }
 .img-caption { text-align: center; font-size: 13px; color: var(--vp-c-text-2); margin-top: -8px; }
 @media (max-width: 640px) {
   .vpha-back { margin-left: 6px; margin-right: 6px; padding: 4px 8px; font-size: 12px; }

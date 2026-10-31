@@ -1,0 +1,12 @@
+ĐO TƯƠNG TÁC CHÍNH (chờ chạy thử) — Social Fetch (socialfetch.dev)
+TikTok: GET /v1/tiktok/videos?url=...   Facebook: GET /v1/facebook/posts?url=...   (1 lượt/lần gọi)
+Xu hướng từ khóa TikTok: GET /v1/tiktok/search?query=...&region=VN&datePosted=this-week&sortBy=date-posted
+
+CÁCH CHẠY THỬ (dùng 100 lượt miễn phí, không cần thẻ):
+1. Đăng ký socialfetch.dev, lấy API key (dạng sfk_...).
+2. (Nên có) tạo file deleted-urls.txt trong thư mục này, mỗi dòng 1 link bài TikTok/Facebook đã bị xóa (2–3 link).
+3. Trong thư mục web (PowerShell):  $env:SOCIALFETCH_API_KEY="sfk_..."; node scripts/socialfetch-test.mjs
+4. Kết quả: result-tiktok.json, result-facebook.json, result-trend.json, summary.txt (không chứa API key).
+
+KIỂM TRA: đủ like/bình luận/chia sẻ/lượt xem/lượt lưu? các dạng link Facebook (pfbid, permalink.php, reel, nhóm)?
+bài đã xóa trả gì? số liệu so với actor quét (chênh do bài tăng thêm sau vài ngày là bình thường)? tìm kiếm VN có ra video tiếng Việt?

@@ -14,6 +14,7 @@ Quét theo hashtag ra rất nhiều bài có đúng hashtag nhưng **chẳng li�
 2. **AI gắn nhãn** *liên quan / không liên quan / chưa rõ*, chạy ngay sau mỗi lần quét chính thức. Chỉ gửi phần chữ đã che số điện thoại, link, email, tên tài khoản; **không gửi ảnh**.
 3. **Nghiên cứu viên xác minh** theo hàng đợi (dưới đây).
 
+- Mỗi bài có một **trạng thái sàng lọc hiện tại**: *chưa sàng lọc*, *liên quan*, *chưa rõ*, *không liên quan*, kèm ai kết luận (quy tắc, AI hay người) và lúc nào. **Kết luận của người thắng AI, AI thắng quy tắc.** Lịch sử mọi nhãn vẫn được giữ đủ để đo độ chính xác.
 - **Không xóa** bài không liên quan, chỉ đánh dấu — để kiểm chứng và đo độ chính xác của AI. Khi phân tích chỉ tính bài liên quan.
 - **Không đo lại** bài không liên quan → tiết kiệm chi phí. Vì vậy AI chạy trước mốc đo ngày 3.
 - Bài gần như chỉ có hình, ít chữ: AI xếp "chưa rõ", người xem.

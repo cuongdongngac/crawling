@@ -6,10 +6,17 @@ Phiếu đề xuất là cách bạn báo cho Ban nghiên cứu một hashtag/t�
 
 1. Trong tab **Hashtag đi kèm**, tìm hashtag có nhãn **Mới**.
 2. Bấm **Đề xuất**. Một phiếu hiện ra, đã điền sẵn hashtag và nền tảng.
+
+   ![Nút Đề xuất](/images/cong-tac-vien/de-xuat-hashtag-01-nut-de-xuat.png)
+   <p class="img-caption">Hình 1: Nút Đề xuất chỉ có ở hashtag Mới. Lưu ý: hashtag chung chung như #fyp, #xuhuong cũng hiện là Mới nhưng không nên đề xuất</p>
+
 3. **Chọn 1–10 bài minh chứng** (đã sắp theo tương tác) — bấm **Mở bài** để xem lại trước khi chọn.
 4. Chấm **ba tiêu chí**: *Nhìn hình*, *Nhìn chữ*, *Nhìn giao dịch* (từ 2/3 trở lên là ca nghi ngờ — xem [Quy tắc ba tiêu chí](./ba-tieu-chi)).
 5. Viết **Nghĩa / cách dùng của từ này** — ví dụ: cách gọi lóng của pod, hay đi kèm giá bán…
 6. Gửi phiếu.
+
+![Phiếu đề xuất](/images/cong-tac-vien/de-xuat-hashtag-02-phieu-mobile.png)
+<p class="img-caption">Hình 2: Phiếu đề xuất: nghĩa của từ, ba tiêu chí (2/3 là ca nghi ngờ), bài minh chứng</p>
 
 ## Theo dõi kết quả
 

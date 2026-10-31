@@ -44,6 +44,10 @@ Ví dụ: `cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png` → bài *Qu
 - Không chụp danh mục từ khoá đang quét — trang trợ giúp là công khai.
 
 ### Danh sách ảnh cần chụp
+
+✅ = đã có (31/10/2026, Claude dựng lại màn hình bằng dữ liệu mẫu tự viết, không phải bài thật). Còn lại cần chụp tay: cài ứng dụng trên Android/iPhone, Apify Console, Excel đã xuất, danh sách phiếu, trang Cấu hình, trang Duyệt phiếu.
+Ảnh có `-mobile` trong tên tự hiển thị rộng tối đa 360px (CSS trong `.vitepress/theme/custom.css`).
+
 | Bài | Tên ảnh (trong `images/<nhóm>/`) | Nội dung |
 |---|---|---|
 | bat-dau/cai-ung-dung | `cai-ung-dung-01-android-nut-cai-mobile.png` | Nút “Cài ứng dụng” trên thanh đầu trang |
@@ -52,14 +56,14 @@ Ví dụ: `cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png` → bài *Qu
 | | `cai-ung-dung-04-iphone-them-vao-mh-chinh-mobile.png` | Mục “Thêm vào MH chính” |
 | | `cai-ung-dung-05-bieu-tuong-mobile.png` | Biểu tượng VPHA Quét trên màn hình chính |
 | cong-tac-vien/api-key-apify | `api-key-apify-01-trang-integrations.png` | Apify Console → API & Integrations (che key) |
-| cong-tac-vien/quet-thu | `quet-thu-01-form-nhap-mobile.png` | Form: công cụ, key (trống), từ khoá, số bài |
-| | `quet-thu-02-tien-do-mobile.png` | Tiến độ từng từ khoá, nút Dừng |
-| | `quet-thu-03-so-lieu-tong-mobile.png` | Ô số liệu tổng |
-| | `quet-thu-04-bo-loc-sap-xep-mobile.png` | Bộ lọc ngôn ngữ, từ khoá, sắp xếp |
-| | `quet-thu-05-tab-hashtag-di-kem-mobile.png` | Tab Hashtag đi kèm với nhãn Mới / Đã có |
+| cong-tac-vien/quet-thu | ✅ `quet-thu-01-form-nhap-mobile.png` | Form: công cụ, key (trống), từ khoá, số bài |
+| | ✅ `quet-thu-02-tien-do-mobile.png` | Tiến độ từng từ khoá, nút Dừng |
+| | ✅ `quet-thu-03-so-lieu-tong-mobile.png` | Ô số liệu tổng |
+| | ✅ `quet-thu-04-bo-loc-sap-xep-mobile.png` | Bộ lọc ngôn ngữ, từ khoá, sắp xếp |
+| | ✅ `quet-thu-05-tab-hashtag-di-kem-mobile.png` | Tab Hashtag đi kèm với nhãn Mới / Đã có |
 | | `quet-thu-06-xuat-excel.png` | File Excel 3 trang sau khi xuất |
-| cong-tac-vien/de-xuat-hashtag | `de-xuat-hashtag-01-nut-de-xuat-mobile.png` | Nút Đề xuất cạnh hashtag Mới |
-| | `de-xuat-hashtag-02-phieu-mobile.png` | Phiếu: bài minh chứng, ba tiêu chí, nghĩa |
+| cong-tac-vien/de-xuat-hashtag | ✅ `de-xuat-hashtag-01-nut-de-xuat.png` (chụp máy tính để thấy nút) | Nút Đề xuất cạnh hashtag Mới |
+| | ✅ `de-xuat-hashtag-02-phieu-mobile.png` | Phiếu: bài minh chứng, ba tiêu chí, nghĩa |
 | | `de-xuat-hashtag-03-trang-thai-mobile.png` | Danh sách phiếu và trạng thái |
 | quan-tri/cau-hinh | `cau-hinh-01-khoa-apify.png` | Khối Apify + kết quả Kiểm tra |
 | | `cau-hinh-02-khoa-openrouter.png` | Khối OpenRouter + hạn mức |

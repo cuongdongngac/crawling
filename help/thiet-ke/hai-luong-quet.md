@@ -12,19 +12,34 @@ Cách làm ban đầu: cứ quét lại hashtag rồi cập nhật số like, b�
 2. **Mất dấu bài** — bài rớt khỏi kết quả tìm kiếm của hashtag là không theo dõi được nữa, dù bài vẫn còn và vẫn tăng tương tác.
 3. **Số liệu không đều** — bài được đo nhiều hay ít là do may rủi, không vẽ được đường cong chuẩn.
 
-## Cách làm mới: tách hai luồng
+## Cách làm mới: việc nào ra việc đó
+
+**Tìm bài (Apify) → Sàng lọc (quy tắc + AI + nghiên cứu viên) → Đo tương tác định kỳ (Social Fetch) → Dashboard, dữ liệu phẳng**
+
+Mỗi khâu một công cụ, một trách nhiệm, một nhật ký và một khoản chi phí riêng. Khâu nào hỏng hoặc cần đổi nhà cung cấp thì thay khâu đó, các khâu khác giữ nguyên.
 
 | | Luồng Phát hiện | Luồng Đo tương tác |
 |---|---|---|
 | Mục đích | Tìm **bài mới** | Theo dõi **bài đã có** |
 | Đầu vào | Hashtag/từ khóa đã duyệt | Danh sách link bài trong hệ thống |
-| Công cụ | Actor tìm theo hashtag | Actor đo lại theo link bài |
+| Công cụ | Apify (actor tìm theo hashtag) | **Social Fetch** (đo theo link bài); Bright Data / actor Apify làm dự phòng |
 | Lịch | Hằng ngày, nỗ lực quét giữ ổn định | Mỗi ngày chọn các bài đến mốc đo |
 | Kết quả | Bài mới + lần đo đầu tiên (ngày 0) | Thêm một dòng số liệu cho mỗi lần đo |
 
+- Số liệu Apify trả về lúc tìm bài được ghi thành **lần đo đầu tiên** (kể cả khi trống số — vẫn xác nhận bài còn tồn tại lúc phát hiện). Mỗi lần đo đều biết nguồn (Apify hay Social Fetch), nhóm phân tích tự quyết định có nối hai nguồn hay không.
 - Bài đã có mà được quét hashtag gặp lại: không thêm bài, chỉ ghi nhận "gặp lại" (tín hiệu bài còn được đẩy) và lấy luôn số liệu.
 - Tắt một hashtag thì các bài đã thu từ hashtag đó **vẫn được đo đủ lịch**.
 - Danh sách bài cần đo do hệ thống tự sinh từ kho dữ liệu, không dùng lịch cố định của Apify.
+
+## Sàng lọc trước khi đo
+
+- AI sàng lọc trong vòng 24 giờ sau khi tìm thấy bài.
+- Bài **liên quan** hoặc **chưa rõ** → vẫn đo bình thường trong lúc chờ người xem (không mất phần đầu đường cong).
+- Bài **không liên quan** → không đo. Người xác minh kết luận ngược lại thì điều chỉnh: ngừng đo (giữ số liệu cũ, loại khỏi phân tích) hoặc đưa vào lịch đo từ lúc đó.
+
+## Số liệu mỗi lần đo
+
+Like (Facebook: tổng mọi loại cảm xúc), bình luận, chia sẻ, lượt xem (chỉ video/reel), lượt lưu (TikTok). Mỗi lần đo là một dòng mới, không ghi đè.
 
 ## Lịch đo của một bài (bậc thang)
 

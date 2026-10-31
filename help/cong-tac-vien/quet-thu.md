@@ -16,6 +16,9 @@ Kết quả chỉ hiện trên màn hình của bạn và trong file Excel bạn
 | **Số bài tối đa mỗi từ khóa** | Để vừa phải (vài chục) cho rẻ và nhanh. |
 | **Thứ tự, Từ ngày, Đến ngày** | Chỉ có với Facebook: *Nổi bật* hoặc *Mới nhất*, lọc theo khoảng ngày. |
 
+![Form nhập thông tin quét](/images/cong-tac-vien/quet-thu-01-form-nhap-mobile.png)
+<p class="img-caption">Hình 1: Form nhập: công cụ, API key của bạn, từ khóa, số bài tối đa</p>
+
 Bấm **Bắt đầu quét**. Dòng chữ bên cạnh cho biết **ước tính chi phí tối đa** trên tài khoản Apify của bạn.
 
 ::: tip Dùng từ tiếng Việt
@@ -29,6 +32,9 @@ Từ khóa tiếng Anh (như “vape”) trả về chủ yếu nội dung nư�
 - Muốn dừng sớm: bấm **Dừng** — bài đã lấy được vẫn giữ lại.
 - Khi mọi từ khóa xong, kết quả **tự tải về** một lần.
 
+![Tiến độ quét](/images/cong-tac-vien/quet-thu-02-tien-do-mobile.png)
+<p class="img-caption">Hình 2: Tiến độ từng từ khóa, chi phí từng lần chạy, nút Dừng</p>
+
 ::: details Đã chạy công cụ trực tiếp trên Apify?
 Mở mục **“Đã chạy trên Apify? Dán mã lần quét để xem kết quả tại đây”**, chọn đúng công cụ ở trên, dán mã lần quét (hoặc đường dẫn `console.apify.com/.../runs/...`) rồi bấm **Thêm**.
 :::
@@ -37,15 +43,24 @@ Mở mục **“Đã chạy trên Apify? Dán mã lần quét để xem kết qu
 
 **Số liệu tổng**: tổng số bài, số bài tiếng Việt, tổng lượt xem/tương tác…
 
+![Số liệu tổng](/images/cong-tac-vien/quet-thu-03-so-lieu-tong-mobile.png)
+<p class="img-caption">Hình 3: Số liệu tổng của tập bài đang lọc</p>
+
 **Bộ lọc và sắp xếp**
 - Ngôn ngữ: *Chỉ tiếng Việt*, *Tiếng Việt + chưa rõ ngôn ngữ*, *Tất cả ngôn ngữ*.
 - Từ khóa: xem riêng từng từ hoặc *Mọi từ khóa*.
 - Sắp xếp: *Tương tác cao nhất (like + bình luận + chia sẻ)*, *Nhiều like / bình luận / chia sẻ / lượt xem nhất*, *Mới đăng nhất*.
 - Ô tìm kiếm trong nội dung bài.
 
+![Bộ lọc và sắp xếp](/images/cong-tac-vien/quet-thu-04-bo-loc-sap-xep-mobile.png)
+<p class="img-caption">Hình 4: Bộ lọc ngôn ngữ, từ khóa, sắp xếp và danh sách bài</p>
+
 **Tab Hashtag đi kèm** — các hashtag xuất hiện cùng trong những bài đang lọc, kèm nhãn:
 - **Mới**: chưa có trong danh mục của dự án → *ứng viên để đề xuất*.
 - **Đã có trong danh mục**, **Đang quét**: dự án đã biết.
+
+![Tab Hashtag đi kèm](/images/cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png)
+<p class="img-caption">Hình 5: Tab Hashtag đi kèm: nhãn Mới / Đang quét / Đã có trong danh mục</p>
 
 Thấy hashtag **Mới** đáng chú ý → bấm **Đề xuất** (xem [Gửi phiếu đề xuất](./de-xuat-hashtag)).
 

@@ -20,10 +20,27 @@ Hệ thống không tự viết phần thu thập dữ liệu mà dùng **actor*
 | Vai trò | TikTok | Facebook |
 |---|---|---|
 | Phát hiện (quét hashtag) | clockworks/tiktok-hashtag-scraper | scraper_one/facebook-posts-search |
-| Đo lại theo link | clockworks/tiktok-scraper (chờ chạy thử) | clappi/facebook-posts-reels-scraper (đã chạy mẫu, chờ chạy với link của dự án) |
-| Dự phòng | api-ninja/tiktok-hashtag-scraper; insiteco/social-insight-scraper (đo lại) | scrapeforge/facebook-search-posts |
+| Đo tương tác theo link | **Social Fetch** (chờ chạy thử 100 lượt miễn phí) | **Social Fetch** (chờ chạy thử) |
+| Dự phòng tìm bài | api-ninja/tiktok-hashtag-scraper | scrapeforge/facebook-search-posts |
+| Dự phòng đo | Bright Data; clockworks/tiktok-scraper; insiteco/social-insight-scraper | Bright Data; clappi/facebook-posts-reels-scraper |
 
 Đã loại: actor chỉ thống kê độ phổ biến hashtag (không thu bài), actor Instagram (ngoài phạm vi), actor đang bảo trì, actor không ra kết quả, actor quét theo trang (trái nguyên tắc chỉ quét theo hashtag).
+
+## Vì sao đo tương tác bằng Social Fetch, không bằng actor Apify?
+
+- **Việc nào ra việc đó:** Apify giỏi tìm bài theo hashtag; đo lại theo link là việc khác, dùng dịch vụ chuyên cho việc đó.
+- **Đơn giản:** đăng ký tự phục vụ, 100 lượt miễn phí không cần thẻ; gọi một lần nhận kết quả ngay (khoảng 3 giây), một bài một lượt.
+- **Chi phí:** gói lượt mua một lần, không hết hạn (khoảng 1,6–2,4 USD/1.000 lượt tùy gói); lượt lỗi không tính tiền. Lượng đo dự kiến ~4.900 lượt/tháng → khoảng 12 USD/tháng.
+- **Đo được cả xu hướng từ khóa TikTok:** tìm video theo từ khóa có lọc khu vực Việt Nam và ngày đăng — dùng làm "nhiệt kế" hằng tuần (xem dưới).
+
+**Rủi ro:** Social Fetch là công ty nhỏ, mới (2024) — có thể đổi giá hoặc ngừng. Cách giảm: mua gói nhỏ dần; phần đo viết tách riêng nhà cung cấp; khi cần thì chuyển sang Bright Data (đã đánh giá: ~1,5 USD/1.000 bản ghi, có gói miễn phí hằng tháng, nhưng thủ tục đăng ký phức tạp hơn) hoặc actor Apify dự phòng. Dự án cần xu hướng, không cần chính xác tuyệt đối; ngày đổi nhà cung cấp được đánh dấu trên biểu đồ.
+
+Đã xem và không chọn: Data365 (thuê bao, quá ngân sách), Oxylabs (không có sẵn bộ đọc cho TikTok/Facebook).
+
+## "Nhiệt kế" xu hướng từ khóa (TikTok, đang thử)
+
+Mỗi tuần, với mỗi từ khóa trong danh mục, hỏi TikTok "có bao nhiêu video mới trong tuần, ở Việt Nam" (lấy vài trang kết quả, cộng lượt xem). Đây là chỉ số **độc lập với mẫu bài đã thu**, rất rẻ (khoảng vài trăm lượt/tháng, dưới 2 USD), bổ sung cho câu hỏi 1.
+Hạn chế: kết quả tìm kiếm có giới hạn và do TikTok sắp xếp, nên là **chỉ số tương đối** (tăng/giảm), không phải tổng số thật. Facebook không có tìm kiếm bài theo từ khóa nên không có nhiệt kế này.
 
 ## Điểm dừng — khi nào đổi hướng
 

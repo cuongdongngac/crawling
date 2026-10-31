@@ -3,7 +3,7 @@
 // SINH DỮ LIỆU GIẢ 18 THÁNG để dựng dashboard (31/10/2026)
 // Mô phỏng đúng thiết kế đo lường (claude/thiet-ke-do-luong-2026-10-31.md):
 //   - Luồng Phát hiện: quét hashtag hằng ngày -> bài mới (snapshot ngày 0), gặp lại bài cũ.
-//   - Luồng Đo tương tác: mốc 3/7/14/30 ngày từ lúc phát hiện (bài > 60 ngày tuổi: chỉ mốc 30),
+//   - Luồng Đo tương tác (nguồn: Social Fetch, run_type MEASURE): mốc 3/7/14/30 ngày từ lúc phát hiện (bài > 60 ngày tuổi: chỉ mốc 30),
 //     kiểm kê hằng tháng bài còn nóng, kiểm kê toàn bộ trước 4 đợt phân tích và sau mốc chính sách,
 //     bài biến mất: đo không thấy -> kiểm lại sau 1 ngày -> ghi posts.unavailable_at.
 //   - Số bài mới mỗi tuần theo 4 nhóm hashtag cố định, có thay đổi mức/độ dốc tại mốc chính sách;
@@ -114,6 +114,11 @@ const TEXTS = {
     "Hành trình cai thuốc của mình sau 3 tháng", "Phụ huynh cần biết các dấu hiệu con dùng thuốc lá điện tử",
     "Bác sĩ nói gì về tác hại của vape"],
 };
+// Bài đúng hashtag nhưng KHÔNG liên quan thuốc lá điện tử (để thử sàng lọc)
+const UNRELATED_TEXTS = ["Tập podcast mới tuần này, mời mọi người nghe", "Quán cà phê mới mở, không gian chill lắm",
+  "Review tai nghe pod mới mua", "Tin thể thao nước ngoài hôm nay", "Bán quần áo cũ, ai cần nhắn mình", "Video nhảy theo trend mới"];
+const UNRELATED_RATE = { COMMERCIAL: 0.25, LIFESTYLE: 0.4, EVASION: 0.3, WARNING: 0.15 };
+const UNCLEAR_RATE = 0.07;
 // Mức nền (bài mới/tuần) và tác động tại mốc chính sách (k = số tuần kể từ mốc)
 const RATE = {
   COMMERCIAL: (w, k) => 78 * (1 + 0.002 * w) * (k < 0 ? 1 : Math.min(0.92, 0.55 + 0.012 * k)),
@@ -146,9 +151,10 @@ function simulate(intervention) {
       const st = new Date(day + "T00:00:00Z").getTime() + startHour * 3600000 + Math.floor(rand() * 1800000);
       const actor = kind === "DISCOVERY"
         ? (platform === "TIKTOK" ? "clockworks/tiktok-hashtag-scraper" : "scraper_one/facebook-posts-search")
-        : (platform === "TIKTOK" ? "clockworks/tiktok-scraper" : "clappi/facebook-posts-reels-scraper");
+        : (platform === "TIKTOK" ? "socialfetch/tiktok-videos" : "socialfetch/facebook-posts");
       r = {
-        mock_key: key, researcher_code: MOCK, platform, actor_id: actor,
+        mock_key: key, researcher_code: MOCK, platform, actor_id: actor, run_type: kind === "DISCOVERY" ? "DISCOVERY" : "MEASURE",
+        cost_usd: null,
         query_parameters: kind === "DISCOVERY"
           ? { mock: true, mock_key: key, mode: "DISCOVERY", hashtag: "#" + hashtag }
           : { mock: true, mock_key: key, mode: "REMEASURE", reasons: [] },
@@ -192,11 +198,27 @@ function simulate(intervention) {
         const cross = chance(0.15) ? [pick(TAGS.filter((x) => x.g !== g && (x.appear == null || k >= x.appear))).t] : [];
         const gen = GENERIC.filter(() => chance(platform === "TIKTOK" ? 0.18 : 0.08)).slice(0, 3);
         const tagsInText = [tag.t, ...others, ...cross, ...gen];
-        const text = pick(TEXTS[g]) + " " + tagsInText.map((h) => "#" + h).join(" ");
+        // Sàng lọc: AI kết luận trong 24 giờ; "chưa rõ" chờ người kết luận sau 1–7 ngày; ~20% bài AI kết luận được người xem lại
+        const trulyUnrelated = chance(UNRELATED_RATE[g]);
+        const aiUnclear = chance(UNCLEAR_RATE);
+        const aiAt = D + uni(1, 20) * 3600000;
+        let relevance, relSource, relAt, stopAt = null;
+        if (aiUnclear) {
+          relAt = aiAt + uni(1, 7) * DAY; relSource = "HUMAN";
+          relevance = trulyUnrelated ? "UNRELATED" : "RELATED";
+          if (trulyUnrelated) stopAt = relAt; // đo trong lúc chờ, người kết luận không liên quan thì ngừng
+        } else {
+          relevance = trulyUnrelated ? "UNRELATED" : "RELATED";
+          relSource = chance(0.2) ? "HUMAN" : "AI";
+          relAt = relSource === "HUMAN" ? aiAt + uni(1, 10) * DAY : aiAt;
+          if (trulyUnrelated) stopAt = aiAt; // AI loại ngay -> không đo lại
+        }
+        if (relAt >= END.getTime()) { relevance = aiUnclear ? "UNCLEAR" : relevance; relSource = aiUnclear ? "AI" : relSource; relAt = Math.min(relAt, END.getTime() - 3600000); }
+        const text = (trulyUnrelated ? pick(UNRELATED_TEXTS) : pick(TEXTS[g])) + " " + tagsInText.map((h) => "#" + h).join(" ");
         // Tương tác tiềm năng + đường cong tăng
         const views = platform === "TIKTOK" ? lognormal(2500, 1.6) : isReel ? lognormal(1800, 1.5) : null;
         const likes = platform === "TIKTOK" ? views * uni(0.02, 0.09) : isReel ? views * uni(0.02, 0.07) : lognormal(35, 1.4);
-        const eng = { v: views, l: likes, c: likes * uni(0.01, 0.09), s: likes * (g === "WARNING" ? uni(0.05, 0.25) : uni(0.005, 0.08)) };
+        const eng = { sv: platform === "TIKTOK" ? likes * uni(0.04, g === "COMMERCIAL" || g === "EVASION" ? 0.35 : 0.15) : null, v: views, l: likes, c: likes * uni(0.01, 0.09), s: likes * (g === "WARNING" ? uni(0.05, 0.25) : uni(0.005, 0.08)) };
         const tau = uni(1, 6);
         const surge = chance(0.04) ? { at: uni(10, 60), mult: uni(1, 4), tau: uni(2, 5) } : null;
         const frac = (tAbs) => {
@@ -210,6 +232,7 @@ function simulate(intervention) {
           return {
             view_count: eng.v == null ? null : Math.round(eng.v * f),
             like_count: Math.round(eng.l * f), comment_count: Math.round(eng.c * f), share_count: Math.round(eng.s * f),
+            save_count: eng.sv == null ? null : Math.round(eng.sv * f),
           };
         };
         // Biến mất: nguy cơ theo ngày, tăng gấp 2,5 trong 90 ngày sau mốc
@@ -226,6 +249,7 @@ function simulate(intervention) {
           raw_payload: { mock: true, group: g, scan_hashtag: "#" + tag.t, is_reel: isReel, author_kind: author.startsWith("u") ? "user" : "seller" },
           content_cluster_id: isSellerGroup && chance(0.06) ? pick(clusters) : null,
           is_flagged: false, flag_reason: null, created_at: new Date(D).toISOString(), unavailable_at: null,
+          relevance, relevance_source: relSource, relevance_at: new Date(relAt).toISOString(),
         });
         const tagSet = new Set(tagsInText.filter((h) => TAGS.some((x) => x.t === h)));
         for (const h of tagSet) facts.push({ post_id, tag: h, match_type: "CAPTION", first_seen_run_key: null, first_seen_at: new Date(D).toISOString() });
@@ -259,6 +283,7 @@ function simulate(intervention) {
           const e = queue.shift();
           if (!e) break;
           if (e.t >= END.getTime()) break;
+          if (stopAt !== null && e.t >= stopAt) break; // không liên quan -> không đo lại
           if (e.reason === "INVENTORY_HOT") mi++;
           else while (mi >= 0 && mi < monthlyInv.length && monthlyInv[mi] <= e.t) mi++;
           if (e.reason === "REDISCOVERY") {
@@ -317,6 +342,8 @@ function report(sim, intervention) {
   const gone = posts.filter((p) => p.unavailable_at);
   console.log(`Bài biến mất: ${gone.length} (${((100 * gone.length) / posts.length).toFixed(1)}%)`);
   console.log("Lượt đo theo lý do:", JSON.stringify(sim.reasonCount));
+  const rel = {}; for (const p of posts) rel[p.relevance + "/" + p.relevance_source] = (rel[p.relevance + "/" + p.relevance_source] || 0) + 1;
+  console.log("Sàng lọc (kết luận/nguồn):", JSON.stringify(rel));
   // Tự kiểm tra tính nhất quán
   const runKeys = new Set(runs.map((r) => r.mock_key));
   const postById = new Map(posts.map((p) => [p.post_id, p]));
@@ -373,6 +400,12 @@ async function seed() {
   if (existing) throw new Error("Đã có dữ liệu giả (MOCK_SEED_INFO). Chạy --clean trước nếu muốn sinh lại.");
   const col = await sb.from("posts").select("unavailable_at").limit(1);
   if (col.error) throw new Error("Bảng posts chưa có cột unavailable_at — chạy docs/migrations/2026-10-31_do-lai-theo-link.sql trước.");
+  const col2 = await sb.from("post_snapshots").select("save_count").limit(1);
+  if (col2.error) throw new Error("Bảng post_snapshots chưa có cột save_count — chạy docs/migrations/2026-10-31_bo-sung-sang-loc-do-luong.sql trước.");
+  const col3 = await sb.from("posts").select("relevance").limit(1);
+  if (col3.error) throw new Error("Bảng posts chưa có cột relevance — chạy docs/migrations/2026-10-31_bo-sung-sang-loc-do-luong.sql trước.");
+  const col4 = await sb.from("collection_runs").select("run_type").limit(1);
+  if (col4.error) throw new Error("Bảng collection_runs chưa có cột run_type — chạy docs/migrations/2026-10-31_loai-run.sql trước.");
 
   let intervention = process.env.MOCK_INTERVENTION ? new Date(process.env.MOCK_INTERVENTION + "T00:00:00Z") : null;
   if (!intervention) {
@@ -391,8 +424,8 @@ async function seed() {
   const ACTORS = [
     { actor_id: "clockworks/tiktok-hashtag-scraper", actor_name: "TikTok – quét theo hashtag", platform: "TIKTOK" },
     { actor_id: "scraper_one/facebook-posts-search", actor_name: "Facebook – tìm bài theo từ khóa/hashtag", platform: "FACEBOOK" },
-    { actor_id: "clockworks/tiktok-scraper", actor_name: "TikTok – đo lại theo link", platform: "TIKTOK" },
-    { actor_id: "clappi/facebook-posts-reels-scraper", actor_name: "Facebook – đo lại theo link", platform: "FACEBOOK" },
+    { actor_id: "socialfetch/tiktok-videos", actor_name: "Social Fetch – TikTok: đo tương tác theo link", platform: "TIKTOK", default_config: { role: "MEASURE" }, is_active: false },
+    { actor_id: "socialfetch/facebook-posts", actor_name: "Social Fetch – Facebook: đo tương tác theo link", platform: "FACEBOOK", default_config: { role: "MEASURE" }, is_active: false },
   ];
   must(await sb.from("apify_actors").upsert(ACTORS, { onConflict: "actor_id", ignoreDuplicates: true }), "apify_actors");
   const texts = TAGS.map((x) => "#" + x.t);
@@ -475,7 +508,15 @@ try {
   if (CLEAN) await clean();
   else if (DRY) {
     const intervention = process.env.MOCK_INTERVENTION ? new Date(process.env.MOCK_INTERVENTION + "T00:00:00Z") : addMonths(START, 6);
-    report(simulate(intervention), intervention);
+    const sim = simulate(intervention);
+    report(sim, intervention);
+    // --dump=<file>: xuất dữ liệu mô phỏng ra JSON (để kiểm thử view SQL ở Postgres cục bộ)
+    const dump = process.argv.find((a) => a.startsWith("--dump="));
+    if (dump) {
+      const { writeFileSync } = await import("node:fs");
+      writeFileSync(dump.slice(7), JSON.stringify({ intervention: intervention.toISOString(), groups: GROUPS, tags: TAGS, ...sim }));
+      console.log("Đã xuất:", dump.slice(7));
+    }
     console.log("(--dry: không ghi gì)");
   } else await seed();
 } catch (e) {
