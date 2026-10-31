@@ -88,3 +88,22 @@ Lưu ý khi đưa vào hệ thống:
 - Không đo lại mọi bài mỗi đêm: bài tích lũy dần (500–800 bài/tháng), sau 18 tháng ~10.000–14.000 bài → đo hết mỗi đêm tốn hàng trăm USD/tháng. Đo theo mốc tuổi: ~5 lần/bài → khoảng 2.500–4.000 lần đo/tháng ≈ 6–18 USD/tháng.
 - `views` của bài thường trả 0 → ghi rỗng (null), không ghi 0, để không tạo số giả trong `post_snapshots`.
 - `status = "unavailable"` → ghi nhận bài biến mất (application có nêu chỉ số này), không ghi dòng snapshot số 0.
+
+## Quyết định 31/10/2026: đo tương tác dùng nhà cung cấp riêng (Bright Data)
+
+CuongPV chốt "việc nào ra việc đó":
+**Apify tìm bài (+ ghi snapshot đầu) → sàng lọc (quy tắc + AI + nghiên cứu viên) → Bright Data đo tương tác theo lịch.**
+
+- Bright Data (Web Scraper API, theo link bài, TikTok + Facebook): ~1,5 USD/1.000 bản ghi, gói miễn phí ~5.000 bản ghi/tháng (theo trang so sánh 07–09/2026 — cần kiểm lại trên trang Bright Data), không tính lần giao lỗi, một lần gọi tới 5.000 link, do công ty duy trì. Lượng đo dự kiến ~4.900 lượt/tháng → gần như nằm trong gói miễn phí.
+- Không chọn: Data365 (báo giá riêng, khởi điểm ~300 EUR/tháng), Oxylabs (không có bộ đọc sẵn cho TikTok/Facebook, chỉ YouTube và TikTok Shop).
+- Actor đo lại trên Apify (`clappi/facebook-posts-reels-scraper`, `clockworks/tiktok-scraper`, `insiteco/social-insight-scraper`) chuyển thành **dự phòng**.
+- Cần chạy thử Bright Data (gói miễn phí): ~20 link TikTok + ~20 link Facebook lấy từ các `result.json` (đủ các dạng link) + 1–2 bài đã xóa; kiểm: dạng link, bài xóa trả gì, có trả lại link/mã đã gửi, lệch số so với actor quét < 10%, điều kiện gói miễn phí và thanh toán. Lưu vào thư mục `brightdata-...`.
+- Ghi chú dữ liệu: `collection_runs.actor_id` tham chiếu bảng `apify_actors` → thêm một dòng cho nguồn Bright Data (ví dụ `brightdata/tiktok-posts-by-url`, `brightdata/facebook-posts-by-url`) — bảng này hiểu là "danh mục nguồn thu thập".
+
+### Cập nhật tối 31/10/2026: đo tương tác dùng **Social Fetch** thay Bright Data
+CuongPV: thủ tục Bright Data lằng nhằng; nếu Social Fetch đổi thì quay về Bright Data; dự án không cần quá chính xác.
+- Social Fetch (socialfetch.dev): REST đồng bộ (~3,2 giây), 1 lượt/lần gọi, lượt lỗi không tính; 100 lượt miễn phí không cần thẻ; gói không hết hạn: Starter 14 USD/1.000, Growth 59 USD/25.000, Scale 379 USD/230.000 (1,64 USD/1.000). ~4.900 lượt/tháng → ~12 USD/tháng.
+- Lệnh: TikTok `GET /v1/tiktok/videos` (theo link video), Facebook `GET /v1/facebook/posts` (theo link bài/reel); không gửi theo lô (mỗi bài một lần gọi).
+- Xu hướng từ khóa: TikTok `GET /v1/tiktok/search` (query, region=VN, datePosted=this-week…, sortBy=date-posted, cursor) → "nhiệt kế" tương đối hằng tuần. Facebook không có tìm bài theo từ khóa.
+- Rủi ro: startup nhỏ (Anh, 2024) → mua gói nhỏ dần, adapter tách nhà cung cấp; dự phòng: Bright Data, rồi actor Apify.
+- Chạy thử: `scripts/socialfetch-test.mjs` (30 TikTok xen kẽ 3 nguồn + 12 Facebook + bài đã xóa trong `socialfetch/deleted-urls.txt` + xu hướng) → kết quả vào `docs/Actor/socialfetch/`.
