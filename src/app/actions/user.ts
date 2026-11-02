@@ -21,6 +21,7 @@ export async function adminCreateUser(formData: FormData) {
   const password = formData.get("password")?.toString();
   const isAdminStr = formData.get("is_admin")?.toString();
   const isAdmin = isAdminStr === "true";
+  const isResearcher = formData.get("is_researcher")?.toString() === "true";
 
   if (!email || !password) return { error: "Email và mật khẩu là bắt buộc." };
 
@@ -41,6 +42,8 @@ export async function adminCreateUser(formData: FormData) {
         id: authData.user.id,
         email: email,
         is_admin: isAdmin,
+        // chỉ gửi khi bật, để vẫn tạo được tài khoản nếu chưa chạy migration 2026-11-02
+        ...(isResearcher ? { is_researcher: true } : {}),
       });
 
     if (profileError) {
@@ -72,6 +75,20 @@ export async function changeUserRole(userId: string, isAdmin: boolean) {
     return { success: true };
   } catch (error: any) {
     return { error: error.message };
+  }
+}
+
+/** Bật/tắt vai nghiên cứu viên (chỉ quản trị viên cấp). Cần migration 2026-11-02_vai-nghien-cuu-vien.sql. */
+export async function changeUserResearcher(userId: string, isResearcher: boolean) {
+  try {
+    await requireAdmin();
+    const adminClient = await getAdminClient();
+    const { error } = await adminClient.from("profiles").update({ is_researcher: isResearcher }).eq("id", userId);
+    if (error) return { error: error.message.includes("is_researcher") ? "Chưa chạy migration 2026-11-02_vai-nghien-cuu-vien.sql." : error.message };
+    revalidatePath("/dashboard/users");
+    return { success: true };
+  } catch (error: unknown) {
+    return { error: error instanceof Error ? error.message : String(error) };
   }
 }
 

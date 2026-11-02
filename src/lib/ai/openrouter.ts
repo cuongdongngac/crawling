@@ -6,7 +6,8 @@
 // ==========================================================
 import { getServiceClient } from "@/lib/auth/guards";
 
-export const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
+// OPENROUTER_BASE_URL: chỉ đặt khi cần đi qua proxy/kiểm thử; mặc định gọi thẳng OpenRouter.
+export const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
 export const SETTING_KEY = "OPENROUTER_API_KEY";
 export const SETTING_MODEL = "OPENROUTER_MODEL";
 export const DEFAULT_MODEL = "google/gemini-3.5-flash";

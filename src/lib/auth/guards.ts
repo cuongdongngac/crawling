@@ -17,6 +17,8 @@ export type CurrentUser = {
   id: string;
   email: string;
   isAdmin: boolean;
+  /** Vai nghiên cứu viên (dữ liệu, kết luận). Độc lập với isAdmin (vận hành). */
+  isResearcher: boolean;
   province: string | null;
   fullName: string | null;
 };
@@ -30,13 +32,15 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!user) return null;
   const { data: profile } = await getServiceClient()
     .from("profiles")
-    .select("is_admin, email, province, full_name")
+    .select("*")
     .eq("id", user.id)
     .maybeSingle();
   return {
     id: user.id,
     email: profile?.email ?? user.email ?? "",
     isAdmin: profile?.is_admin === true,
+    // Chưa chạy migration 2026-11-02 (chưa có cột) -> tạm coi quản trị viên là nghiên cứu viên như trước
+    isResearcher: profile ? (profile.is_researcher === undefined ? profile.is_admin === true : profile.is_researcher === true) : false,
     province: profile?.province ?? null,
     fullName: profile?.full_name ?? null,
   };
@@ -51,6 +55,13 @@ export async function requireUser(): Promise<CurrentUser> {
 export async function requireAdmin(): Promise<CurrentUser> {
   const u = await requireUser();
   if (!u.isAdmin) throw new Error("Chỉ quản trị viên được dùng chức năng này.");
+  return u;
+}
+
+/** Nghiên cứu viên: duyệt hashtag, gắn nhãn / xác minh, xem danh sách bài kèm link. */
+export async function requireResearcher(): Promise<CurrentUser> {
+  const u = await requireUser();
+  if (!u.isResearcher) throw new Error("Chỉ nghiên cứu viên được dùng chức năng này.");
   return u;
 }
 

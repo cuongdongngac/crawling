@@ -25,6 +25,7 @@ export default defineConfig({
     nav: [
       { text: "Bắt đầu", link: "/bat-dau/gioi-thieu" },
       { text: "Cộng tác viên", link: "/cong-tac-vien/quet-thu" },
+      { text: "Nghiên cứu viên", link: "/nghien-cuu/huong-dan-gan-nhan" },
       { text: "Quản trị", link: "/quan-tri/cau-hinh" },
       { text: "Thiết kế (tạm thời)", link: "/thiet-ke/" },
       { text: "Hỏi đáp", link: "/hoi-dap" },
@@ -37,6 +38,7 @@ export default defineConfig({
           { text: "Hệ thống làm gì, không làm gì", link: "/bat-dau/gioi-thieu" },
           { text: "Cài ứng dụng lên điện thoại", link: "/bat-dau/cai-ung-dung" },
           { text: "Nguyên tắc an toàn khi quan sát", link: "/bat-dau/nguyen-tac-an-toan" },
+          { text: "Vai trò và quyền", link: "/bat-dau/vai-tro" },
         ],
       },
       {
@@ -49,21 +51,29 @@ export default defineConfig({
         ],
       },
       {
-        text: "3. Quản trị",
+        text: "3. Nghiên cứu viên",
+        items: [
+          { text: "Duyệt phiếu đề xuất", link: "/nghien-cuu/duyet-de-xuat" },
+          { text: "Gắn nhãn bài (AI hỗ trợ)", link: "/nghien-cuu/gan-nhan" },
+          { text: "Hướng dẫn gắn nhãn bài (bảng mã v1)", link: "/nghien-cuu/huong-dan-gan-nhan" },
+        ],
+      },
+      {
+        text: "4. Quản trị",
         items: [
           { text: "Cấu hình khóa hệ thống & AI", link: "/quan-tri/cau-hinh" },
-          { text: "Duyệt phiếu đề xuất", link: "/quan-tri/duyet-de-xuat" },
           { text: "Quét chính thức (đang phát triển)", link: "/quan-tri/quet-chinh-thuc" },
         ],
       },
       {
-        text: "4. Thiết kế đang phát triển (tạm thời)",
+        text: "5. Thiết kế đang phát triển (tạm thời)",
         collapsed: false,
         items: [
           { text: "Đọc trước: trạng thái & cách góp ý", link: "/thiet-ke/" },
           { text: "Quy trình tổng thể: công cụ nào, vì sao", link: "/thiet-ke/quy-trinh-tong-the" },
           { text: "Hai luồng quét: Phát hiện / Đo tương tác", link: "/thiet-ke/hai-luong-quet" },
           { text: "Sàng lọc bài: AI và người", link: "/thiet-ke/sang-loc-ai" },
+          { text: "Hướng dẫn mã hóa: triết lý, cơ sở khoa học", link: "/thiet-ke/huong-dan-ma-hoa" },
           { text: "Câu hỏi nghiên cứu và biểu đồ", link: "/thiet-ke/cau-hoi-nghien-cuu" },
           { text: "Chọn công cụ quét", link: "/thiet-ke/chon-cong-cu-quet" },
           { text: "Hạn chế của hệ thống", link: "/thiet-ke/han-che" },

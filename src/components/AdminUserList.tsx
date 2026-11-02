@@ -1,8 +1,8 @@
 "use client";
 
-import { adminCreateUser, changeUserRole, deleteUser, resetUserPassword } from "@/app/actions/user";
+import { adminCreateUser, changeUserRole, changeUserResearcher, deleteUser, resetUserPassword } from "@/app/actions/user";
 import { useState } from "react";
-import { ShieldCheck, ShieldAlert, KeyRound, Trash, Plus, Search, UserCircle, X } from "lucide-react";
+import { ShieldCheck, ShieldAlert, KeyRound, Trash, Plus, Search, UserCircle, X, ClipboardCheck } from "lucide-react";
 
 export default function AdminUserList({ initialUsers }: { initialUsers: any[] }) {
   const [users, setUsers] = useState(initialUsers);
@@ -31,6 +31,13 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
     const res = await changeUserRole(userId, !currentAdmin);
     if (res.error) alert(res.error);
     else setUsers(users.map(u => u.id === userId ? { ...u, is_admin: !currentAdmin } : u));
+  };
+
+  const handleToggleResearcher = async (userId: string, current: boolean) => {
+    if (!confirm(`Bạn muốn ${current ? "gỡ" : "cấp"} vai Nghiên cứu viên cho user này?\n(Nghiên cứu viên xem nội dung, đường dẫn bài, gắn nhãn và duyệt hashtag.)`)) return;
+    const res = await changeUserResearcher(userId, !current);
+    if (res.error) alert(res.error);
+    else setUsers(users.map(u => u.id === userId ? { ...u, is_researcher: !current } : u));
   };
 
   const handleDelete = async (userId: string, email: string) => {
@@ -85,7 +92,11 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
           <div className="pb-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" name="is_admin" value="true" className="w-4 h-4 text-amber-600 rounded" />
-              <span className="text-sm font-medium text-stone-700">Là Quản trị viên (Admin)</span>
+              <span className="text-sm font-medium text-stone-700">Quản trị viên (vận hành)</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer mt-1">
+              <input type="checkbox" name="is_researcher" value="true" className="w-4 h-4 text-violet-600 rounded" />
+              <span className="text-sm font-medium text-stone-700">Nghiên cứu viên (dữ liệu, gắn nhãn)</span>
             </label>
           </div>
           <div className="flex gap-2 w-full md:w-auto">
@@ -117,15 +128,23 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  {user.is_admin ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Admin
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-medium">
-                      <UserCircle className="w-3.5 h-3.5" /> User
-                    </span>
-                  )}
+                  <div className="flex flex-wrap gap-1.5">
+                    {user.is_admin && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5" /> Quản trị
+                      </span>
+                    )}
+                    {user.is_researcher && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 text-xs font-semibold">
+                        <ClipboardCheck className="w-3.5 h-3.5" /> Nghiên cứu viên
+                      </span>
+                    )}
+                    {!user.is_admin && !user.is_researcher && (
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-medium">
+                        <UserCircle className="w-3.5 h-3.5" /> Cộng tác viên
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-6 py-4 text-right">
                   {resetId === user.id ? (
@@ -142,7 +161,10 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
                     </div>
                   ) : (
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => handleToggleRole(user.id, user.is_admin)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title="Đổi quyền">
+                      <button onClick={() => handleToggleResearcher(user.id, !!user.is_researcher)} className="p-2 text-stone-500 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition-colors" title={user.is_researcher ? "Gỡ vai Nghiên cứu viên" : "Cấp vai Nghiên cứu viên"}>
+                        <ClipboardCheck className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleToggleRole(user.id, user.is_admin)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title={user.is_admin ? "Gỡ quyền Quản trị" : "Cấp quyền Quản trị"}>
                         {user.is_admin ? <ShieldAlert className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4" />}
                       </button>
                       <button onClick={() => setResetId(user.id)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title="Đổi mật khẩu">

@@ -1,6 +1,6 @@
 # Duyệt phiếu đề xuất
 
-Mục **Đề xuất hashtag** của quản trị viên liệt kê phiếu của mọi cộng tác viên, kèm tỉnh, bài minh chứng và điểm ba tiêu chí.
+Mục **Đề xuất hashtag** của nghiên cứu viên liệt kê phiếu của mọi cộng tác viên, kèm tỉnh, bài minh chứng và điểm ba tiêu chí.
 
 ## Quyết định
 

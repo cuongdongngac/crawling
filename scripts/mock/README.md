@@ -30,4 +30,16 @@ Tùy chọn: `MOCK_START=2025-05-01` `MOCK_MONTHS=18` `MOCK_INTERVENTION=2025-11
 `posts.raw_payload.mock = true`, tài khoản trong link dạng `mock_...`, `collection_runs.researcher_code = 'MOCK'`,
 danh sách hashtag do script tạo nằm trong `system_settings.MOCK_SEED_INFO`. Script từ chối sinh lần hai khi chưa `--clean`.
 
-Chưa sinh (làm khi dựng màn hình tương ứng): phiếu đề xuất hashtag theo tỉnh (Q6), nhãn AI và nhãn người (Q5) — cần tài khoản người dùng giả.
+## Dữ liệu cho trang Gắn nhãn (AI) — 02/11/2026
+
+Câu chữ do `seed-mock.mjs` sinh chỉ có ~26 câu mẫu, quá đơn điệu để thử AI. Script `seed-ai-demo.ts` (chạy bằng `npx tsx`, cần mạng lần đầu để tải tsx):
+
+1. `npx tsx scripts/mock/seed-ai-demo.ts --dry` — xem caption mẫu, không ghi gì.
+2. `npx tsx scripts/mock/seed-ai-demo.ts --texts --eval` — thay caption bài giả bằng câu đa dạng (teencode, bỏ dấu, emoji, giá, kênh liên hệ, ngụy trang, ca mập mờ, ca "trùng từ" không liên quan) **kèm đáp án** (`raw_payload.mock_truth`), và nạp **bộ 50 bài mô phỏng** có đáp án (`eval_items`, bộ `MO_PHONG_50`). Giữ nguyên nhóm, số liệu, kết luận sàng lọc → trang Tổng quan không đổi. Mất ~1–3 phút.
+   **Chạy trước khi cho AI gắn nhãn**: đổi caption sau khi AI đã gắn thì nhãn AI cũ không còn khớp chữ (khi đó chạy `--clean` rồi sinh lại toàn bộ).
+3. Vào trang **Gắn nhãn (AI)** → Chạy AI. Gợi ý cho buổi trình diễn: chọn "Bài phát hiện từ ngày" khoảng 2–3 tháng cuối (~2.000–3.500 bài). Chạy thử 20 bài trước: trang hiện chi phí thật mỗi bài và ước tính cho số bài còn lại. Nhớ nâng trần chi phí AI ở trang Cấu hình nếu cần.
+4. (Không bắt buộc) `npx tsx scripts/mock/seed-ai-demo.ts --gold=300` — ghi **đáp án** của 300 bài giả đã có nhãn AI thành nhãn GOLD (ghi tên quản trị viên đầu tiên, `note = 'MOCK_TRUTH'`), để thẻ "Đáp án dữ liệu giả" có số. Xóa: `--clean-gold`.
+
+Không có số điện thoại/tài khoản thật trong caption: dạng `09xx.xxx.xxx`, `t.me/mock_shop`.
+
+Chưa sinh: phiếu đề xuất hashtag theo tỉnh (Q6).

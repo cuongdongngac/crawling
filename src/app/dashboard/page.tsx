@@ -9,7 +9,7 @@ import OverviewDashboard, {
 } from "@/components/dashboard/OverviewDashboard";
 
 // Tổng quan: đọc các view tính sẵn (docs/migrations/2026-10-31_dashboard-views.sql).
-// Số liệu tổng hợp: mọi người đã đăng nhập. Danh sách bài kèm link: chỉ quản trị viên.
+// Số liệu tổng hợp: mọi người đã đăng nhập. Danh sách bài kèm link: chỉ nghiên cứu viên.
 
 type SB = ReturnType<typeof getServiceClient>;
 
@@ -65,7 +65,7 @@ export default async function DashboardPage() {
       interventionAssumed = true;
     }
 
-    if (me.isAdmin) {
+    if (me.isResearcher) {
       const latest = await sb.from("v_post_growth").select("last_at").order("last_at", { ascending: false }).limit(1).maybeSingle();
       const ref = latest.data?.last_at ? new Date(latest.data.last_at as string) : new Date();
       const since = new Date(ref.getTime() - 14 * 86400000).toISOString();

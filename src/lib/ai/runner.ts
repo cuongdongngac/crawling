@@ -72,6 +72,8 @@ export async function runAiTask<TIn>(opts: {
   trigger: "CRON" | "MANUAL" | "EVAL";
   triggeredBy?: string | null;
   concurrency?: number;
+  /** Gọi sau khi ghi một nhãn thành công (ví dụ: cập nhật posts.relevance). Lỗi ở đây không làm hỏng lô. */
+  afterSave?: (target: AiTarget<TIn>, output: LabelValues & { reason?: string }, confidence: number | null) => Promise<void>;
 }): Promise<AiRunSummary> {
   const db = getServiceClient();
   const { task, targets } = opts;
@@ -142,7 +144,10 @@ export async function runAiTask<TIn>(opts: {
         const { error } = await db.from("ai_labels").insert(row);
         if (error && error.code !== "23505") throw new Error(error.message); // 23505 = đã có nhãn (chạy trùng)
         if (p.error) failed++;
-        else ok++;
+        else {
+          ok++;
+          if (!error && p.output && opts.afterSave) await opts.afterSave(t, p.output, p.confidence).catch(() => {});
+        }
       } catch (e) {
         failed++;
         await db.from("ai_labels").insert({ ...base, error: (e instanceof Error ? e.message : String(e)).slice(0, 500) });

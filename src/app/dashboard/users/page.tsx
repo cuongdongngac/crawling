@@ -17,7 +17,7 @@ export default async function UsersPage() {
               Quản lý Người dùng
             </h1>
             <p className="text-stone-500 mt-1">
-              Thêm tài khoản mới, phân quyền Admin và reset mật khẩu.
+              Thêm tài khoản, cấp vai Quản trị / Nghiên cứu viên, đặt lại mật khẩu.
             </p>
           </div>
         </div>

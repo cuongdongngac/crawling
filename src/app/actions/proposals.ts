@@ -8,7 +8,7 @@
  */
 
 import { revalidatePath } from "next/cache";
-import { getServiceClient, requireAdmin, requireUser } from "@/lib/auth/guards";
+import { getServiceClient, requireResearcher, requireUser } from "@/lib/auth/guards";
 
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
 const errMsg = (e: unknown) => (e instanceof Error ? e.message : String(e));
@@ -101,7 +101,7 @@ export async function reviewProposal(args: {
   groupId?: string | null;
 }): Promise<Result<true>> {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireResearcher(); // duyệt phiếu là việc của nghiên cứu viên
     const note = String(args.note || "").trim();
     if (note.length < 3) throw new Error("Ghi lý do cho quyết định (ít nhất vài chữ).");
     if (!["APPROVED", "NEED_INFO", "REJECTED", "DUPLICATE"].includes(args.decision)) throw new Error("Quyết định không hợp lệ.");

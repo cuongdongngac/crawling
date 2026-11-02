@@ -36,7 +36,7 @@ Dữ liệu giả có nhãn riêng (tài khoản trong link bắt đầu bằng 
 - **Bốn số chính:** bài đã phát hiện, bài liên quan (và tỷ lệ trên số bài đã sàng lọc), không liên quan, chờ sàng lọc / chưa rõ.
 - **Câu hỏi 1 — Bài liên quan mới mỗi tuần theo 4 nhóm hashtag**, có vạch mốc chính sách; chuyển được sang "tất cả bài" (trước sàng lọc) để thấy sàng lọc loại bớt bao nhiêu; rê chuột để xem số từng tuần; nút **Bảng** để xem số liệu dạng bảng. Tuần cuối chưa đủ 7 ngày được vẽ nét đứt để không bị đọc thành "giảm".
 - **Vận hành theo khâu:** số lần chạy, khối lượng, lỗi, chi phí của Phát hiện bài / Đo biến động / Nhiệt kế.
-- **Câu hỏi 3 — Bài tăng tương tác mạnh nhất** trong khoảng 7 ngày gần nhất (chỉ bài liên quan hoặc chưa rõ, còn tồn tại). **Chỉ quản trị viên** thấy danh sách này vì có đường dẫn bài. Đây là danh sách *đề xuất xem xét*, không phải danh sách chuyển tuyến.
+- **Câu hỏi 3 — Bài tăng tương tác mạnh nhất** trong khoảng 7 ngày gần nhất (chỉ bài liên quan hoặc chưa rõ, còn tồn tại). **Chỉ nghiên cứu viên** thấy danh sách này vì có đường dẫn bài. Đây là danh sách *đề xuất xem xét*, không phải danh sách chuyển tuyến.
 - Mỗi phần ghi rõ câu hỏi nó trả lời và **hạn chế**.
 
 Chưa có (làm tiếp): vòng đời hashtag (câu hỏi 2), đường tỷ lệ bài còn tồn tại (câu hỏi 4), AI so với người (câu hỏi 5), hai tỉnh (câu hỏi 6), nhiệt kế từ khóa đặt cạnh.

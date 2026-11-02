@@ -16,7 +16,7 @@ export default async function DeXuatPage() {
     )
     .order("created_at", { ascending: false })
     .limit(500);
-  if (!me.isAdmin) q = q.eq("proposed_by", me.id);
+  if (!me.isResearcher && !me.isAdmin) q = q.eq("proposed_by", me.id);
   const { data: proposals, error } = await q;
 
   // Thứ tự đề xuất theo từng từ (ai đề xuất sớm nhất) — tính trên toàn bộ phiếu
@@ -34,7 +34,7 @@ export default async function DeXuatPage() {
 
   const emailById = new Map<string, { email: string; full_name: string | null }>();
   let groups: { group_id: string; group_name: string }[] = [];
-  if (me.isAdmin) {
+  if (me.isResearcher) {
     const ids = Array.from(new Set((proposals || []).map((p) => p.proposed_by)));
     if (ids.length) {
       const { data: profs } = await svc.from("profiles").select("id, email, full_name").in("id", ids);
@@ -52,7 +52,7 @@ export default async function DeXuatPage() {
       hashtag: p.hashtag_text,
       platform: p.platform,
       province: p.province,
-      proposer: me.isAdmin ? (who?.full_name ? `${who.full_name} (${who.email})` : who?.email ?? "") : null,
+      proposer: me.isResearcher ? (who?.full_name ? `${who.full_name} (${who.email})` : who?.email ?? "") : null,
       meaning: p.meaning,
       evidenceUrls: p.evidence_urls || [],
       evidencePostCount: p.evidence_post_count,
@@ -76,12 +76,12 @@ export default async function DeXuatPage() {
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Đề xuất hashtag</h1>
             <p className="text-sm text-stone-500 mt-1">
-              {me.isAdmin
+              {me.isResearcher
                 ? "Duyệt các phiếu đề xuất từ cộng tác viên. Mọi quyết định cần ghi lý do; duyệt sẽ thêm hashtag vào danh mục (Track 2)."
                 : "Các phiếu bạn đã gửi và kết quả duyệt. Gửi phiếu mới từ tab “Hashtag đi kèm” trong Quét thử."}
             </p>
             <HelpLink
-              slug={me.isAdmin ? "quan-tri/duyet-de-xuat" : "cong-tac-vien/de-xuat-hashtag"}
+              slug={me.isResearcher ? "nghien-cuu/duyet-de-xuat" : "cong-tac-vien/de-xuat-hashtag"}
               className="mt-1"
             />
           </div>
@@ -91,7 +91,7 @@ export default async function DeXuatPage() {
             Không đọc được phiếu đề xuất: {error.message}. Kiểm tra đã chạy file SQL bổ sung schema chưa.
           </p>
         ) : (
-          <ProposalList rows={rows} isAdmin={me.isAdmin} groups={groups} />
+          <ProposalList rows={rows} isAdmin={me.isResearcher} groups={groups} />
         )}
       </div>
     </div>

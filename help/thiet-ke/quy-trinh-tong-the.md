@@ -63,7 +63,7 @@ Mỗi lần chạy ghi chi phí thật, nên chi phí từng khâu sẽ được
 
 ## Đọc chi tiết từng khâu
 
-- Khâu 1–2: [Quét thử](../cong-tac-vien/quet-thu), [Gửi phiếu đề xuất](../cong-tac-vien/de-xuat-hashtag), [Duyệt phiếu](../quan-tri/duyet-de-xuat)
+- Khâu 1–2: [Quét thử](../cong-tac-vien/quet-thu), [Gửi phiếu đề xuất](../cong-tac-vien/de-xuat-hashtag), [Duyệt phiếu](../nghien-cuu/duyet-de-xuat)
 - Khâu 3, 5: [Hai luồng quét](./hai-luong-quet), [Chọn công cụ quét](./chon-cong-cu-quet)
 - Khâu 4: [Sàng lọc bài: AI và người](./sang-loc-ai)
 - Khâu 6: [Nhiệt kế từ khóa](./chon-cong-cu-quet) (mục "Nhiệt kế")

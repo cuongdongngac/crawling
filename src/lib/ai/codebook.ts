@@ -154,3 +154,49 @@ export function isSuspected(l: LabelValues): boolean {
   const n = [l.crit_image, l.crit_text, l.crit_transaction].filter((x) => x === true).length;
   return n >= 2;
 }
+
+// ----------------------------------------------------------
+// Từ nhãn -> kết luận sàng lọc (posts.relevance). Quy tắc "rel@1":
+//   AI:  purpose = UNRELATED và độ chắc >= 0,6  -> UNRELATED
+//        purpose khác UNRELATED và độ chắc >= 0,5 -> RELATED
+//        còn lại (độ chắc thấp, thiếu purpose)   -> UNCLEAR (chờ người)
+//   Người: purpose = UNRELATED -> UNRELATED; có purpose khác -> RELATED; đánh dấu "chưa chắc" -> UNCLEAR.
+// Đổi ngưỡng => đổi RELEVANCE_RULE để truy vết.
+// ----------------------------------------------------------
+export const RELEVANCE_RULE = "rel@1";
+export type Relevance = "RELATED" | "UNCLEAR" | "UNRELATED";
+
+export function relevanceFromAi(l: LabelValues | null, confidence: number | null): Relevance {
+  const p = typeof l?.purpose === "string" ? l.purpose : null;
+  if (!p) return "UNCLEAR";
+  const c = confidence ?? 0.7;
+  if (p === "UNRELATED") return c >= 0.6 ? "UNRELATED" : "UNCLEAR";
+  return c >= 0.5 ? "RELATED" : "UNCLEAR";
+}
+
+export function relevanceFromHuman(l: LabelValues, unsure: boolean): Relevance {
+  if (unsure || typeof l.purpose !== "string") return "UNCLEAR";
+  return l.purpose === "UNRELATED" ? "UNRELATED" : "RELATED";
+}
+
+/** Kiểm tra nhãn NGƯỜI gán: bắt buộc purpose; trường khác được để trống (null = chưa chấm). */
+export function validateHumanLabels(cb: Codebook, input: unknown): { labels: LabelValues; errors: string[] } {
+  const src = (input && typeof input === "object" ? input : {}) as Record<string, unknown>;
+  const labels: LabelValues = {};
+  const errors: string[] = [];
+  for (const f of cb.fields) {
+    const v = src[f.key];
+    if (f.kind === "bool") labels[f.key] = typeof v === "boolean" ? v : null;
+    else if (f.kind === "enum") {
+      const allowed = new Set(f.values.map((x) => x.code));
+      // null = chưa chấm; [] = đã chấm là "không có"
+      if (f.multi) labels[f.key] = Array.isArray(v) ? Array.from(new Set(v.map(String).filter((s) => allowed.has(s)))) : null;
+      else labels[f.key] = typeof v === "string" && allowed.has(v) ? v : null;
+    } else {
+      const arr = Array.isArray(v) ? v.map((x) => String(x).trim()).filter(Boolean) : null;
+      labels[f.key] = arr && arr.length ? Array.from(new Set(arr)).slice(0, 10) : null;
+    }
+  }
+  if (!labels.purpose) errors.push("Cần chọn Mục đích nội dung.");
+  return { labels, errors };
+}

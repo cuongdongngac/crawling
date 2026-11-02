@@ -27,4 +27,7 @@ Hệ thống giám sát M&E của VPHA theo dõi **hashtag và từ khóa** liê
 
 - **Cộng tác viên** (từ đủ 18 tuổi, tại các trường Cao đẳng Y tế): nghe ngóng từ lóng, quét thử, gửi phiếu đề xuất hashtag.
 - **Điều phối viên tỉnh**: nhắc lịch, kiểm tra chất lượng đề xuất.
-- **Ban nghiên cứu / quản trị viên**: duyệt danh mục, cấu hình hệ thống, phân tích và kết luận.
+- **Nghiên cứu viên** (Ban nghiên cứu): duyệt phiếu đề xuất và danh mục hashtag, xác minh nhãn AI, xem danh sách bài kèm đường dẫn, chốt danh sách chuyển tuyến, phân tích và kết luận.
+- **Quản trị viên**: vận hành hệ thống — tài khoản, khóa dịch vụ, cấu hình, công cụ quét, chi phí, lịch chạy.
+
+Một người có thể giữ cả hai vai nghiên cứu viên và quản trị viên. Xem [Vai trò và quyền](./vai-tro).

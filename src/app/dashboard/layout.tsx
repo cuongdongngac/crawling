@@ -14,6 +14,7 @@ import {
   Radar,
   Lightbulb,
   Award,
+  ClipboardCheck,
 } from "lucide-react";
 import DashboardHeader from "@/components/DashboardHeader";
 
@@ -38,6 +39,9 @@ export default async function DashboardLayout({
     .single();
 
   const isAdmin = profile?.is_admin === true;
+  // Vai nghiên cứu viên (dữ liệu, kết luận) — độc lập với quản trị (vận hành).
+  // Chưa chạy migration 2026-11-02 (chưa có cột) thì tạm coi quản trị viên là nghiên cứu viên như trước.
+  const isResearcher = profile?.is_researcher === undefined ? isAdmin : profile?.is_researcher === true;
 
   return (
     <div className="min-h-screen bg-stone-50 flex">
@@ -52,7 +56,7 @@ export default async function DashboardLayout({
         <nav className="flex-1 px-4 py-6 space-y-8 overflow-y-auto">
           <div className="space-y-1">
             <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-stone-500">
-              Nghiên cứu viên
+              Chung
             </p>
             <Link
               href="/dashboard"
@@ -87,6 +91,38 @@ export default async function DashboardLayout({
             </Link>
           </div>
 
+          {isResearcher && (
+            <div className="space-y-1">
+              <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-violet-400/80">
+                Nghiên cứu viên
+              </p>
+              <Link
+                href="/dashboard/gan-nhan"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-800 hover:text-white transition-colors"
+              >
+                <ClipboardCheck className="w-5 h-5 text-violet-400" />
+                <span className="flex-1">Gắn nhãn (AI)</span>
+                <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
+              </Link>
+              <Link
+                href="/dashboard/hashtag-groups"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-800 hover:text-white transition-colors"
+              >
+                <Tags className="w-5 h-5 text-amber-400" />
+                <span className="flex-1">Nhóm Từ khóa</span>
+                <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
+              </Link>
+              <Link
+                href="/dashboard/hashtags"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-800 hover:text-white transition-colors"
+              >
+                <Hash className="w-5 h-5 text-amber-400" />
+                <span className="flex-1">Từ khóa (Hashtags)</span>
+                <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
+              </Link>
+            </div>
+          )}
+
           {isAdmin && (
             <div className="space-y-1">
               <p className="px-3 mb-2 text-[11px] font-semibold uppercase tracking-wider text-amber-500/80">
@@ -114,22 +150,6 @@ export default async function DashboardLayout({
               >
                 <Activity className="w-5 h-5 text-indigo-400" />
                 <span className="flex-1">Giám sát &amp; Phân công</span>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
-              </Link>
-              <Link
-                href="/dashboard/hashtag-groups"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-800 hover:text-white transition-colors"
-              >
-                <Tags className="w-5 h-5 text-amber-400" />
-                <span className="flex-1">Nhóm Từ khóa</span>
-                <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
-              </Link>
-              <Link
-                href="/dashboard/hashtags"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-stone-800 hover:text-white transition-colors"
-              >
-                <Hash className="w-5 h-5 text-amber-400" />
-                <span className="flex-1">Từ khóa (Hashtags)</span>
                 <ChevronRight className="w-3.5 h-3.5 text-stone-600" />
               </Link>
               <Link
@@ -167,6 +187,7 @@ export default async function DashboardLayout({
           <Link href="/dashboard" className="shrink-0 px-3 py-1.5 rounded-lg hover:bg-stone-800">Tổng quan</Link>
           <Link href="/dashboard/quet-thu" className="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-700 text-white">Quét thử</Link>
           <Link href="/dashboard/de-xuat" className="shrink-0 px-3 py-1.5 rounded-lg hover:bg-stone-800">Đề xuất</Link>
+          {isResearcher && <Link href="/dashboard/gan-nhan" className="shrink-0 px-3 py-1.5 rounded-lg hover:bg-stone-800">Gắn nhãn</Link>}
           <Link href="/dashboard/scraping" className="shrink-0 px-3 py-1.5 rounded-lg hover:bg-stone-800">Cào dữ liệu</Link>
           <Link href="/dashboard/profile" className="shrink-0 px-3 py-1.5 rounded-lg hover:bg-stone-800">Tài khoản</Link>
         </nav>

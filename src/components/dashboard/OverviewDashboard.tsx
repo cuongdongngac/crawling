@@ -51,7 +51,7 @@ export type GrowthRow = {
 type Props = {
   weekly: WeeklyRow[];
   stages: StageRow[];
-  growth: GrowthRow[] | null; // null = không phải quản trị viên
+  growth: GrowthRow[] | null; // null = không phải nghiên cứu viên
   groups: { id: string; name: string }[];
   intervention: string | null;
   interventionAssumed: boolean;
@@ -514,7 +514,7 @@ function GrowthPanel({ growth, groupName, isMock }: { growth: GrowthRow[] | null
       </p>
       {growth === null ? (
         <p className="text-sm text-stone-600 mt-3 rounded-lg bg-stone-50 p-3">
-          Danh sách bài kèm đường dẫn chỉ dành cho nghiên cứu viên (quản trị viên), theo nguyên tắc hạn chế người xem dữ liệu liên kết.
+          Danh sách bài kèm đường dẫn chỉ dành cho nghiên cứu viên, theo nguyên tắc hạn chế người xem dữ liệu liên kết.
         </p>
       ) : growth.length === 0 ? (
         <p className="text-sm text-stone-500 py-6 text-center">Chưa có bài nào đủ hai lần đo cách nhau từ 6 ngày.</p>

@@ -1,7 +1,13 @@
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth/guards";
 import { Hash } from "lucide-react";
 import HashtagTable from "@/components/HashtagTable";
 
-export default function HashtagsPage() {
+// Danh mục từ khóa là việc của nghiên cứu viên (duyệt, xếp nhóm) — DEC vai trò 02/11/2026.
+export default async function HashtagsPage() {
+  const me = await getCurrentUser();
+  if (!me) redirect("/login");
+  if (!me.isResearcher) redirect("/dashboard");
   return (
     <div className="p-8 bg-stone-50 min-h-full">
       <div className="mb-8 max-w-5xl mx-auto">

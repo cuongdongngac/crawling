@@ -29,6 +29,19 @@ Quét theo hashtag ra rất nhiều bài có đúng hashtag nhưng **chẳng li�
 
 Vì sao cộng tác viên không xác minh bài: ít người xem dữ liệu thô hơn thì an toàn dữ liệu cá nhân hơn; ít người gắn nhãn, được tập huấn kỹ thì nhãn ổn định hơn; và cộng tác viên được ghi nhận theo **chất lượng đề xuất**, không theo số bài đã xem.
 
+::: info Căn cứ để chấm
+Người và AI chấm theo cùng một bảng mã: [Hướng dẫn gắn nhãn bài (bảng mã v1)](../nghien-cuu/huong-dan-gan-nhan). Vì sao viết như vậy: [triết lý và cơ sở khoa học](./huong-dan-ma-hoa).
+:::
+
+## Màn hình đã có (02/11/2026)
+
+Trang **Gắn nhãn (AI)** — hướng dẫn: [Gắn nhãn bài (AI hỗ trợ)](../nghien-cuu/gan-nhan). Khác với thiết kế ban đầu ở hai điểm:
+
+- Hai mẫu ngẫu nhiên (~10% bài AI giữ, ~10% bài AI loại) **gộp thành một hàng "mẫu chấm mù"**, trộn lẫn, và ẩn cả gợi ý lẫn kết luận của AI tới khi lưu. Lý do: nếu tên hàng là "bài AI loại", người chấm đã biết AI kết luận gì, và số đo không còn khách quan.
+- Đã có **vai nghiên cứu viên** riêng (02/11/2026), tách khỏi quản trị viên — xem [Vai trò và quyền](../bat-dau/vai-tro).
+
+Chưa làm: hàng "bài sắp vào danh sách chuyển tuyến" (chưa có danh sách chuyển tuyến); ~50 bài/tháng hai người gắn độc lập (người với người); bảng độ tin cậy theo tháng.
+
 ## Hàng đợi xác minh của nghiên cứu viên (thứ tự ưu tiên)
 
 1. **Bài sắp vào danh sách chuyển tuyến — xem 100%.** Không bài nào được chuyển đi mà chưa qua người.

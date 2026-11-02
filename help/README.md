@@ -69,5 +69,5 @@ Ví dụ: `cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png` → bài *Qu
 | | `cau-hinh-02-khoa-openrouter.png` | Khối OpenRouter + hạn mức |
 | | `cau-hinh-03-chon-model.png` | Danh sách chọn model |
 | | `cau-hinh-04-chinh-sach-ai.png` | Tự gắn nhãn + trần chi phí |
-| quan-tri/duyet-de-xuat | `duyet-de-xuat-01-danh-sach.png` | Danh sách phiếu cần duyệt |
+| nghien-cuu/duyet-de-xuat | `duyet-de-xuat-01-danh-sach.png` | Danh sách phiếu cần duyệt |
 | | `duyet-de-xuat-02-quyet-dinh.png` | Ô lý do + các nút quyết định |
