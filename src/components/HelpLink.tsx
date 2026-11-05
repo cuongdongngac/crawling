@@ -1,7 +1,7 @@
 import { CircleHelp } from "lucide-react";
 
 /**
- * Liên kết tới bài trợ giúp (VitePress, phục vụ tại /help).
+ * Liên kết tới bài trợ giúp (Astro Starlight, phục vụ tại /help).
  * slug: đường dẫn bài, ví dụ "cong-tac-vien/quet-thu" -> /help/cong-tac-vien/quet-thu.html
  * Mở tab mới để không mất dữ liệu đang nhập trên màn hình.
  */

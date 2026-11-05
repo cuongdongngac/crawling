@@ -1,0 +1,36 @@
+/* Màu xanh của ứng dụng (thay cho biến --vp-c-brand của VitePress cũ) */
+:root {
+	--sl-color-accent-low: #022c22;
+	--sl-color-accent: #10b981;
+	--sl-color-accent-high: #a7f3d0;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d1fae5;
+	--sl-color-accent: #047857;
+	--sl-color-accent-high: #065f46;
+}
+
+.vpha-back {
+	margin-inline-end: 0.75rem;
+	padding: 4px 10px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #fff !important;
+	background: #047857;
+	white-space: nowrap;
+	text-decoration: none !important;
+	align-self: center;
+}
+.vpha-back:hover { background: #065f46; }
+
+.sl-markdown-content img { border-radius: 10px; border: 1px solid var(--sl-color-hairline); }
+.sl-markdown-content img[src*='-mobile'] { max-width: 360px; display: block; margin: 16px auto; }
+.img-caption { text-align: center; font-size: 13px; color: var(--sl-color-gray-3); margin-top: -8px !important; }
+
+.vpha-hero-sub { display: block; font-size: 0.55em; font-weight: 600; color: var(--sl-color-gray-2); }
+.vpha-footer { text-align: center; font-size: 0.8rem; color: var(--sl-color-gray-3); margin-top: 1.5rem; }
+
+@media (max-width: 640px) {
+	.vpha-back { padding: 4px 8px; font-size: 12px; }
+}

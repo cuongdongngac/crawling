@@ -1,0 +1,7 @@
+---
+// Thêm nút "← Về ứng dụng" (về /dashboard, nằm ngoài /help) cạnh biểu tượng mặc định của Starlight.
+import Default from '@astrojs/starlight/components/SocialIcons.astro';
+const isEn = Astro.locals.starlightRoute.locale === 'en';
+---
+<a href="/dashboard" class="vpha-back">{isEn ? '← Back to app' : '← Về ứng dụng'}</a>
+<Default />

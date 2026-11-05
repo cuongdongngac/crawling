@@ -1,0 +1,40 @@
+---
+title: "Trợ giúp sử dụng"
+description: "Hệ thống thống kê hashtag và bài có tương tác cao trên mạng xã hội — cung cấp bằng chứng, không thực thi."
+template: splash
+hero:
+  title: 'VPHA M&E <span class="vpha-hero-sub">Trợ giúp sử dụng</span>'
+  tagline: "Hệ thống thống kê hashtag và bài có tương tác cao trên mạng xã hội — cung cấp bằng chứng, không thực thi."
+  image:
+    html: '<img src="/help/icons/icon-512.png" alt="VPHA" width="220" height="220" />'
+  actions:
+    - text: "Bắt đầu"
+      link: /help/bat-dau/gioi-thieu.html
+      variant: primary
+    - text: "Quét thử từ khóa"
+      link: /help/cong-tac-vien/quet-thu.html
+      variant: secondary
+    - text: "Cài lên điện thoại"
+      link: /help/bat-dau/cai-ung-dung.html
+      variant: secondary
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <LinkCard
+    title="🔎 Quét thử"
+    description="Cộng tác viên dùng API key Apify của mình để thử một từ khóa, xem bài và hashtag đi kèm, xuất Excel. Dữ liệu bài không vào kho chính thức."
+    href="/help/cong-tac-vien/quet-thu.html"
+  />
+  <LinkCard
+    title="💡 Đề xuất hashtag"
+    description="Thấy hashtag “Mới” đáng chú ý thì gửi phiếu đề xuất kèm bài minh chứng và chấm ba tiêu chí. Ban nghiên cứu duyệt."
+    href="/help/cong-tac-vien/de-xuat-hashtag.html"
+  />
+  <LinkCard
+    title="🛡️ An toàn là trên hết"
+    description="Chỉ quan sát, không tương tác, không tự đi tìm kho, không làm một mình."
+    href="/help/bat-dau/nguyen-tac-an-toan.html"
+  />
+</CardGrid>

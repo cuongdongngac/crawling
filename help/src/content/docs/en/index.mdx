@@ -1,0 +1,44 @@
+---
+title: "User help"
+description: "A system that tracks hashtags and high-engagement posts on social media — it provides evidence, it does not enforce."
+template: splash
+hero:
+  title: 'VPHA M&E <span class="vpha-hero-sub">User help</span>'
+  tagline: "A system that tracks hashtags and high-engagement posts on social media — it provides evidence, it does not enforce."
+  image:
+    html: '<img src="/help/icons/icon-512.png" alt="VPHA" width="220" height="220" />'
+  actions:
+    - text: "Get started"
+      link: /help/en/bat-dau/gioi-thieu.html
+      variant: primary
+    - text: "Trial keyword scan"
+      link: /help/en/cong-tac-vien/quet-thu.html
+      variant: secondary
+    - text: "Install on your phone"
+      link: /help/en/bat-dau/cai-ung-dung.html
+      variant: secondary
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<Aside>
+English translations are in progress. Pages that are not translated yet are shown in Vietnamese.
+</Aside>
+
+<CardGrid>
+  <LinkCard
+    title="🔎 Trial scan"
+    description="Contributors use their own Apify API key to try a keyword, see posts and co-occurring hashtags, and export to Excel. Post data does not enter the official store."
+    href="/help/en/cong-tac-vien/quet-thu.html"
+  />
+  <LinkCard
+    title="💡 Suggest a hashtag"
+    description="Spot a noteworthy “New” hashtag? Submit a suggestion form with evidence posts and a three-criteria score. The research team reviews it."
+    href="/help/en/cong-tac-vien/de-xuat-hashtag.html"
+  />
+  <LinkCard
+    title="🛡️ Safety first"
+    description="Observe only: do not interact, do not go searching on your own, never work alone."
+    href="/help/en/bat-dau/nguyen-tac-an-toan.html"
+  />
+</CardGrid>

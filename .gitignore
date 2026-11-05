@@ -43,8 +43,8 @@ apify*.key
 
 # trang trợ giúp: build tự sinh (npm run help:build)
 /public/help
-/help/.vitepress/cache
-/help/.vitepress/dist
+/help/.astro
+/help/node_modules
 
 # vercel
 .vercel

@@ -1,12 +1,41 @@
-# Trang trợ giúp (VitePress)
+# Trang trợ giúp (Astro Starlight, đa ngôn ngữ)
 
-- Mục `thiet-ke/` là **kênh trao đổi thiết kế tạm thời** (ý tưởng, trạng thái, hạn chế) — rút gọn/xóa khi hệ thống ổn định: xóa thư mục + nhóm "4. Thiết kế…" trong sidebar + mục nav "Thiết kế (tạm thời)" + link trong `quan-tri/quet-chinh-thuc.md`.
-- Viết bài: thêm file `.md` vào `bat-dau/`, `cong-tac-vien/`, `quan-tri/`, rồi thêm một dòng vào `sidebar` trong `.vitepress/config.mts`.
-- Xem thử khi viết: `npm run help:dev` → http://localhost:5173/help/
+## Cấu trúc
+```
+help/
+├── astro.config.mjs          cấu hình: ngôn ngữ, sidebar (menu), màu, nút "← Về ứng dụng"
+├── src/content/docs/         BÀI VIẾT
+│   ├── index.mdx             trang chủ tiếng Việt
+│   ├── bat-dau/ cong-tac-vien/ nghien-cuu/ quan-tri/ thiet-ke/ hoi-dap.md   (tiếng Việt — ngôn ngữ mặc định)
+│   └── en/                   bản tiếng Anh, cùng tên file, cùng thư mục con (en/cong-tac-vien/quet-thu.md …)
+├── src/plugins/help-links.mjs   tự sửa link/ảnh khi build (xem dưới)
+├── src/components/           nút "Về ứng dụng", chân trang
+├── src/styles/custom.css     màu xanh của app, cỡ ảnh -mobile, chú thích ảnh
+└── public/                   icons/, images/ (phục vụ tại /help/...)
+```
+
+- Tiếng Việt là ngôn ngữ gốc (đường dẫn `/help/...`), tiếng Anh ở `/help/en/...`. Bài **chưa dịch** tự hiện bản tiếng Việt kèm thông báo — không cần tạo file trống.
+- Dịch một bài: chép file sang `src/content/docs/en/` giữ nguyên đường dẫn con, dịch `title` và nội dung. Nhãn menu tiếng Anh nằm ở `translations: { en: … }` trong `astro.config.mjs`.
+- Mục `thiet-ke/` là **kênh trao đổi thiết kế tạm thời** (ý tưởng, trạng thái, hạn chế) — rút gọn/xóa khi hệ thống ổn định: xóa thư mục + nhóm "5. Thiết kế…" trong `sidebar` + link trong `quan-tri/quet-chinh-thuc.md`.
+- Viết bài: thêm file `.md` vào thư mục nhóm trong `src/content/docs/`, rồi thêm một dòng `item('nhom/ten-bai', 'Nhãn tiếng Việt', 'English label')` vào `sidebar` trong `astro.config.mjs`.
+- Xem thử khi viết: `npm run help:dev` → http://localhost:4321/help/
 - Build: `npm run help:build` (xuất ra `public/help`, đã nằm trong `npm run build` nên Vercel tự build).
-- Ảnh chụp màn hình: đặt trong `help/public/images/`, chèn `![Mô tả](/images/ten-anh.png)`.
-- Liên kết từ ứng dụng: dùng component `HelpLink` (`src/components/HelpLink.tsx`) với đường dẫn bài, ví dụ `cong-tac-vien/quet-thu`.
+- Liên kết từ ứng dụng: dùng component `HelpLink` (`src/components/HelpLink.tsx`) với đường dẫn bài, ví dụ `cong-tac-vien/quet-thu` → `/help/cong-tac-vien/quet-thu.html`.
 - Trang trợ giúp công khai (không cần đăng nhập): không đưa danh mục từ khóa, khóa API hay dữ liệu bài vào đây.
+
+## Cú pháp bài viết (Starlight)
+- **Tiêu đề bài** đặt trong frontmatter, KHÔNG viết dòng `# Tiêu đề` (Starlight tự hiện tiêu đề):
+  ```md
+  ---
+  title: "Quét thử từ khóa"
+  description: "(tùy chọn) mô tả ngắn cho tìm kiếm/chia sẻ"
+  ---
+  ```
+- **Khối lưu ý**: `:::note[Tiêu đề]`, `:::tip[…]`, `:::caution[…]`, `:::danger[…]`, đóng bằng `:::` (tiêu đề trong ngoặc vuông là tùy chọn).
+  Đổi từ VitePress: `::: info` → `:::note`, `::: warning` → `:::caution`.
+- **Khối thu gọn**: `<details><summary>Câu hỏi</summary>` + dòng trống + nội dung + dòng trống + `</details>`.
+- **Link giữa các bài**: viết như cũ — `./ten-bai`, `../nhom/ten-bai`, `./index`, hoặc `/nhom/ten-bai`. Plugin `src/plugins/help-links.mjs` tự đổi thành `/help/nhom/ten-bai.html` khi build.
+  Nếu sửa plugin này mà kết quả không đổi: xóa bộ nhớ đệm `help/node_modules/.astro` rồi build lại.
 
 ## Ảnh minh hoạ
 
@@ -15,9 +44,10 @@
 
 ```
 help/public/images/
-├── bat-dau/         ảnh cho các bài trong help/bat-dau/
-├── cong-tac-vien/   ảnh cho các bài trong help/cong-tac-vien/
-└── quan-tri/        ảnh cho các bài trong help/quan-tri/
+├── bat-dau/         ảnh cho các bài trong src/content/docs/bat-dau/
+├── cong-tac-vien/   ảnh cho các bài trong src/content/docs/cong-tac-vien/
+├── quan-tri/        ảnh cho các bài trong src/content/docs/quan-tri/
+└── thiet-ke/        ảnh cho các bài trong src/content/docs/thiet-ke/
 ```
 
 ### Đặt tên
@@ -36,7 +66,7 @@ Ví dụ: `cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png` → bài *Qu
 ![Tab Hashtag đi kèm](/images/cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png)
 <p class="img-caption">Hình 5: Hashtag “Mới” là ứng viên để đề xuất</p>
 ```
-(Đường dẫn bắt đầu bằng `/images/…`; VitePress tự thêm `/help/`.)
+(Đường dẫn bắt đầu bằng `/images/…`; plugin `help-links` tự thêm `/help/` khi build.)
 
 ### An toàn khi chụp
 - Chỉ chụp với **dữ liệu mẫu**; che tên tài khoản, ảnh đại diện, nội dung bài thật.
@@ -46,7 +76,7 @@ Ví dụ: `cong-tac-vien/quet-thu-05-tab-hashtag-di-kem-mobile.png` → bài *Qu
 ### Danh sách ảnh cần chụp
 
 ✅ = đã có (31/10/2026, Claude dựng lại màn hình bằng dữ liệu mẫu tự viết, không phải bài thật). Còn lại cần chụp tay: cài ứng dụng trên Android/iPhone, Apify Console, Excel đã xuất, danh sách phiếu, trang Cấu hình, trang Duyệt phiếu.
-Ảnh có `-mobile` trong tên tự hiển thị rộng tối đa 360px (CSS trong `.vitepress/theme/custom.css`).
+Ảnh có `-mobile` trong tên tự hiển thị rộng tối đa 360px (CSS trong `src/styles/custom.css`).
 
 | Bài | Tên ảnh (trong `images/<nhóm>/`) | Nội dung |
 |---|---|---|

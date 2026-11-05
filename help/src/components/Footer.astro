@@ -1,0 +1,14 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+const isEn = Astro.locals.starlightRoute.locale === 'en';
+---
+<Default />
+<p class="vpha-footer">
+	{isEn
+		? 'Vietnam Public Health Association (VPHA) – M&E monitoring system'
+		: 'Hội Y tế công cộng Việt Nam (VPHA) – Hệ thống giám sát M&E'}
+	<br />
+	{isEn
+		? 'Internal documentation for contributors and the research team.'
+		: 'Tài liệu nội bộ dành cho cộng tác viên và nhóm nghiên cứu.'}
+</p>
