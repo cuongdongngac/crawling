@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ExternalLink, Loader2, Star } from "lucide-react";
 import { reviewProposal, type ReviewDecision } from "@/app/actions/proposals";
+import { useT, useLocale } from "@/lib/i18n/client";
 
 export type ProposalRow = {
   id: number;
@@ -43,6 +44,7 @@ export default function ProposalList({
   isAdmin: boolean;
   groups: { group_id: string; group_name: string }[];
 }) {
+  const t = useT();
   const [filter, setFilter] = useState<string>(isAdmin ? "PENDING" : "ALL");
   const list = useMemo(
     () =>
@@ -62,11 +64,11 @@ export default function ProposalList({
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         {[
-          ["PENDING", `Đang chờ (${(counts.SUBMITTED ?? 0) + (counts.NEED_INFO ?? 0)})`],
-          ["APPROVED", `Đã duyệt (${counts.APPROVED ?? 0})`],
-          ["REJECTED", `Từ chối (${counts.REJECTED ?? 0})`],
-          ["DUPLICATE", `Trùng (${counts.DUPLICATE ?? 0})`],
-          ["ALL", `Tất cả (${rows.length})`],
+          ["PENDING", t("Đang chờ ({v0})", { v0: (counts.SUBMITTED ?? 0) + (counts.NEED_INFO ?? 0) })],
+          ["APPROVED", t("Đã duyệt ({v0})", { v0: counts.APPROVED ?? 0 })],
+          ["REJECTED", t("Từ chối ({v0})", { v0: counts.REJECTED ?? 0 })],
+          ["DUPLICATE", t("Trùng ({v0})", { v0: counts.DUPLICATE ?? 0 })],
+          ["ALL", t("Tất cả ({length})", { length: rows.length })],
         ].map(([k, l]) => (
           <button
             key={k}
@@ -83,7 +85,7 @@ export default function ProposalList({
 
       {list.length === 0 ? (
         <p className="text-sm text-stone-500 py-8 text-center bg-white rounded-2xl border border-stone-200">
-          Chưa có phiếu nào ở mục này.
+          {t("Chưa có phiếu nào ở mục này.")}
         </p>
       ) : (
         <ul className="space-y-3">
@@ -105,6 +107,8 @@ function ProposalCard({
   isAdmin: boolean;
   groups: { group_id: string; group_name: string }[];
 }) {
+  const t = useT();
+  const locale = useLocale();
   const router = useRouter();
   const st = STATUS[r.status] ?? { label: r.status, cls: "bg-stone-100" };
   const score = r.crit.filter(Boolean).length;
@@ -127,22 +131,22 @@ function ProposalCard({
     <li className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <span className="text-lg font-bold text-stone-900">#{r.hashtag}</span>
-        <span className={"px-2 py-0.5 rounded-full text-xs font-semibold " + st.cls}>{st.label}</span>
+        <span className={"px-2 py-0.5 rounded-full text-xs font-semibold " + st.cls}>{t(st.label)}</span>
         <span className="text-xs text-stone-500">{r.platform}</span>
-        <span className="text-xs text-stone-500">{new Date(r.createdAt).toLocaleString("vi-VN")}</span>
+        <span className="text-xs text-stone-500">{new Date(r.createdAt).toLocaleString(locale)}</span>
         {r.isFirst ? (
-          <span className="inline-flex items-center gap-1 text-xs text-amber-700 font-semibold" title="Người đề xuất từ này sớm nhất">
-            <Star className="w-3.5 h-3.5" /> Đề xuất sớm nhất
+          <span className="inline-flex items-center gap-1 text-xs text-amber-700 font-semibold" title={t("Người đề xuất từ này sớm nhất")}>
+            <Star className="w-3.5 h-3.5" /> {t("Đề xuất sớm nhất")}
           </span>
         ) : (
-          <span className="text-xs text-stone-500">Có người đề xuất từ này trước</span>
+          <span className="text-xs text-stone-500">{t("Có người đề xuất từ này trước")}</span>
         )}
-        {r.sameTagCount > 1 && <span className="text-xs text-stone-400">· {r.sameTagCount} phiếu cùng từ</span>}
+        {r.sameTagCount > 1 && <span className="text-xs text-stone-400">{t("· {sameTagCount} phiếu cùng từ", { sameTagCount: r.sameTagCount })}</span>}
       </div>
 
       {isAdmin && (
         <p className="text-sm text-stone-600 mt-1">
-          {r.proposer} {r.province ? `· ${PROVINCE[r.province] ?? r.province}` : "· (chưa gán tỉnh)"}
+          {r.proposer} {r.province ? `· ${t(PROVINCE[r.province] ?? r.province)}` : t("· (chưa gán tỉnh)")}
         </p>
       )}
 
@@ -154,11 +158,11 @@ function ProposalCard({
             key={l}
             className={"px-2 py-0.5 rounded-full border " + (r.crit[i] ? "bg-emerald-50 border-emerald-300 text-emerald-800" : "border-stone-200 text-stone-400")}
           >
-            {l}
+            {t(l)}
           </span>
         ))}
-        <span className={score >= 2 ? "text-red-700 font-semibold" : "text-stone-500"}>Điểm {score}/3</span>
-        {r.evidencePostCount !== null && <span className="text-stone-500">· {r.evidencePostCount} bài trong lần quét</span>}
+        <span className={score >= 2 ? "text-red-700 font-semibold" : "text-stone-500"}>{t("Điểm {score}/3", { score })}</span>
+        {r.evidencePostCount !== null && <span className="text-stone-500">{t("· {evidencePostCount} bài trong lần quét", { evidencePostCount: r.evidencePostCount })}</span>}
       </div>
 
       <div className="flex flex-wrap gap-2 mt-2">
@@ -170,16 +174,16 @@ function ProposalCard({
             rel="noreferrer"
             className="inline-flex items-center gap-1 text-xs text-emerald-700 border border-emerald-200 rounded-lg px-2 py-1 hover:bg-emerald-50"
           >
-            Bài {i + 1} <ExternalLink className="w-3 h-3" />
+            {t("Bài {v0}", { v0: i + 1 })} <ExternalLink className="w-3 h-3" />
           </a>
         ))}
       </div>
 
       {r.reviewNote && (
         <p className="text-sm mt-3 p-2 rounded-lg bg-stone-50 border border-stone-200">
-          <span className="font-semibold">Lý do: </span>
+          <span className="font-semibold">{t("Lý do:")} </span>
           {r.reviewNote}
-          {r.reviewedAt && <span className="text-xs text-stone-500"> · {new Date(r.reviewedAt).toLocaleDateString("vi-VN")}</span>}
+          {r.reviewedAt && <span className="text-xs text-stone-500"> · {new Date(r.reviewedAt).toLocaleDateString(locale)}</span>}
         </p>
       )}
 
@@ -189,7 +193,7 @@ function ProposalCard({
             rows={2}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Lý do quyết định (bắt buộc)…"
+            placeholder={t("Lý do quyết định (bắt buộc)…")}
             className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-emerald-500"
           />
           <div className="flex flex-col sm:flex-row gap-2">
@@ -197,21 +201,21 @@ function ProposalCard({
               value={groupId}
               onChange={(e) => setGroupId(e.target.value)}
               className="px-3 py-2 border border-stone-300 rounded-lg text-sm bg-white"
-              title="Nhóm hashtag sẽ gắn khi duyệt"
+              title={t("Nhóm hashtag sẽ gắn khi duyệt")}
             >
               {groups.map((g) => (
                 <option key={g.group_id} value={g.group_id}>
-                  Gắn vào nhóm: {g.group_name}
+                  {t("Gắn vào nhóm: {group_name}", { group_name: g.group_name })}
                 </option>
               ))}
             </select>
             <div className="flex flex-wrap gap-2">
               {(
                 [
-                  ["APPROVED", "Duyệt", "bg-green-700 text-white"],
-                  ["NEED_INFO", "Cần bổ sung", "bg-amber-100 text-amber-900"],
-                  ["DUPLICATE", "Trùng", "bg-stone-200 text-stone-800"],
-                  ["REJECTED", "Từ chối", "bg-red-100 text-red-800"],
+                  ["APPROVED", t("Duyệt"), "bg-green-700 text-white"],
+                  ["NEED_INFO", t("Cần bổ sung"), "bg-amber-100 text-amber-900"],
+                  ["DUPLICATE", t("Trùng"), "bg-stone-200 text-stone-800"],
+                  ["REJECTED", t("Từ chối"), "bg-red-100 text-red-800"],
                 ] as [ReviewDecision, string, string][]
               ).map(([d, l, cls]) => (
                 <button
@@ -225,7 +229,7 @@ function ProposalCard({
               ))}
             </div>
           </div>
-          {error && <p className="text-sm text-red-700">{error}</p>}
+          {error && <p className="text-sm text-red-700">{t(error)}</p>}
         </div>
       )}
     </li>

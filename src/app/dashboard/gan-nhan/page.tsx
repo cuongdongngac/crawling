@@ -7,11 +7,13 @@ import { getAiPolicy, getMonthSpendUsd } from "@/lib/ai/runner";
 import { getLabelProgress } from "@/lib/ai/jobs";
 import { getQueueCounts, loadReliability, type QueueBucket } from "@/lib/ai/review";
 import LabelingWorkbench from "@/components/labeling/LabelingWorkbench";
+import { getT } from "@/lib/i18n/server";
 
 // Mỗi lô AI ~20 bài, song song 4 -> thường 15–30 giây; để dư cho model chậm.
 export const maxDuration = 120;
 
 export default async function GanNhanPage() {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
   if (!me.isResearcher) redirect("/dashboard");
@@ -52,24 +54,23 @@ export default async function GanNhanPage() {
             <Tags className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Gắn nhãn bài (AI hỗ trợ)</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{t("Gắn nhãn bài (AI hỗ trợ)")}</h1>
             <p className="text-sm text-stone-500 mt-1">
-              AI đọc chữ của bài (đã che số điện thoại, link, tài khoản) và gợi ý nhãn; nghiên cứu viên xác minh. AI gợi ý, người quyết định — độ tin cậy của AI
-              được đo, không tin suông.
+              {t("AI đọc chữ của bài (đã che số điện thoại, link, tài khoản) và gợi ý nhãn; nghiên cứu viên xác minh. AI gợi ý, người quyết định — độ tin cậy của AI được đo, không tin suông.")}
             </p>
             <div className="flex flex-wrap gap-x-4">
-              <HelpLink slug="nghien-cuu/gan-nhan" label="Cách dùng trang này" className="mt-1" />
-              <HelpLink slug="thiet-ke/sang-loc-ai" label="Vì sao làm thế" className="mt-1" />
+              <HelpLink slug="nghien-cuu/gan-nhan" label={t("Cách dùng trang này")} className="mt-1" />
+              <HelpLink slug="thiet-ke/sang-loc-ai" label={t("Vì sao làm thế")} className="mt-1" />
             </div>
           </div>
         </div>
         {loadError && (
           <div className="mb-6 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-900">
-            <p className="font-semibold">Chưa đọc được dữ liệu gắn nhãn.</p>
+            <p className="font-semibold">{t("Chưa đọc được dữ liệu gắn nhãn.")}</p>
             <p className="mt-1">
-              Kiểm tra đã chạy <code>docs/migrations/2026-10-30_ai-gan-nhan.sql</code> và <code>2026-10-31_bo-sung-sang-loc-do-luong.sql</code> trên Supabase chưa.
+              {t("Kiểm tra đã chạy")} <code>docs/migrations/2026-10-30_ai-gan-nhan.sql</code> {t("và")} <code>2026-10-31_bo-sung-sang-loc-do-luong.sql</code> {t("trên Supabase chưa.")}
             </p>
-            <p className="mt-2 text-xs text-amber-800">Chi tiết: {loadError}</p>
+            <p className="mt-2 text-xs text-amber-800">{t("Chi tiết: {loadError}", { loadError })}</p>
           </div>
         )}
         <LabelingWorkbench

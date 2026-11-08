@@ -1,0 +1,64 @@
+{
+  "data": {
+    "lookupStatus": "found",
+    "post": {
+      "platform": "facebook",
+      "postId": "122115594332852840",
+      "url": "https://www.facebook.com/reel/960336166801934",
+      "description": "Open Notebook: NotebookLM 'miễn phí' bằng dữ liệu của bạn?\n#SpiderAINews #TinCôngNghệ #opennotebook #notebooklm #privacy #selfhosted #AI #ArtificialIntelligence #TríTuệNhânTạo #AINews #ai #ollama",
+      "publishedAt": "2026-06-05T17:27:14.000Z",
+      "isPaidPartnership": null,
+      "sharedPostId": null,
+      "sharedPostUrl": null,
+      "feedbackId": "ZmVlZGJhY2s6cGZiaWQwdTFiTFI5YldZTnRhRlQ2bnFhSDN3NGhSUEJtcUVrMW5RdkpmckRid3RlUHJRRlRyUEFNU1NOUXFGbVNVcEdDQWw=",
+      "linkAttachment": null
+    },
+    "author": {
+      "name": "Spider AI News",
+      "profileUrl": "https://www.facebook.com/people/Spider-AI-News/61575585210087/",
+      "avatarUrl": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-1/659892543_4465320783748822_5163283493949406651_n.jpg?stp=c0.0.842.842a_cp0_dst-jpg_tt6&cstp=mx842x842&ctp=s80x80&_nc_cat=105&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=ibLqk4vVYhQQ7kNvwHeij-A&_nc_oc=AdrPU5W-vIT_YtHq5aYgrvq_A7lxeqxmnECbJETONYR9tk9s1ZtoAGpd7SW2FMCYc5Y&_nc_zt=24&_nc_ht=scontent-lga3-2.xx&_nc_gid=SB9L5nv9I6dsEsYvbylpcw&_nc_ss=78180&oh=00_AQRR__Nj07PjYkOsKrvsjZ9yhIl8MPECyiqyf0IObEFg2Q&oe=6AF0C3BB",
+      "platformUserId": "61575585210087",
+      "verified": false
+    },
+    "metrics": {
+      "likes": 243,
+      "comments": 2,
+      "shares": 91,
+      "views": 23106,
+      "reactions": {
+        "thankful": 0,
+        "like": 243,
+        "love": 0,
+        "care": 0,
+        "haha": 0,
+        "wow": 0,
+        "sad": 0,
+        "anger": 0,
+        "pride": 0,
+        "confused": 0
+      }
+    },
+    "media": {
+      "thumbnailUrl": "https://scontent-lga3-2.xx.fbcdn.net/v/t15.5256-10/715059276_1021058977123669_2415766054308955721_n.jpg?stp=dst-jpg_tt6&cstp=mx1080x1920&ctp=s960x960&_nc_cat=107&ccb=1-7&_nc_sid=d2b52d&_nc_ohc=gTJY6xfFwCMQ7kNvwE43auR&_nc_oc=AdpYX-9XcBhABgyBkOW4Fju7kcoTjex2y2oU-PRCgP0-veXz_MhKFNrm3SbexHMvPos&_nc_zt=23&_nc_ht=scontent-lga3-2.xx&_nc_gid=SB9L5nv9I6dsEsYvbylpcw&_nc_ss=78180&oh=00_AQSLZZS0r-oYwrMvsuwK-SHtQm3yqN9XV5G52X5AOmC3nQ&oe=6AF0C579",
+      "imageUrl": null,
+      "imageUrls": null,
+      "videoUrl": "https://video-lga3-2.xx.fbcdn.net/o1/v/t2/f2/m412/AQO2J_8Y4l-z2Ba9XI_VgppqqN_y9HZ7eW_9tIoJ97mk-u48GfjV6d5JkpSVJ0YI4qmf9n-OpLowSrBfn-SmwKYNvQVcUADnwkhumtrioA.mp4?_nc_cat=100&_nc_sid=8bf8fe&_nc_ht=video-lga3-2.xx.fbcdn.net&_nc_ohc=k31q7Yve4ZcQ7kNvwEO1Jdm&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5GQUNFQk9PSy4uQzMuMzYwLnN2ZV9zZCIsInhwdl9hc3NldF9pZCI6Mjc3MjA2NDYzMzc1NDI0MTgsImFzc2V0X2FnZV9kYXlzIjoxNTEsInZpX3VzZWNhc2VfaWQiOjEwMTIyLCJkdXJhdGlvbl9zIjoxMjQsInVybGdlbl9zb3VyY2UiOiJ3d3cifQ%3D%3D&ccb=17-1&_nc_gid=SB9L5nv9I6dsEsYvbylpcw&_nc_ss=78180&_nc_zt=28&oh=00_AQTbmoxgnvbEMFsgF8k0bd1x_sVzxckKSa2KT_6CfOpsow&oe=6AF0D79A&bitrate=183534&tag=sve_sd",
+      "videoHdUrl": "https://video-lga3-3.xx.fbcdn.net/o1/v/t2/f2/m266/AQPAPFMOHe0n1G-yzs36U-VMn21uMai-woHZS1ziYgCCbNJDKqj0lxQNLJUR-zXfMjmebfFNB7DL7z90ogdi_ZX2eYJ2-atjFEo.mp4?strext=1&_nc_cat=102&_nc_sid=8bf8fe&_nc_ht=video-lga3-3.xx.fbcdn.net&_nc_ohc=Z5fPYLsxuMUQ7kNvwFS-NHE&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5GQUNFQk9PSy4uQzMuMTA4MC5hdjFfY29tcHJlc3NlZF9zb3VyY2UiLCJ4cHZfYXNzZXRfaWQiOjI3NzIwNjQ2MzM3NTQyNDE4LCJhc3NldF9hZ2VfZGF5cyI6MTUxLCJ2aV91c2VjYXNlX2lkIjoxMDEyMiwiZHVyYXRpb25fcyI6MTI0LCJ1cmxnZW5fc291cmNlIjoid3d3In0%3D&ccb=17-1&_nc_gid=SB9L5nv9I6dsEsYvbylpcw&_nc_ss=78180&_nc_zt=28&oh=00_AQRA28ov-hJyXWcozgKpXirb5Ih7yGl9yPMHAtzDhc0xtA&oe=6AECC4A0&bitrate=824913&tag=av1_compressed_source",
+      "durationSec": 124.544,
+      "width": 1080,
+      "height": 1920,
+      "captionsUrl": null
+    },
+    "music": {
+      "trackTitle": null,
+      "albumArtUrl": "https://scontent-lga3-2.xx.fbcdn.net/v/t39.30808-1/659892543_4465320783748822_5163283493949406651_n.jpg?stp=c0.0.842.842a_cp0_dst-jpg_tt6&cstp=mx842x842&ctp=s64x64&_nc_cat=105&ccb=1-7&_nc_sid=0fc832&_nc_ohc=ibLqk4vVYhQQ7kNvwHeij-A&_nc_oc=AdrPU5W-vIT_YtHq5aYgrvq_A7lxeqxmnECbJETONYR9tk9s1ZtoAGpd7SW2FMCYc5Y&_nc_zt=24&_nc_ht=scontent-lga3-2.xx&_nc_gid=SB9L5nv9I6dsEsYvbylpcw&_nc_ss=78180&oh=00_AQRR__Nj07PjYkOsKrvsjZ9yhIl8MPECyiqyf0IObEFg2Q&oe=6AF0C3BB"
+    },
+    "comments": [],
+    "transcript": null
+  },
+  "meta": {
+    "requestId": "req_5ab953d5-8edd-4d6d-8556-d3eb881a76ac_pg_269cfd04",
+    "creditsCharged": 1,
+    "version": "v1"
+  }
+}

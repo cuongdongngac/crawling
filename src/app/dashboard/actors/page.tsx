@@ -1,7 +1,9 @@
 import { Database } from "lucide-react";
 import ActorTable from "@/components/ActorTable";
+import { getT } from "@/lib/i18n/server";
 
-export default function ActorsPage() {
+export default async function ActorsPage() {
+  const t = await getT();
   return (
     <div className="p-8 bg-stone-50 min-h-full">
       <div className="mb-8 max-w-5xl mx-auto">
@@ -11,10 +13,10 @@ export default function ActorsPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Quản lý Công cụ (Apify Actors)
+              {t("Quản lý Công cụ (Apify Actors)")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Định nghĩa các công cụ thu thập dữ liệu và cấu hình JSON mặc định (Default Payload) cho từng công cụ.
+              {t("Định nghĩa các công cụ thu thập dữ liệu và cấu hình JSON mặc định (Default Payload) cho từng công cụ.")}
             </p>
           </div>
         </div>

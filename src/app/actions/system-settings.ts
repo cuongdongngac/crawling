@@ -22,6 +22,8 @@ import {
   type OpenRouterModel,
 } from "@/lib/ai/openrouter";
 import { AI_SETTING_AUTO, AI_SETTING_BUDGET, getAiPolicy, getMonthSpendUsd } from "@/lib/ai/runner";
+import { SF_SETTING_BUDGET, SF_SETTING_KEY, SF_SETTING_PRICE, getMeasureConfig, getMeasureSpendUsd } from "@/lib/measure/runner";
+import { fetchSfBalance } from "@/lib/measure/socialfetch";
 
 const APIFY_KEY = "APIFY_API_TOKEN";
 
@@ -33,6 +35,8 @@ export type SystemSettingsView = {
   openrouter: { hasKey: boolean; keyHint: string | null; model: string; defaultModel: string; updatedAt: string | null };
   /** Chính sách AI: tự chạy sau mỗi lần quét chính thức + trần chi phí tháng. monthSpendUsd null = chưa tạo bảng ai_runs. */
   ai: { autoEnabled: boolean; monthlyBudgetUsd: number; monthSpendUsd: number | null };
+  /** Social Fetch — đo tương tác theo link. monthSpendUsd null = chưa chạy migration loại lần chạy. */
+  socialfetch: { hasKey: boolean; keyHint: string | null; keyFromEnv: boolean; monthlyBudgetUsd: number; usdPerCredit: number; monthSpendUsd: number | null; updatedAt: string | null };
 };
 
 export type ApifyAccountInfo = {
@@ -48,7 +52,7 @@ async function readAll() {
   const { data, error } = await getServiceClient()
     .from("system_settings")
     .select("setting_key, setting_value, updated_at")
-    .in("setting_key", [APIFY_KEY, OR_KEY, OR_MODEL]);
+    .in("setting_key", [APIFY_KEY, OR_KEY, OR_MODEL, SF_SETTING_KEY]);
   if (error) throw new Error(error.message);
   return new Map((data ?? []).map((r) => [r.setting_key as string, r as { setting_value: string; updated_at: string | null }]));
 }
@@ -57,8 +61,18 @@ async function view(): Promise<SystemSettingsView> {
   const m = await readAll();
   const ap = m.get(APIFY_KEY);
   const ok = m.get(OR_KEY);
-  const [policy, spend] = await Promise.all([getAiPolicy(), getMonthSpendUsd()]);
+  const sf = m.get(SF_SETTING_KEY);
+  const [policy, spend, mcfg, mspend] = await Promise.all([getAiPolicy(), getMonthSpendUsd(), getMeasureConfig(), getMeasureSpendUsd().catch(() => null)]);
   return {
+    socialfetch: {
+      hasKey: !!sf?.setting_value || mcfg.keyFromEnv,
+      keyHint: sf?.setting_value ? maskKey(sf.setting_value) : mcfg.keyFromEnv ? "(biến môi trường)" : null,
+      keyFromEnv: mcfg.keyFromEnv,
+      monthlyBudgetUsd: mcfg.monthlyBudgetUsd,
+      usdPerCredit: mcfg.usdPerCredit,
+      monthSpendUsd: mspend,
+      updatedAt: sf?.updated_at ?? null,
+    },
     ai: { autoEnabled: policy.autoEnabled, monthlyBudgetUsd: policy.monthlyBudgetUsd, monthSpendUsd: spend },
     apify: { hasKey: !!ap?.setting_value, keyHint: maskKey(ap?.setting_value ?? null), updatedAt: ap?.updated_at ?? null },
     openrouter: {
@@ -125,6 +139,9 @@ export async function saveSystemSettings(input: {
   openrouterModel: string;
   aiAutoEnabled: boolean;
   aiMonthlyBudgetUsd: number;
+  socialfetchKey?: string;
+  measureMonthlyBudgetUsd?: number;
+  socialfetchUsdPerCredit?: number;
 }): Promise<Result<SystemSettingsView>> {
   try {
     await requireAdmin();
@@ -139,6 +156,22 @@ export async function saveSystemSettings(input: {
     if (!Number.isFinite(budget) || budget < 0 || budget > 1000) throw new Error("Trần chi phí AI phải từ 0 đến 1.000 USD/tháng.");
     rows.push({ setting_key: AI_SETTING_BUDGET, setting_value: String(budget), updated_at: now });
     rows.push({ setting_key: AI_SETTING_AUTO, setting_value: input.aiAutoEnabled ? "true" : "false", updated_at: now });
+
+    if (input.measureMonthlyBudgetUsd !== undefined) {
+      const b = Number(input.measureMonthlyBudgetUsd);
+      if (!Number.isFinite(b) || b < 0 || b > 5000) throw new Error("Trần chi phí đo phải từ 0 đến 5.000 USD/tháng.");
+      rows.push({ setting_key: SF_SETTING_BUDGET, setting_value: String(b), updated_at: now });
+    }
+    if (input.socialfetchUsdPerCredit !== undefined) {
+      const pr = Number(input.socialfetchUsdPerCredit);
+      if (!Number.isFinite(pr) || pr <= 0 || pr > 1) throw new Error("Giá mỗi lượt Social Fetch phải lớn hơn 0 và không quá 1 USD.");
+      rows.push({ setting_key: SF_SETTING_PRICE, setting_value: String(pr), updated_at: now });
+    }
+    const sfKey = String(input.socialfetchKey || "").trim();
+    if (sfKey) {
+      await fetchSfBalance(sfKey); // miễn phí; sai khóa thì báo lỗi, không lưu
+      rows.push({ setting_key: SF_SETTING_KEY, setting_value: sfKey, updated_at: now });
+    }
 
     const apify = String(input.apifyToken || "").trim();
     if (apify) {
@@ -161,13 +194,13 @@ export async function saveSystemSettings(input: {
   }
 }
 
-export async function clearSystemKey(which: "apify" | "openrouter"): Promise<Result<SystemSettingsView>> {
+export async function clearSystemKey(which: "apify" | "openrouter" | "socialfetch"): Promise<Result<SystemSettingsView>> {
   try {
     await requireAdmin();
     const { error } = await getServiceClient()
       .from("system_settings")
       .delete()
-      .eq("setting_key", which === "apify" ? APIFY_KEY : OR_KEY);
+      .eq("setting_key", which === "apify" ? APIFY_KEY : which === "socialfetch" ? SF_SETTING_KEY : OR_KEY);
     if (error) throw new Error(error.message);
     revalidatePath("/dashboard/settings");
     return { ok: true, data: await view() };
@@ -185,6 +218,19 @@ export async function testApifyToken(token?: string): Promise<Result<ApifyAccoun
     const t = String(token || "").trim() || (await storedValue(APIFY_KEY));
     if (!t) throw new Error("Chưa có Apify token để kiểm tra.");
     return { ok: true, data: await fetchApifyAccount(t) };
+  } catch (e) {
+    return { ok: false, error: errMsg(e) };
+  }
+}
+
+/** Kiểm tra khóa Social Fetch bằng số dư (miễn phí, không tính lượt). */
+export async function testSocialFetchKey(key?: string): Promise<Result<{ balance: number | null }>> {
+  try {
+    await requireAdmin();
+    const k = String(key || "").trim() || (await getMeasureConfig()).apiKey;
+    if (!k) throw new Error("Chưa có khóa Social Fetch để kiểm tra.");
+    const r = await fetchSfBalance(k);
+    return { ok: true, data: { balance: r.balance } };
   } catch (e) {
     return { ok: false, error: errMsg(e) };
   }

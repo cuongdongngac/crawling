@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { AlertTriangle, Loader2, RefreshCw, Search } from "lucide-react";
 import { listOpenRouterModels } from "@/app/actions/system-settings";
 import type { OpenRouterModel } from "@/lib/ai/openrouter";
+import { useT } from "@/lib/i18n/client";
 
 type Filter = "all" | "free" | "vision" | "json";
 type Sort = "new" | "cheap" | "context" | "name";
@@ -15,6 +16,7 @@ export const fmtCtx = (n: number | null) =>
 
 /** Danh sách model OpenRouter: tìm kiếm, lọc, sắp xếp, bấm để chọn. Giá USD / 1 triệu token (vào / ra). */
 export default function OpenRouterModelPicker({ value, onChange }: { value: string; onChange: (id: string) => void }) {
+  const t = useT();
   const [models, setModels] = useState<OpenRouterModel[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [q, setQ] = useState("");
@@ -71,18 +73,18 @@ export default function OpenRouterModelPicker({ value, onChange }: { value: stri
   return (
     <div className="space-y-3">
       <div className="rounded-xl border-2 border-violet-500 bg-violet-50/50 p-3">
-        <div className="text-xs text-violet-700 font-semibold mb-0.5">Model đang chọn</div>
+        <div className="text-xs text-violet-700 font-semibold mb-0.5">{t("Model đang chọn")}</div>
         <div className="font-semibold text-stone-900 break-words">{selected?.name ?? value}</div>
         <div className="text-xs font-mono text-stone-500 break-all">{value}</div>
         {selected && (
           <div className="mt-1 text-xs text-stone-600 flex flex-wrap gap-x-3">
-            <span>Vào ${fmtPrice(selected.priceIn)} · Ra ${fmtPrice(selected.priceOut)} / 1 triệu token</span>
-            <span>Ngữ cảnh {fmtCtx(selected.contextLength)}</span>
+            <span>{t("Vào ${v0} · Ra ${v1} / 1 triệu token", { v0: t(fmtPrice(selected.priceIn)), v1: t(fmtPrice(selected.priceOut)) })}</span>
+            <span>{t("Ngữ cảnh {v0}", { v0: fmtCtx(selected.contextLength) })}</span>
           </div>
         )}
         {models && !selected && (
           <div className="mt-1 text-xs text-amber-700 flex items-center gap-1">
-            <AlertTriangle className="w-3.5 h-3.5" /> Không thấy model này trong danh sách OpenRouter hiện tại — kiểm tra lại mã.
+            <AlertTriangle className="w-3.5 h-3.5" /> {t("Không thấy model này trong danh sách OpenRouter hiện tại — kiểm tra lại mã.")}
           </div>
         )}
       </div>
@@ -93,30 +95,30 @@ export default function OpenRouterModelPicker({ value, onChange }: { value: stri
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Tìm model: gemini flash, gpt, qwen…"
+            placeholder={t("Tìm model: gemini flash, gpt, qwen…")}
             className="w-full pl-9 pr-3 py-2.5 text-sm border border-stone-300 rounded-lg outline-none focus:ring-2 focus:ring-violet-500"
           />
         </label>
         <select value={provider} onChange={(e) => setProvider(e.target.value)} className="px-3 py-2.5 text-sm border border-stone-300 rounded-lg bg-white">
-          <option value="">Mọi nhà cung cấp</option>
+          <option value="">{t("Mọi nhà cung cấp")}</option>
           {providers.map((p) => (
             <option key={p} value={p}>{p}</option>
           ))}
         </select>
         <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="px-3 py-2.5 text-sm border border-stone-300 rounded-lg bg-white">
-          <option value="new">Mới nhất</option>
-          <option value="cheap">Rẻ nhất</option>
-          <option value="context">Ngữ cảnh dài nhất</option>
-          <option value="name">Theo tên</option>
+          <option value="new">{t("Mới nhất")}</option>
+          <option value="cheap">{t("Rẻ nhất")}</option>
+          <option value="context">{t("Ngữ cảnh dài nhất")}</option>
+          <option value="name">{t("Theo tên")}</option>
         </select>
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">
         {([
-          ["all", "Tất cả"],
-          ["free", "Miễn phí"],
-          ["vision", "Đọc được ảnh"],
-          ["json", "Trả JSON"],
+          ["all", t("Tất cả")],
+          ["free", t("Miễn phí")],
+          ["vision", t("Đọc được ảnh")],
+          ["json", t("Trả JSON")],
         ] as [Filter, string][]).map(([k, label]) => (
           <button
             key={k}
@@ -130,7 +132,7 @@ export default function OpenRouterModelPicker({ value, onChange }: { value: stri
           </button>
         ))}
         <span className="ml-auto text-xs text-stone-500">{models ? `${filtered.length}/${models.length} model` : ""}</span>
-        <button type="button" onClick={reload} className="p-1.5 rounded-lg hover:bg-stone-100" aria-label="Tải lại danh sách">
+        <button type="button" onClick={reload} className="p-1.5 rounded-lg hover:bg-stone-100" aria-label={t("Tải lại danh sách")}>
           <RefreshCw className="w-4 h-4 text-stone-500" />
         </button>
       </div>
@@ -138,11 +140,11 @@ export default function OpenRouterModelPicker({ value, onChange }: { value: stri
       <div className="border border-stone-200 rounded-xl max-h-[420px] overflow-y-auto divide-y divide-stone-100 bg-white">
         {!models && !error && (
           <div className="p-6 text-center text-sm text-stone-500 flex items-center justify-center gap-2">
-            <Loader2 className="w-4 h-4 animate-spin" /> Đang tải danh sách model từ OpenRouter…
+            <Loader2 className="w-4 h-4 animate-spin" /> {t("Đang tải danh sách model từ OpenRouter…")}
           </div>
         )}
-        {error && <div className="p-4 text-sm text-red-700 bg-red-50">{error} — vẫn có thể gõ mã model ở ô bên dưới.</div>}
-        {models && filtered.length === 0 && <div className="p-6 text-center text-sm text-stone-500">Không có model khớp bộ lọc.</div>}
+        {error && <div className="p-4 text-sm text-red-700 bg-red-50">{t("{error} — vẫn có thể gõ mã model ở ô bên dưới.", { error })}</div>}
+        {models && filtered.length === 0 && <div className="p-6 text-center text-sm text-stone-500">{t("Không có model khớp bộ lọc.")}</div>}
         {filtered.slice(0, 150).map((m) => {
           const active = m.id === value;
           return (
@@ -157,26 +159,26 @@ export default function OpenRouterModelPicker({ value, onChange }: { value: stri
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className={`text-sm font-semibold ${active ? "text-violet-800" : "text-stone-900"}`}>{m.name}</span>
-                  {m.isFree && <Badge className="bg-emerald-100 text-emerald-800">Miễn phí</Badge>}
-                  {m.inputModalities.includes("image") && <Badge className="bg-sky-100 text-sky-800">Ảnh</Badge>}
+                  {m.isFree && <Badge className="bg-emerald-100 text-emerald-800">{t("Miễn phí")}</Badge>}
+                  {m.inputModalities.includes("image") && <Badge className="bg-sky-100 text-sky-800">{t("Ảnh")}</Badge>}
                   {m.supportsJson && <Badge className="bg-stone-100 text-stone-700">JSON</Badge>}
                 </div>
                 <div className="text-xs font-mono text-stone-500 truncate">{m.id}</div>
               </div>
               <div className="text-xs text-stone-600 tabular-nums sm:text-right shrink-0">
-                <div>${fmtPrice(m.priceIn)} / ${fmtPrice(m.priceOut)}</div>
-                <div className="text-stone-400">{fmtCtx(m.contextLength)} ngữ cảnh</div>
+                <div>${t(fmtPrice(m.priceIn))} / ${t(fmtPrice(m.priceOut))}</div>
+                <div className="text-stone-400">{t("{v0} ngữ cảnh", { v0: fmtCtx(m.contextLength) })}</div>
               </div>
             </button>
           );
         })}
         {filtered.length > 150 && (
-          <div className="p-2 text-center text-xs text-stone-500">Còn {filtered.length - 150} model — gõ thêm từ khoá để thu hẹp.</div>
+          <div className="p-2 text-center text-xs text-stone-500">{t("Còn {v0} model — gõ thêm từ khoá để thu hẹp.", { v0: filtered.length - 150 })}</div>
         )}
       </div>
 
       <label className="block">
-        <span className="text-xs text-stone-500">Hoặc gõ mã model</span>
+        <span className="text-xs text-stone-500">{t("Hoặc gõ mã model")}</span>
         <input
           value={value}
           onChange={(e) => onChange(e.target.value.trim())}

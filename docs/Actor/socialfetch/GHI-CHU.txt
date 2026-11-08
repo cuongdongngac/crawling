@@ -10,3 +10,33 @@ CÁCH CHẠY THỬ (dùng 100 lượt miễn phí, không cần thẻ):
 
 KIỂM TRA: đủ like/bình luận/chia sẻ/lượt xem/lượt lưu? các dạng link Facebook (pfbid, permalink.php, reel, nhóm)?
 bài đã xóa trả gì? số liệu so với actor quét (chênh do bài tăng thêm sau vài ngày là bình thường)? tìm kiếm VN có ra video tiếng Việt?
+
+--- ĐÁNH GIÁ MẪU 04/11/2026 (Claude) ---
+ĐÚNG MỤC ĐÍCH: "Get Facebook post or reel" = GET /v1/facebook/posts?url=<link>, 1 lượt.
+  Trả: data.lookupStatus (found/not_found), post.postId/url/description/publishedAt,
+  metrics.likes/comments/shares/views + reactions (theo loại). Reel có views.
+  KHÔNG lưu: author.name/profileUrl/avatarUrl, media.* (link video/ảnh), music.* -> chỉ băm author.platformUserId.
+  CẦN XÁC NHẬN: metrics.likes là riêng "like" hay tổng cảm xúc (mẫu này mọi cảm xúc đều là like nên chưa phân biệt được).
+KHÔNG ĐÚNG MỤC ĐÍCH: "Get TikTok profile engagement audit" = /v1/tiktok/profiles/{handle}/engagement
+  -> đánh giá cả TÀI KHOẢN (người theo dõi, tương tác trung bình, danh sách video) = theo dõi người, trái nguyên tắc
+  "không quét theo người, không lập hồ sơ"; tốn ~5 lượt. Không dùng.
+  Cần thử thay bằng: GET /v1/tiktok/videos?url=<link video> (đo 1 video).
+CÒN THIẾU: TikTok single video; 1 bài FB + 1 video TikTok đã xóa (xem trả gì); các dạng link FB (pfbid, permalink.php, nhóm);
+  1 bài FB có nhiều loại cảm xúc; 1–2 bài liên quan thuốc lá điện tử tiếng Việt.
+
+--- ĐÁNH GIÁ MẪU 04/11/2026 (lần 2) ---
+"Get TikTok video" = GET /v1/tiktok/videos?url=<link video>, 1 lượt: ĐÚNG MỤC ĐÍCH, dùng cho luồng đo.
+  metrics: views 341333, likes 14980, comments 67, shares 173, saves 219 — khớp mẫu "audit" chụp ~30 phút trước
+  (14982/67/173/219/341325): hai đường cùng nguồn, số sống (thay đổi từng phút).
+  Có video.region ("VN"), author.region, video.isAd -> có thể dùng lọc "bài ở VN" (không phải tỉnh).
+  Phản hồi ~41 KB (khối "details" thô của TikTok, music, media, author.avatar/handle/nickname/secUid)
+  -> adapter CHỈ giữ: lookupStatus, video.id/url/createdAt/region/isAd, metrics.*; băm author.platformUserId; bỏ phần còn lại.
+"Get YouTube video" = GET /v1/youtube/videos?url=<link>, 1 lượt: chạy được (views, likes, comments; không có shares/saves),
+  tự chuẩn hóa link (bỏ &list=...). NGOÀI PHẠM VI hiện tại (dự án: TikTok + Facebook) -> chỉ để dự phòng, chờ Ban quyết.
+  Phản hồi kèm relatedVideos/channel/subscriber -> nếu dùng cũng phải bỏ.
+GHÉP KẾT QUẢ: luôn ghép theo link MÌNH GỬI (post_id = sha256(link gốc)), không theo link Social Fetch trả về (có thể đã chuẩn hóa).
+ĐÃ TỐN ~8 lượt (FB 1, audit ~5, TikTok 1, YouTube 1).
+
+--- 04/11/2026: ĐÃ VIẾT ADAPTER (src/lib/measure/socialfetch.ts) ---
+Đọc đúng 2 mẫu thật (TikTok video, FB reel). lookup_failed = không tính lượt, thử lại; not_found = tính lượt, ghi missing_since, xác nhận biến mất sau >= 24h.
+CÒN THỬ: bài đã xóa (FB + TikTok), link FB pfbid / permalink.php / nhóm, bài FB nhiều loại cảm xúc.

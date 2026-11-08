@@ -11,6 +11,7 @@ import {
   Plus,
   Trash
 } from "lucide-react";
+import { useT } from "@/lib/i18n/client";
 
 export interface HashtagGroupRow {
   group_id: string;
@@ -20,6 +21,7 @@ export interface HashtagGroupRow {
 }
 
 export default function HashtagGroupTable() {
+  const t = useT();
   const [groups, setGroups] = useState<HashtagGroupRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -92,14 +94,14 @@ export default function HashtagGroupTable() {
         return newForms;
       });
     } else {
-      alert("Lỗi khi lưu: " + error.message);
+      alert(t("Lỗi khi lưu: ") + error.message);
     }
     setSaving((prev) => ({ ...prev, [groupId]: false }));
   };
 
   const handleAddNew = async () => {
     if (!newGroupForm.group_id?.trim() || !newGroupForm.group_name?.trim()) {
-      alert("Vui lòng nhập ID và Tên nhóm!");
+      alert(t("Vui lòng nhập ID và Tên nhóm!"));
       return;
     }
 
@@ -121,26 +123,26 @@ export default function HashtagGroupTable() {
       setNewGroupForm({ group_id: "", group_name: "", description: "" });
       setIsAddingNew(false);
     } catch (error: any) {
-      alert("Không thể thêm nhóm mới! Lỗi: " + error.message);
+      alert(t("Không thể thêm nhóm mới! Lỗi: ") + error.message);
     } finally {
       setSavingNew(false);
     }
   };
 
   const handleDelete = async (groupId: string, groupName: string) => {
-    if (!confirm(`Bạn có chắc chắn muốn xóa nhóm "${groupName}"?`)) return;
+    if (!confirm(t("Bạn có chắc chắn muốn xóa nhóm \"{groupName}\"?", { groupName }))) return;
 
     try {
       const { error } = await supabase.from("hashtag_groups").delete().eq("group_id", groupId);
       if (error) throw error;
       setGroups((prev) => prev.filter((g) => g.group_id !== groupId));
     } catch (error: any) {
-      alert("Không thể xóa nhóm! Lỗi: " + error.message);
+      alert(t("Không thể xóa nhóm! Lỗi: ") + error.message);
     }
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-stone-500">Đang tải danh sách...</div>;
+    return <div className="text-center py-12 text-stone-500">{t("Đang tải danh sách...")}</div>;
   }
 
   return (
@@ -151,7 +153,7 @@ export default function HashtagGroupTable() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <input
             type="text"
-            placeholder="Tìm kiếm nhóm..."
+            placeholder={t("Tìm kiếm nhóm...")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
@@ -161,7 +163,7 @@ export default function HashtagGroupTable() {
           onClick={() => setIsAddingNew(true)}
           className="flex items-center gap-2 px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
         >
-          <Plus className="w-4 h-4" /> Thêm Nhóm
+          <Plus className="w-4 h-4" /> {t("Thêm Nhóm")}
         </button>
       </div>
 
@@ -170,33 +172,33 @@ export default function HashtagGroupTable() {
         <div className="p-5 bg-amber-50 border-b border-amber-100 flex gap-4 items-start">
           <div className="flex-1 grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">ID Nhóm (Viết hoa liền không dấu)</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">{t("ID Nhóm (Viết hoa liền không dấu)")}</label>
               <input
                 type="text"
                 value={newGroupForm.group_id || ""}
                 onChange={(e) => setNewGroupForm({ ...newGroupForm, group_id: e.target.value.toUpperCase() })}
                 className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                placeholder="VD: COMMERCIAL"
+                placeholder={t("VD: COMMERCIAL")}
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Tên Nhóm</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Tên Nhóm")}</label>
               <input
                 type="text"
                 value={newGroupForm.group_name || ""}
                 onChange={(e) => setNewGroupForm({ ...newGroupForm, group_name: e.target.value })}
                 className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                placeholder="VD: Thương mại & Bán lẻ"
+                placeholder={t("VD: Thương mại & Bán lẻ")}
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Mô tả chi tiết</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Mô tả chi tiết")}</label>
               <input
                 type="text"
                 value={newGroupForm.description || ""}
                 onChange={(e) => setNewGroupForm({ ...newGroupForm, description: e.target.value })}
                 className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
-                placeholder="Tuỳ chọn..."
+                placeholder={t("Tuỳ chọn...")}
               />
             </div>
           </div>
@@ -206,13 +208,13 @@ export default function HashtagGroupTable() {
               disabled={savingNew || !newGroupForm.group_id || !newGroupForm.group_name}
               className="px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 disabled:opacity-50 transition-colors"
             >
-              {savingNew ? "Đang lưu..." : "Lưu"}
+              {savingNew ? t("Đang lưu...") : t("Lưu")}
             </button>
             <button
               onClick={() => setIsAddingNew(false)}
               className="px-4 py-2 bg-stone-200 text-stone-700 text-sm font-medium rounded-lg hover:bg-stone-300 transition-colors"
             >
-              Hủy
+              {t("Hủy")}
             </button>
           </div>
         </div>
@@ -223,10 +225,10 @@ export default function HashtagGroupTable() {
         <table className="w-full text-left text-sm">
           <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium">
             <tr>
-              <th className="px-6 py-3 w-1/5">ID Nhóm</th>
-              <th className="px-6 py-3 w-1/4">Tên Nhóm</th>
-              <th className="px-6 py-3 w-2/5">Mô tả</th>
-              <th className="px-6 py-3 text-right">Thao tác</th>
+              <th className="px-6 py-3 w-1/5">{t("ID Nhóm")}</th>
+              <th className="px-6 py-3 w-1/4">{t("Tên Nhóm")}</th>
+              <th className="px-6 py-3 w-2/5">{t("Mô tả")}</th>
+              <th className="px-6 py-3 text-right">{t("Thao tác")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-100">
@@ -280,7 +282,7 @@ export default function HashtagGroupTable() {
                             onClick={() => handleSave(group.group_id)}
                             disabled={saving[group.group_id]}
                             className="p-1.5 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
-                            title="Lưu"
+                            title={t("Lưu")}
                           >
                             <Save className="w-4 h-4" />
                           </button>
@@ -290,7 +292,7 @@ export default function HashtagGroupTable() {
                               setEditForms((p) => { const n = { ...p }; delete n[group.group_id]; return n; });
                             }}
                             className="p-1.5 text-stone-500 bg-stone-200 hover:bg-stone-300 rounded transition-colors"
-                            title="Hủy"
+                            title={t("Hủy")}
                           >
                             <X className="w-4 h-4" />
                           </button>
@@ -300,14 +302,14 @@ export default function HashtagGroupTable() {
                           <button
                             onClick={() => handleEdit(group)}
                             className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
-                            title="Sửa"
+                            title={t("Sửa")}
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(group.group_id, group.group_name)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Xóa"
+                            title={t("Xóa")}
                           >
                             <Trash className="w-4 h-4" />
                           </button>
@@ -323,7 +325,7 @@ export default function HashtagGroupTable() {
               <tr>
                 <td colSpan={4} className="px-6 py-12 text-center text-stone-500">
                   <Tags className="w-10 h-10 mx-auto text-stone-300 mb-3" />
-                  <p>Chưa có nhóm từ khóa nào.</p>
+                  <p>{t("Chưa có nhóm từ khóa nào.")}</p>
                 </td>
               </tr>
             )}

@@ -16,6 +16,7 @@ import {
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useT, useLocale } from "@/lib/i18n/client";
 
 const STATUS_LABEL: Record<string, string> = {
   PLANNED: "LÊN KẾ HOẠCH",
@@ -39,6 +40,8 @@ export default function ScrapingStudio({
   allowedGroups: any[];
   hashtagsByGroup: Record<string, any[]>;
 }) {
+  const t = useT();
+  const locale = useLocale();
   const router = useRouter();
   const supabase = createClient();
 
@@ -66,12 +69,12 @@ export default function ScrapingStudio({
   const handleGroupChange = (groupId: string) => {
     setSelectedGroup(groupId);
     const tags = hashtagsByGroup[groupId] || [];
-    setSelectedHashtags(tags.map((t) => t.hashtag_text));
+    setSelectedHashtags(tags.map((x) => x.hashtag_text));
   };
 
   const handleToggleHashtag = (tag: string) => {
     if (selectedHashtags.includes(tag)) {
-      setSelectedHashtags((prev) => prev.filter((t) => t !== tag));
+      setSelectedHashtags((prev) => prev.filter((x) => x !== tag));
     } else {
       setSelectedHashtags((prev) => [...prev, tag]);
     }
@@ -97,12 +100,12 @@ export default function ScrapingStudio({
   };
 
   const handleStartRun = async () => {
-    if (!selectedActor) return alert("Vui lòng chọn Công cụ (Actor).");
+    if (!selectedActor) return alert(t("Vui lòng chọn Công cụ (Actor)."));
     if (selectedHashtags.length === 0)
-      return alert("Vui lòng chọn ít nhất 1 từ khóa để cào.");
-    if (maxItems < 1) return alert("Giới hạn bài viết không hợp lệ.");
+      return alert(t("Vui lòng chọn ít nhất 1 từ khóa để cào."));
+    if (maxItems < 1) return alert(t("Giới hạn bài viết không hợp lệ."));
     if (scheduleMode === "QUEUE" && !scheduledAt)
-      return alert("Vui lòng chọn thời gian đưa vào hàng đợi.");
+      return alert(t("Vui lòng chọn thời gian đưa vào hàng đợi."));
 
     setLoading(true);
 
@@ -131,14 +134,14 @@ export default function ScrapingStudio({
             )
             .join(", ");
           const when = lastRun.started_at
-            ? new Date(lastRun.started_at).toLocaleString("vi-VN")
-            : "trước đó";
+            ? new Date(lastRun.started_at).toLocaleString(locale)
+            : t("trước đó");
           const confirmed = confirm(
-            `⚠️ Cảnh báo trùng lặp:\n` +
-              `Bạn đã thu thập THÀNH CÔNG các từ khóa [${tagOverlap}] bằng Công cụ ${selectedActor} lúc ${when}.\n` +
-              `Số bài đã thu: ${lastRun.items_count ?? 0}.\n\n` +
-              `Dữ liệu đã có định hướng, lặp lại sẽ sinh chi phí không cần thiết.\n` +
-              `Bạn vẫn muốn tạo kế hoạch mới?`,
+            t("⚠️ Cảnh báo trùng lặp:\n") +
+              t("Bạn đã thu thập THÀNH CÔNG các từ khóa [{tagOverlap}] bằng Công cụ {selectedActor} lúc {when}.\n", { tagOverlap, selectedActor, when }) +
+              t("Số bài đã thu: {v0}.\n\n", { v0: lastRun.items_count ?? 0 }) +
+              t("Dữ liệu đã có định hướng, lặp lại sẽ sinh chi phí không cần thiết.\n") +
+              t("Bạn vẫn muốn tạo kế hoạch mới?"),
           );
           if (!confirmed) {
             setLoading(false);
@@ -182,12 +185,12 @@ export default function ScrapingStudio({
 
       alert(
         isImmediate
-          ? "✅ Đã gửi lệnh thu thập NGAY LẬP TỨC thành công!\n" +
-              "(Dùng Apify token hệ thống ở trang Cấu hình.)\n" +
-              "Tiếp theo: chạy Worker (node scripts/worker.js --once) trên terminal để pick kế hoạch → gọi Apify → lưu kết quả."
-          : `⏱️ Đưa vào HÀNG ĐỢI thành công!\n` +
-              `Chạy lúc: ${new Date(scheduledAt).toLocaleString("vi-VN")}\n` +
-              "(Dùng Apify token hệ thống ở trang Cấu hình.)",
+          ? t("✅ Đã gửi lệnh thu thập NGAY LẬP TỨC thành công!\n") +
+              t("(Dùng Apify token hệ thống ở trang Cấu hình.)\n") +
+              t("Tiếp theo: chạy Worker (node scripts/worker.js --once) trên terminal để pick kế hoạch → gọi Apify → lưu kết quả.")
+          : t("⏱️ Đưa vào HÀNG ĐỢI thành công!\n") +
+              t("Chạy lúc: {v0}\n", { v0: new Date(scheduledAt).toLocaleString(locale) }) +
+              t("(Dùng Apify token hệ thống ở trang Cấu hình.)"),
       );
 
       setSelectedHashtags([]);
@@ -195,7 +198,7 @@ export default function ScrapingStudio({
 
       router.refresh();
     } catch (err: any) {
-      alert("Lỗi khởi tạo: " + err.message);
+      alert(t("Lỗi khởi tạo: ") + err.message);
     } finally {
       setLoading(false);
     }
@@ -206,17 +209,17 @@ export default function ScrapingStudio({
       <div className="lg:col-span-1 space-y-6">
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
           <h2 className="text-lg font-bold text-stone-900 mb-6 flex items-center gap-2">
-            <Clock className="w-5 h-5 text-indigo-600" /> Lên Kế Hoạch Thu Thập
+            <Clock className="w-5 h-5 text-indigo-600" /> {t("Lên Kế Hoạch Thu Thập")}
           </h2>
 
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-2">
-                1. Chọn Nền tảng (Công cụ)
+                {t("1. Chọn Nền tảng (Công cụ)")}
               </label>
               {allowedActors.length === 0 ? (
                 <div className="p-3 bg-red-50 text-red-600 text-xs rounded border border-red-100">
-                  Bạn chưa được phân công Công cụ nào.
+                  {t("Bạn chưa được phân công Công cụ nào.")}
                 </div>
               ) : (
                 <select
@@ -235,11 +238,11 @@ export default function ScrapingStudio({
 
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-2">
-                2. Chọn Nhóm Từ khóa
+                {t("2. Chọn Nhóm Từ khóa")}
               </label>
               {allowedGroups.length === 0 ? (
                 <div className="p-3 bg-red-50 text-red-600 text-xs rounded border border-red-100">
-                  Bạn chưa được phân công Nhóm nào.
+                  {t("Bạn chưa được phân công Nhóm nào.")}
                 </div>
               ) : (
                 <select
@@ -248,7 +251,7 @@ export default function ScrapingStudio({
                   className="w-full p-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
                 >
                   <option value="" disabled>
-                    -- Chọn một nhóm --
+                    {t("-- Chọn một nhóm --")}
                   </option>
                   {allowedGroups.map((g) => (
                     <option key={g.group_id} value={g.group_id}>
@@ -262,13 +265,12 @@ export default function ScrapingStudio({
             {selectedGroup && (
               <div>
                 <label className="block text-sm font-semibold text-stone-700 mb-2">
-                  3. Từ khóa cụ thể ({selectedHashtags.length}/
-                  {availableHashtags.length})
+                  {t("3. Từ khóa cụ thể ({length}/{length2})", { length: selectedHashtags.length, length2: availableHashtags.length })}
                 </label>
                 <div className="bg-stone-50 border border-stone-200 rounded-xl p-3 max-h-48 overflow-y-auto space-y-2">
                   {availableHashtags.length === 0 ? (
                     <div className="text-xs text-stone-500 italic text-center">
-                      Không có từ khóa nào trong nhóm này.
+                      {t("Không có từ khóa nào trong nhóm này.")}
                     </div>
                   ) : (
                     availableHashtags.map((tag) => (
@@ -299,7 +301,7 @@ export default function ScrapingStudio({
 
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-2">
-                4. Giới hạn bài viết tối đa (Max Items)
+                {t("4. Giới hạn bài viết tối đa (Max Items)")}
               </label>
               <input
                 type="number"
@@ -308,14 +310,13 @@ export default function ScrapingStudio({
                 className="w-full p-2.5 bg-stone-50 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
               />
               <div className="text-xs text-stone-500 mt-1">
-                Nên đặt giới hạn để kiểm soát chi phí Apify.
+                {t("Nên đặt giới hạn để kiểm soát chi phí Apify.")}
               </div>
             </div>
 
             <div className="pt-4 border-t border-stone-100">
               <p className="block text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
-                <ListTodo className="w-4 h-4 text-indigo-500" /> 5. Lên lịch
-                thực hiện
+                <ListTodo className="w-4 h-4 text-indigo-500" /> {t("5. Lên lịch thực hiện")}
               </p>
 
               <div className="space-y-3">
@@ -331,11 +332,10 @@ export default function ScrapingStudio({
                   />
                   <div className="flex-1">
                     <div className="text-sm font-bold text-stone-900 flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-emerald-500" /> Chạy NGAY LẬP
-                      TỨC
+                      <Zap className="w-4 h-4 text-emerald-500" /> {t("Chạy NGAY LẬP TỨC")}
                     </div>
                     <div className="text-[11px] text-stone-500 mt-0.5">
-                      Gửi lệnh cho Apify ngay sau khi nhấn nút (mock).
+                      {t("Gửi lệnh cho Apify ngay sau khi nhấn nút (mock).")}
                     </div>
                   </div>
                 </label>
@@ -352,13 +352,12 @@ export default function ScrapingStudio({
                   />
                   <div className="flex-1 space-y-2">
                     <div className="text-sm font-bold text-stone-900 flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-indigo-500" /> Đưa vào Hàng
-                      đợi (Queue)
+                      <Clock className="w-4 h-4 text-indigo-500" /> {t("Đưa vào Hàng đợi (Queue)")}
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
                         <label className="block text-[11px] font-semibold text-stone-500 mb-1">
-                          Thời gian chạy
+                          {t("Thời gian chạy")}
                         </label>
                         <input
                           type="datetime-local"
@@ -370,7 +369,7 @@ export default function ScrapingStudio({
                       </div>
                       <div>
                         <label className="block text-[11px] font-semibold text-stone-500 mb-1 flex items-center gap-1">
-                          <SignalHigh className="w-3 h-3" /> Ưu tiên
+                          <SignalHigh className="w-3 h-3" /> {t("Ưu tiên")}
                         </label>
                         <select
                           disabled={scheduleMode !== "QUEUE"}
@@ -380,10 +379,10 @@ export default function ScrapingStudio({
                           }
                           className="w-full px-2 py-1.5 text-xs border border-stone-300 rounded-lg bg-white disabled:opacity-60"
                         >
-                          <option value={0}>0 - Thấp</option>
-                          <option value={1}>1 - Bình thường</option>
-                          <option value={2}>2 - Cao</option>
-                          <option value={3}>3 - Khẩn cấp</option>
+                          <option value={0}>{t("0 - Thấp")}</option>
+                          <option value={1}>{t("1 - Bình thường")}</option>
+                          <option value={2}>{t("2 - Cao")}</option>
+                          <option value={3}>{t("3 - Khẩn cấp")}</option>
                         </select>
                       </div>
                     </div>
@@ -404,19 +403,18 @@ export default function ScrapingStudio({
               {scheduleMode === "IMMEDIATE" ? (
                 <>
                   <Zap className="w-5 h-5" />{" "}
-                  {loading ? "Đang gửi..." : "Chạy Thu thập NGAY"}
+                  {loading ? t("Đang gửi...") : t("Chạy Thu thập NGAY")}
                 </>
               ) : (
                 <>
                   <Clock className="w-5 h-5" />{" "}
-                  {loading ? "Đang lên lịch..." : "Thêm vào Hàng đợi"}
+                  {loading ? t("Đang lên lịch...") : t("Thêm vào Hàng đợi")}
                 </>
               )}
             </button>
 
             <p className="text-[11px] text-stone-500 text-center">
-              💡 Hệ thống sẽ cảnh báo nếu từ khóa &amp; công cụ này đã được bạn
-              thu thập thành công trước đó.
+              {t("💡 Hệ thống sẽ cảnh báo nếu từ khóa & công cụ này đã được bạn thu thập thành công trước đó.")}
             </p>
           </div>
         </div>
@@ -426,14 +424,13 @@ export default function ScrapingStudio({
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 min-h-full">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <h2 className="text-lg font-bold text-stone-900 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-emerald-600" /> Bảng Theo dõi
-              Tiến trình
+              <Activity className="w-5 h-5 text-emerald-600" /> {t("Bảng Theo dõi Tiến trình")}
             </h2>
             <div className="flex flex-wrap gap-2">
               <LegendBadge
                 color="bg-amber-100 text-amber-700"
                 icon={<Clock className="w-3 h-3" />}
-                label="Kế hoạch"
+                label={t("Kế hoạch")}
               />
               <LegendBadge
                 color="bg-indigo-100 text-indigo-700"
@@ -443,17 +440,17 @@ export default function ScrapingStudio({
               <LegendBadge
                 color="bg-blue-100 text-blue-700"
                 icon={<Activity className="w-3 h-3 animate-pulse" />}
-                label="Đang chạy"
+                label={t("Đang chạy")}
               />
               <LegendBadge
                 color="bg-green-100 text-green-700"
                 icon={<CheckCircle2 className="w-3 h-3" />}
-                label="Thành công"
+                label={t("Thành công")}
               />
               <LegendBadge
                 color="bg-red-100 text-red-700"
                 icon={<XCircle className="w-3 h-3" />}
-                label="Thất bại"
+                label={t("Thất bại")}
               />
             </div>
           </div>
@@ -465,7 +462,7 @@ export default function ScrapingStudio({
           >
             <FlaskConical className="w-5 h-5 text-emerald-700 shrink-0" />
             <span className="text-sm">
-              <strong>Quét thử</strong> (dùng API key cá nhân, không ghi DB, xuất Excel) nay ở trang riêng →
+              <strong>{t("Quét thử")}</strong> {t("(dùng API key cá nhân, không ghi DB, xuất Excel) nay ở trang riêng →")}
             </span>
           </Link>
 
@@ -495,6 +492,8 @@ function LegendBadge({
 }
 
 function RunHistoryTable({ userEmail }: { userEmail: string }) {
+  const t = useT();
+  const locale = useLocale();
   const [runs, setRuns] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
@@ -536,20 +535,20 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
       .eq("run_id", runId);
 
     if (error) {
-      alert("Lỗi khi chạy: " + error.message);
+      alert(t("Lỗi khi chạy: ") + error.message);
     } else {
-      alert("Đã bắn lệnh thu thập lên hệ thống (Mockup)!");
+      alert(t("Đã bắn lệnh thu thập lên hệ thống (Mockup)!"));
     }
   };
 
   const handleDeleteRun = async (runId: string) => {
-    if (!confirm("Bạn có chắc muốn xóa Kế hoạch này?")) return;
+    if (!confirm(t("Bạn có chắc muốn xóa Kế hoạch này?"))) return;
     setRuns(runs.filter((r) => r.run_id !== runId));
     const { error } = await supabase
       .from("collection_runs")
       .delete()
       .eq("run_id", runId);
-    if (error) alert("Lỗi khi xóa: " + error.message);
+    if (error) alert(t("Lỗi khi xóa: ") + error.message);
   };
 
   const statusBadge = (status: string) => {
@@ -572,7 +571,7 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
         className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full ${styles[status] ?? "bg-stone-100 text-stone-700"}`}
       >
         {icons[status] ?? <AlertCircle className="w-3 h-3" />}
-        {STATUS_LABEL[status] ?? status}
+        {t(STATUS_LABEL[status] ?? status)}
       </span>
     );
   };
@@ -580,7 +579,7 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
   if (loading)
     return (
       <div className="text-sm text-stone-500 text-center py-10">
-        Đang tải lịch sử...
+        {t("Đang tải lịch sử...")}
       </div>
     );
   if (runs.length === 0)
@@ -588,7 +587,7 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
       <div className="text-center py-20 border-2 border-dashed border-stone-200 rounded-2xl bg-stone-50">
         <Clock className="w-10 h-10 text-stone-300 mx-auto mb-3" />
         <p className="text-sm font-medium text-stone-500">
-          Chưa có kế hoạch thu thập nào.
+          {t("Chưa có kế hoạch thu thập nào.")}
         </p>
       </div>
     );
@@ -598,11 +597,11 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
       <table className="w-full text-left text-sm">
         <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium text-xs uppercase">
           <tr>
-            <th className="px-4 py-3">Công cụ &amp; Cấu hình</th>
-            <th className="px-4 py-3">Trạng thái</th>
-            <th className="px-4 py-3">Thời gian</th>
-            <th className="px-4 py-3 w-20">Ưu tiên</th>
-            <th className="px-4 py-3 text-right">Thao tác</th>
+            <th className="px-4 py-3">{t("Công cụ & Cấu hình")}</th>
+            <th className="px-4 py-3">{t("Trạng thái")}</th>
+            <th className="px-4 py-3">{t("Thời gian")}</th>
+            <th className="px-4 py-3 w-20">{t("Ưu tiên")}</th>
+            <th className="px-4 py-3 text-right">{t("Thao tác")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-stone-100">
@@ -640,7 +639,7 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
                       </span>
                       {run.query_parameters.group_id && (
                         <span className="text-[10px] text-stone-500 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded">
-                          Nhóm: {run.query_parameters.group_id}
+                          {t("Nhóm: {group_id}", { group_id: run.query_parameters.group_id })}
                         </span>
                       )}
                     </div>
@@ -652,60 +651,55 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
                 <td className="px-4 py-3 text-[11px] text-stone-600 font-mono space-y-0.5">
                   {scheduledTs && (
                     <div className="flex items-center gap-1">
-                      <ListTodo className="w-3 h-3 text-indigo-400" /> Dự kiến:{" "}
-                      {scheduledTs.toLocaleString("vi-VN")}
+                      <ListTodo className="w-3 h-3 text-indigo-400" /> {t("Dự kiến: {v0}", { v0: scheduledTs.toLocaleString(locale) })}
                     </div>
                   )}
                   {startedTs &&
                     run.status !== "PLANNED" &&
                     run.status !== "QUEUED" && (
                       <div className="flex items-center gap-1">
-                        <Activity className="w-3 h-3 text-blue-400" /> Bắt đầu:{" "}
-                        {startedTs.toLocaleString("vi-VN")}
+                        <Activity className="w-3 h-3 text-blue-400" /> {t("Bắt đầu: {v0}", { v0: startedTs.toLocaleString(locale) })}
                       </div>
                     )}
                 </td>
                 <td className="px-4 py-3">
                   {run.priority === 3 ? (
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">
-                      3-Cao
+                      {t("3-Cao")}
                     </span>
                   ) : run.priority === 2 ? (
                     <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700">
-                      2-Bình+
+                      {t("2-Bình+")}
                     </span>
                   ) : run.priority === 1 ? (
                     <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-stone-100 text-stone-700">
-                      1-Bình
+                      {t("1-Bình")}
                     </span>
                   ) : (
                     <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-stone-50 text-stone-500 border border-stone-200">
-                      0-Thấp
+                      {t("0-Thấp")}
                     </span>
                   )}
                 </td>
                 <td className="px-4 py-3 text-right">
                   {isSuccess ? (
                     <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100 inline-flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" />{" "}
-                      {run.items_count ?? 0} BĐ
+                      <CheckCircle2 className="w-3.5 h-3.5" />{t("{v0} BĐ", { v0: run.items_count ?? 0 })}
                     </span>
                   ) : run.status === "RUNNING" ? (
                     <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-100 inline-flex items-center gap-1">
-                      <Activity className="w-3.5 h-3.5 animate-spin" /> Đang
-                      chạy
+                      <Activity className="w-3.5 h-3.5 animate-spin" /> {t("Đang chạy")}
                     </span>
                   ) : run.status === "FAILED" ? (
                     <div className="flex items-center justify-end gap-2">
                       <span className="text-xs font-semibold text-red-600 mr-1">
-                        Thất bại
+                        {t("Thất bại")}
                       </span>
                       <button
                         onClick={() => handleRunNow(run.run_id)}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-[11px] font-bold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
                       >
-                        <Play className="w-3.5 h-3.5" fill="currentColor" />{" "}
-                        Chạy lại
+                        <Play className="w-3.5 h-3.5" fill="currentColor" />{t("Chạy lại")}
                       </button>
                     </div>
                   ) : (
@@ -715,15 +709,14 @@ function RunHistoryTable({ userEmail }: { userEmail: string }) {
                           onClick={() => handleRunNow(run.run_id)}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-[11px] font-bold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
                         >
-                          <Play className="w-3.5 h-3.5" fill="currentColor" />{" "}
-                          Chạy
+                          <Play className="w-3.5 h-3.5" fill="currentColor" />{t("Chạy")}
                         </button>
                       ) : null}
                       {!isLocked && (
                         <button
                           onClick={() => handleDeleteRun(run.run_id)}
                           className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                          title="Xóa Kế hoạch"
+                          title={t("Xóa Kế hoạch")}
                         >
                           <XCircle className="w-4 h-4" />
                         </button>

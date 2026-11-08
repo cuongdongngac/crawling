@@ -1,8 +1,10 @@
 import { fetchUsers } from "@/app/actions/user";
 import Link from "next/link";
 import { UserCircle, Eye, ShieldCheck, Activity } from "lucide-react";
+import { getT } from "@/lib/i18n/server";
 
 export default async function ResearchersPage() {
+  const t = await getT();
   const users = await fetchUsers();
 
   return (
@@ -14,10 +16,10 @@ export default async function ResearchersPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Giám sát & Phân công
+              {t("Giám sát & Phân công")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Phân công phạm vi công việc và theo dõi lịch sử thu thập dữ liệu của từng Nghiên cứu viên.
+              {t("Phân công phạm vi công việc và theo dõi lịch sử thu thập dữ liệu của từng Nghiên cứu viên.")}
             </p>
           </div>
         </div>
@@ -27,10 +29,10 @@ export default async function ResearchersPage() {
             <table className="w-full text-left text-sm">
               <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium">
                 <tr>
-                  <th className="px-6 py-4">Tài Khoản</th>
-                  <th className="px-6 py-4">Phạm vi Nhóm Từ khóa</th>
-                  <th className="px-6 py-4">Công cụ cào (Actors)</th>
-                  <th className="px-6 py-4 text-right">Chi tiết</th>
+                  <th className="px-6 py-4">{t("Tài Khoản")}</th>
+                  <th className="px-6 py-4">{t("Phạm vi Nhóm Từ khóa")}</th>
+                  <th className="px-6 py-4">{t("Công cụ cào (Actors)")}</th>
+                  <th className="px-6 py-4 text-right">{t("Chi tiết")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
@@ -55,20 +57,20 @@ export default async function ResearchersPage() {
                       </td>
                       <td className="px-6 py-4">
                         {user.is_admin ? (
-                          <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">Tất cả (Admin)</span>
+                          <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">{t("Tất cả (Admin)")}</span>
                         ) : groupCount > 0 ? (
-                          <span className="text-xs font-medium text-stone-700 bg-stone-100 px-2 py-1 rounded">{groupCount} Nhóm</span>
+                          <span className="text-xs font-medium text-stone-700 bg-stone-100 px-2 py-1 rounded">{t("{groupCount} Nhóm", { groupCount })}</span>
                         ) : (
-                          <span className="text-xs text-stone-400 italic">Chưa phân công</span>
+                          <span className="text-xs text-stone-400 italic">{t("Chưa phân công")}</span>
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {user.is_admin ? (
-                          <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">Tất cả (Admin)</span>
+                          <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">{t("Tất cả (Admin)")}</span>
                         ) : actorCount > 0 ? (
-                          <span className="text-xs font-medium text-stone-700 bg-stone-100 px-2 py-1 rounded">{actorCount} Công cụ</span>
+                          <span className="text-xs font-medium text-stone-700 bg-stone-100 px-2 py-1 rounded">{t("{actorCount} Công cụ", { actorCount })}</span>
                         ) : (
-                          <span className="text-xs text-stone-400 italic">Chưa phân công</span>
+                          <span className="text-xs text-stone-400 italic">{t("Chưa phân công")}</span>
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -76,7 +78,7 @@ export default async function ResearchersPage() {
                           href={`/dashboard/researchers/${user.id}`}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 hover:text-indigo-700 rounded-lg text-xs font-medium transition-colors"
                         >
-                          <Eye className="w-3.5 h-3.5" /> Theo dõi
+                          <Eye className="w-3.5 h-3.5" /> {t("Theo dõi")}
                         </Link>
                       </td>
                     </tr>

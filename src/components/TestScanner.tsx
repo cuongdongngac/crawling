@@ -27,6 +27,7 @@ import {
   type ScanRun,
 } from "@/app/actions/test-scan";
 import ProposalDialog, { type ProposalTarget } from "@/components/ProposalDialog";
+import { useT, useLocale } from "@/lib/i18n/client";
 
 // ---------------------------------------------------------------
 // Kiểu dữ liệu
@@ -100,7 +101,7 @@ const LANG_VI: Record<string, string> = {
 // ---------------------------------------------------------------
 // Tiện ích
 // ---------------------------------------------------------------
-const fmt = (n: number | null | undefined) => (n === null || n === undefined ? "–" : n.toLocaleString("vi-VN"));
+const fmtN = (n: number | null | undefined, locale: string) => (n === null || n === undefined ? "–" : n.toLocaleString(locale));
 const engagement = (r: ScanRow) => (r.like_count ?? 0) + (r.comment_count ?? 0) + (r.share_count ?? 0);
 const isVi = (r: ScanRow) => r.lang === "vi";
 const isUnknown = (r: ScanRow) => !LANG_VI[r.lang] || r.lang === "other";
@@ -132,16 +133,20 @@ function parseKeywords(text: string): string[] {
   );
 }
 
-function dateVi(iso: string | null) {
+function dateL(iso: string | null, locale: string) {
   if (!iso) return "–";
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "–" : d.toLocaleDateString("vi-VN");
+  return Number.isNaN(d.getTime()) ? "–" : d.toLocaleDateString(locale);
 }
 
 // ---------------------------------------------------------------
 // Component chính
 // ---------------------------------------------------------------
 export default function TestScanner({ actors, knownHashtags }: { actors: ActorInfo[]; knownHashtags: string[] }) {
+  const t = useT();
+  const locale = useLocale();
+  const fmt = (n: number | null | undefined) => fmtN(n, locale);
+  const dateVi = (iso: string | null) => dateL(iso, locale);
   const known = useMemo(() => new Set(knownHashtags), [knownHashtags]);
 
   // --- Form ---
@@ -176,9 +181,9 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
   // Phải đọc sau khi trang đã hiển thị (server không có localStorage), nên setState trong effect là chủ ý.
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    const t = safeGet(TOKEN_KEY);
-    if (t) {
-      setToken(t);
+    const saved = safeGet(TOKEN_KEY);
+    if (saved) {
+      setToken(saved);
       setRememberToken(true);
     }
     const j = safeGet(JOB_KEY);
@@ -248,7 +253,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
   const loadResults = useCallback(
     async (j: Job) => {
       if (!token) {
-        setError("Nhập API key để tải kết quả.");
+        setError(t("Nhập API key để tải kết quả."));
         return;
       }
       setBusy("fetch");
@@ -297,9 +302,9 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
   async function onStart() {
     setError(null);
-    if (!token.trim()) return setError("Nhập API key Apify của bạn.");
-    if (keywords.length === 0) return setError("Nhập ít nhất một từ khóa.");
-    if (anyRunning && !window.confirm("Lần quét trước chưa xong. Bỏ theo dõi lần đó và quét mới?")) return;
+    if (!token.trim()) return setError(t("Nhập API key Apify của bạn."));
+    if (keywords.length === 0) return setError(t("Nhập ít nhất một từ khóa."));
+    if (anyRunning && !window.confirm(t("Lần quét trước chưa xong. Bỏ theo dõi lần đó và quét mới?"))) return;
     setBusy("start");
     const res = await startScan({
       token,
@@ -328,7 +333,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
   async function onAbort() {
     if (!job || !token) return;
-    if (!window.confirm("Dừng các từ khóa đang quét? Bài đã lấy được vẫn giữ lại.")) return;
+    if (!window.confirm(t("Dừng các từ khóa đang quét? Bài đã lấy được vẫn giữ lại."))) return;
     setBusy("abort");
     const res = await abortScan({ token, runs: job.runs });
     setBusy(null);
@@ -337,7 +342,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
   }
 
   async function onImport() {
-    if (!token.trim()) return setError("Nhập API key Apify của tài khoản đã chạy lần quét đó.");
+    if (!token.trim()) return setError(t("Nhập API key Apify của tài khoản đã chạy lần quét đó."));
     if (!importRef.trim()) return;
     setBusy("import");
     setError(null);
@@ -370,7 +375,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
   }
 
   function onClear() {
-    if (!window.confirm("Xóa kết quả lần quét này khỏi màn hình? (Dữ liệu trên Apify vẫn còn.)")) return;
+    if (!window.confirm(t("Xóa kết quả lần quét này khỏi màn hình? (Dữ liệu trên Apify vẫn còn.)"))) return;
     setJob(null);
     setError(null);
   }
@@ -451,6 +456,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
   const related = useMemo(() => job?.related ?? [], [job]);
 
+  // i18n-ignore: trả chữ tiếng Việt cố định (dùng để so sánh); dịch lúc hiển thị bằng t(status).
   const tagStatus = (tag: string) => (scannedKw.has(tag) ? "Đang quét" : known.has(tag) ? "Đã có trong danh mục" : "Mới");
 
   const totalUsd = (job?.runs ?? []).reduce((a, r) => a + (r.usageUsd ?? 0), 0);
@@ -482,28 +488,28 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     const mod: any = await import("exceljs");
     const ExcelJS = mod.default ?? mod;
     const wb = new ExcelJS.Workbook();
-    wb.creator = "VPHA – Quét thử";
+    wb.creator = t("VPHA – Quét thử");
     wb.created = new Date();
 
-    const ws = wb.addWorksheet("Bài viết", { views: [{ state: "frozen", ySplit: 1 }] });
+    const ws = wb.addWorksheet(t("Bài viết"), { views: [{ state: "frozen", ySplit: 1 }] });
     ws.columns = [
       { header: "STT", key: "stt", width: 6 },
-      { header: "Nền tảng", key: "platform", width: 11 },
-      { header: "Từ khóa quét", key: "keywords", width: 18 },
-      { header: "Ngày đăng", key: "published", width: 18, style: { numFmt: "dd/mm/yyyy hh:mm" } },
-      { header: "Ngôn ngữ", key: "lang", width: 12 },
-      { header: "Nội dung", key: "text", width: 60 },
+      { header: t("Nền tảng"), key: "platform", width: 11 },
+      { header: t("Từ khóa quét"), key: "keywords", width: 18 },
+      { header: t("Ngày đăng"), key: "published", width: 18, style: { numFmt: "dd/mm/yyyy hh:mm" } },
+      { header: t("Ngôn ngữ"), key: "lang", width: 12 },
+      { header: t("Nội dung"), key: "text", width: 60 },
       { header: "Hashtag", key: "hashtags", width: 35 },
       { header: "Like", key: "like", width: 10 },
-      { header: "Bình luận", key: "comment", width: 10 },
-      { header: "Chia sẻ", key: "share", width: 10 },
-      { header: "Lượt xem", key: "view", width: 12 },
-      { header: "Lượt lưu", key: "save", width: 10 },
-      { header: "Tổng tương tác (like+bình luận+chia sẻ)", key: "eng", width: 14 },
-      { header: "Quảng cáo", key: "ad", width: 10 },
-      { header: "Link bài", key: "url", width: 45 },
-      { header: "Mã tác giả (đã băm)", key: "author", width: 20 },
-      { header: "Mã bài", key: "postid", width: 22 },
+      { header: t("Bình luận"), key: "comment", width: 10 },
+      { header: t("Chia sẻ"), key: "share", width: 10 },
+      { header: t("Lượt xem"), key: "view", width: 12 },
+      { header: t("Lượt lưu"), key: "save", width: 10 },
+      { header: t("Tổng tương tác (like+bình luận+chia sẻ)"), key: "eng", width: 14 },
+      { header: t("Quảng cáo"), key: "ad", width: 10 },
+      { header: t("Link bài"), key: "url", width: 45 },
+      { header: t("Mã tác giả (đã băm)"), key: "author", width: 20 },
+      { header: t("Mã bài"), key: "postid", width: 22 },
     ];
     filtered.forEach((r, i) => {
       ws.addRow({
@@ -511,7 +517,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
         platform: platformVi(r.platform),
         keywords: r.keywords.join(", "),
         published: r.published_at ? new Date(r.published_at) : null,
-        lang: LANG_VI[r.lang] ?? r.lang,
+        lang: t(LANG_VI[r.lang] ?? r.lang),
         text: r.text,
         hashtags: r.hashtags.map((h) => "#" + h).join(" "),
         like: r.like_count,
@@ -520,7 +526,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
         view: r.view_count,
         save: r.save_count,
         eng: engagement(r),
-        ad: r.is_ad ? "Có" : "",
+        ad: r.is_ad ? t("Có") : "",
         url: { text: r.post_url, hyperlink: r.post_url },
         author: r.author_hash ? r.author_hash.slice(0, 16) : "",
         postid: r.native_post_id,
@@ -530,55 +536,55 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
     ws.getColumn("text").alignment = { wrapText: true, vertical: "top" };
     ws.autoFilter = { from: "A1", to: "Q1" };
 
-    const wh = wb.addWorksheet("Hashtag đi kèm", { views: [{ state: "frozen", ySplit: 1 }] });
+    const wh = wb.addWorksheet(t("Hashtag đi kèm"), { views: [{ state: "frozen", ySplit: 1 }] });
     wh.columns = [
       { header: "Hashtag", key: "tag", width: 28 },
-      { header: "Trạng thái", key: "status", width: 22 },
-      { header: "Số bài", key: "posts", width: 10 },
-      { header: "Số bài tiếng Việt", key: "vi", width: 14 },
-      { header: "Tổng like", key: "like", width: 12 },
-      { header: "Tổng bình luận", key: "comment", width: 14 },
-      { header: "Tổng chia sẻ", key: "share", width: 12 },
-      { header: "Tổng lượt xem", key: "view", width: 14 },
+      { header: t("Trạng thái"), key: "status", width: 22 },
+      { header: t("Số bài"), key: "posts", width: 10 },
+      { header: t("Số bài tiếng Việt"), key: "vi", width: 14 },
+      { header: t("Tổng like"), key: "like", width: 12 },
+      { header: t("Tổng bình luận"), key: "comment", width: 14 },
+      { header: t("Tổng chia sẻ"), key: "share", width: 12 },
+      { header: t("Tổng lượt xem"), key: "view", width: 14 },
     ];
-    hashtagStats.forEach((s) => wh.addRow({ ...s, tag: "#" + s.tag, status: tagStatus(s.tag) }));
+    hashtagStats.forEach((s) => wh.addRow({ ...s, tag: "#" + s.tag, status: t(tagStatus(s.tag)) }));
     wh.getRow(1).font = { bold: true };
     wh.autoFilter = { from: "A1", to: "H1" };
 
     if (related.length) {
-      const wr = wb.addWorksheet("Hashtag liên quan", { views: [{ state: "frozen", ySplit: 1 }] });
+      const wr = wb.addWorksheet(t("Hashtag liên quan"), { views: [{ state: "frozen", ySplit: 1 }] });
       wr.columns = [
         { header: "Hashtag", key: "tag", width: 28 },
-        { header: "Trạng thái", key: "status", width: 22 },
-        { header: "Thông tin từ nền tảng", key: "info", width: 30 },
-        { header: "Gợi ý từ từ khóa", key: "keywords", width: 30 },
+        { header: t("Trạng thái"), key: "status", width: 22 },
+        { header: t("Thông tin từ nền tảng"), key: "info", width: 30 },
+        { header: t("Gợi ý từ từ khóa"), key: "keywords", width: 30 },
       ];
       related.forEach((r) =>
-        wr.addRow({ tag: "#" + r.tag, status: tagStatus(r.tag), info: r.info ?? "", keywords: r.keywords.join(", ") }),
+        wr.addRow({ tag: "#" + r.tag, status: t(tagStatus(r.tag)), info: r.info ? r.info.split(" · ").map((x) => t(x)).join(" · ") : "", keywords: r.keywords.join(", ") }),
       );
       wr.getRow(1).font = { bold: true };
       wr.autoFilter = { from: "A1", to: "D1" };
     }
 
-    const wi = wb.addWorksheet("Thông tin");
+    const wi = wb.addWorksheet(t("Thông tin"));
     wi.columns = [
-      { header: "Mục", key: "k", width: 30 },
-      { header: "Giá trị", key: "v", width: 80 },
+      { header: t("Mục"), key: "k", width: 30 },
+      { header: t("Giá trị"), key: "v", width: 80 },
     ];
-    const langLabel = { vi: "Chỉ tiếng Việt", vi_unknown: "Tiếng Việt + chưa rõ ngôn ngữ", all: "Tất cả ngôn ngữ" }[langFilter];
+    const langLabel = { vi: t("Chỉ tiếng Việt"), vi_unknown: t("Tiếng Việt + chưa rõ ngôn ngữ"), all: t("Tất cả ngôn ngữ") }[langFilter];
     [
-      ["Công cụ", actors.find((a) => a.id === job.actorId)?.label ?? job.actorId],
+      [t("Công cụ"), t(actors.find((a) => a.id === job.actorId)?.label ?? job.actorId)],
       ["Actor Apify", job.actorId],
-      ["Từ khóa", job.keywords.join(", ")],
-      ["Số bài tối đa mỗi từ khóa", job.perKeyword],
-      ["Thời điểm quét", new Date(job.createdAt).toLocaleString("vi-VN")],
-      ["Thời điểm xuất file", new Date().toLocaleString("vi-VN")],
-      ["Bộ lọc khi xuất", `${langLabel}${kwFilter ? "; từ khóa: " + kwFilter : ""}${search ? "; tìm: " + search : ""}`],
-      ["Số bài trong file", filtered.length],
-      ["Tổng số bài lấy về (trước lọc)", rows.length],
-      ["Chi phí Apify thực tế (USD)", Math.round(totalUsd * 1000) / 1000],
-      ["Mã các lần chạy Apify", job.runs.map((r) => `${r.keyword}: ${r.runId}`).join("; ")],
-      ["Lưu ý", "File không chứa tên tài khoản; mã tác giả đã băm một chiều. Không chia sẻ công khai. Số like/bình luận là số tại thời điểm quét."],
+      [t("Từ khóa"), job.keywords.join(", ")],
+      [t("Số bài tối đa mỗi từ khóa"), job.perKeyword],
+      [t("Thời điểm quét"), new Date(job.createdAt).toLocaleString(locale)],
+      [t("Thời điểm xuất file"), new Date().toLocaleString(locale)],
+      [t("Bộ lọc khi xuất"), `${langLabel}${kwFilter ? t("; từ khóa: ") + kwFilter : ""}${search ? t("; tìm: ") + search : ""}`],
+      [t("Số bài trong file"), filtered.length],
+      [t("Tổng số bài lấy về (trước lọc)"), rows.length],
+      [t("Chi phí Apify thực tế (USD)"), Math.round(totalUsd * 1000) / 1000],
+      [t("Mã các lần chạy Apify"), job.runs.map((r) => `${r.keyword}: ${r.runId}`).join("; ")],
+      [t("Lưu ý"), t("File không chứa tên tài khoản; mã tác giả đã băm một chiều. Không chia sẻ công khai. Số like/bình luận là số tại thời điểm quét.")],
     ].forEach(([k, v]) => wi.addRow({ k, v }));
     wi.getRow(1).font = { bold: true };
 
@@ -610,7 +616,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
       <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className={labelCls}>Nền tảng / công cụ</label>
+            <label className={labelCls}>{t("Nền tảng / công cụ")}</label>
             <select
               value={actorId}
               onChange={(e) => {
@@ -624,16 +630,16 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
             >
               {actors.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.label}
+                  {t(a.label)}
                 </option>
               ))}
             </select>
-            <p className="text-xs text-stone-500 mt-1">{actor?.note}</p>
+            <p className="text-xs text-stone-500 mt-1">{t(actor?.note)}</p>
           </div>
 
           <div>
             <label className={labelCls}>
-              <KeyRound className="inline w-4 h-4 mr-1 -mt-0.5" /> API key Apify của bạn
+              <KeyRound className="inline w-4 h-4 mr-1 -mt-0.5" /> {t("API key Apify của bạn")}
             </label>
             <input
               type="password"
@@ -645,26 +651,26 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
             />
             <label className="flex items-center gap-2 mt-1.5 text-xs text-stone-600">
               <input type="checkbox" checked={rememberToken} onChange={(e) => setRememberToken(e.target.checked)} />
-              Nhớ key trên máy này (chỉ lưu trong trình duyệt của bạn, không gửi lên cơ sở dữ liệu)
+              {t("Nhớ key trên máy này (chỉ lưu trong trình duyệt của bạn, không gửi lên cơ sở dữ liệu)")}
             </label>
           </div>
 
           <div className="md:col-span-2">
-            <label className={labelCls}>Từ khóa / hashtag (mỗi dòng một từ, hoặc cách nhau bằng dấu phẩy)</label>
+            <label className={labelCls}>{t("Từ khóa / hashtag (mỗi dòng một từ, hoặc cách nhau bằng dấu phẩy)")}</label>
             <textarea
               rows={3}
               value={keywordsText}
               onChange={(e) => setKeywordsText(e.target.value)}
-              placeholder={actor?.platform === "FACEBOOK" ? "kẹo khói\n#podgiare" : "vapegiare\npodgiare"}
+              placeholder={actor?.platform === "FACEBOOK" ? t("kẹo khói\n#podgiare") : "vapegiare\npodgiare"}
               className={inputCls}
             />
             <p className="text-xs text-stone-500 mt-1">
-              {keywords.length} từ khóa · mỗi từ khóa là một lần quét riêng (tối đa 20).
+              {t("{length} từ khóa · mỗi từ khóa là một lần quét riêng (tối đa 20).", { length: keywords.length })}
             </p>
           </div>
 
           <div>
-            <label className={labelCls}>Số bài tối đa mỗi từ khóa</label>
+            <label className={labelCls}>{t("Số bài tối đa mỗi từ khóa")}</label>
             {actor?.perKeywordFixed ? (
               <p className="text-sm text-stone-700 py-2.5">{actor.perKeywordFixed}</p>
             ) : (
@@ -678,7 +684,9 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                   className={inputCls}
                 />
                 <p className="text-xs text-stone-500 mt-1">
-                  {actor?.minPerKeyword ? `Tối thiểu ${actor.minPerKeyword}, t` : "T"}ối đa {actor?.maxPerKeyword}.
+                  {actor?.minPerKeyword
+                    ? t("Tối thiểu {min}, tối đa {max}.", { min: actor.minPerKeyword, max: actor?.maxPerKeyword })
+                    : t("Tối đa {max}.", { max: actor?.maxPerKeyword })}
                 </p>
               </>
             )}
@@ -688,32 +696,32 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {caps.sortOrder && (
                 <div>
-                  <label className={labelCls}>Thứ tự</label>
+                  <label className={labelCls}>{t("Thứ tự")}</label>
                   <select value={searchType} onChange={(e) => setSearchType(e.target.value as "top" | "latest")} className={inputCls}>
-                    <option value="top">Nổi bật</option>
-                    <option value="latest">Mới nhất</option>
+                    <option value="top">{t("Nổi bật")}</option>
+                    <option value="latest">{t("Mới nhất")}</option>
                   </select>
                 </div>
               )}
               {caps.dateRange && (
                 <>
                   <div>
-                    <label className={labelCls}>Từ ngày</label>
+                    <label className={labelCls}>{t("Từ ngày")}</label>
                     <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputCls} />
                   </div>
                   <div>
-                    <label className={labelCls}>Đến ngày</label>
+                    <label className={labelCls}>{t("Đến ngày")}</label>
                     <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputCls} />
                   </div>
                 </>
               )}
               {!!caps.periods?.length && (
                 <div>
-                  <label className={labelCls}>Số liệu trong</label>
+                  <label className={labelCls}>{t("Số liệu trong")}</label>
                   <select value={period} onChange={(e) => setPeriod(Number(e.target.value))} className={inputCls}>
                     {caps.periods.map((d) => (
                       <option key={d} value={d}>
-                        {d} ngày gần nhất
+                        {t("{d} ngày gần nhất", { d })}
                       </option>
                     ))}
                   </select>
@@ -729,22 +737,22 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
             disabled={busy !== null}
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold disabled:opacity-50"
           >
-            {busy === "start" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />} Bắt đầu quét
+            {busy === "start" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />} {t("Bắt đầu quét")}
           </button>
           <p className="text-xs text-stone-500">
-            Ước tính tối đa ~{estUsd.toFixed(2)} USD trên tài khoản Apify của bạn (theo giá gói miễn phí; gói trả phí rẻ hơn).
+            {t("Ước tính tối đa ~{v0} USD trên tài khoản Apify của bạn (theo giá gói miễn phí; gói trả phí rẻ hơn).", { v0: estUsd.toFixed(2) })}
           </p>
         </div>
 
         <details className="mt-4 text-sm">
           <summary className="cursor-pointer text-stone-600 font-medium inline-flex items-center gap-1">
-            <Link2 className="w-4 h-4" /> Đã chạy trên Apify? Dán mã lần quét để xem kết quả tại đây
+            <Link2 className="w-4 h-4" /> {t("Đã chạy trên Apify? Dán mã lần quét để xem kết quả tại đây")}
           </summary>
           <div className="mt-2 flex flex-col sm:flex-row gap-2">
             <input
               value={importRef}
               onChange={(e) => setImportRef(e.target.value)}
-              placeholder="Mã lần quét hoặc link console.apify.com/.../runs/..."
+              placeholder={t("Mã lần quét hoặc link console.apify.com/.../runs/...")}
               className={inputCls}
             />
             <button
@@ -752,17 +760,17 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
               disabled={busy !== null}
               className="px-4 py-2.5 rounded-lg border border-stone-300 bg-white hover:bg-stone-50 font-semibold disabled:opacity-50"
             >
-              {busy === "import" ? "Đang tìm…" : "Thêm"}
+              {busy === "import" ? t("Đang tìm…") : t("Thêm")}
             </button>
           </div>
           <p className="text-xs text-stone-500 mt-1">
-            Chọn đúng công cụ ở trên trước khi thêm. Từ khóa đầu tiên trong ô từ khóa (nếu có) sẽ được dùng làm nhãn.
+            {t("Chọn đúng công cụ ở trên trước khi thêm. Từ khóa đầu tiên trong ô từ khóa (nếu có) sẽ được dùng làm nhãn.")}
           </p>
         </details>
 
         {error && (
           <div className="mt-4 flex items-start gap-2 p-3 rounded-lg bg-red-50 text-red-800 text-sm">
-            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {error}
+            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /> {t(error)}
           </div>
         )}
       </section>
@@ -772,7 +780,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
         <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 md:p-6">
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <h2 className="font-bold text-stone-900 mr-auto">
-              Tiến độ · {actors.find((a) => a.id === job.actorId)?.label ?? job.actorId}
+              {t("Tiến độ · {v0}", { v0: t(actors.find((a) => a.id === job.actorId)?.label ?? job.actorId) })}
             </h2>
             {anyRunning && (
               <button
@@ -780,7 +788,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                 disabled={busy !== null}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-amber-300 text-amber-800 bg-amber-50 text-sm font-semibold"
               >
-                <Square className="w-3.5 h-3.5" /> Dừng
+                <Square className="w-3.5 h-3.5" /> {t("Dừng")}
               </button>
             )}
             {allDone && (
@@ -789,28 +797,28 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                 disabled={busy !== null}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-300 text-sm font-semibold"
               >
-                <RefreshCw className={"w-3.5 h-3.5 " + (busy === "fetch" ? "animate-spin" : "")} /> Tải lại kết quả
+                <RefreshCw className={"w-3.5 h-3.5 " + (busy === "fetch" ? "animate-spin" : "")} /> {t("Tải lại kết quả")}
               </button>
             )}
             <button onClick={onClear} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-300 text-sm">
-              <Trash2 className="w-3.5 h-3.5" /> Xóa
+              <Trash2 className="w-3.5 h-3.5" /> {t("Xóa")}
             </button>
           </div>
 
           {(anyRunning || (allDone && job.rows === null)) && !token && (
             <p className="text-sm text-amber-800 bg-amber-50 rounded-lg p-3 mb-3">
-              Nhập lại API key ở trên để tiếp tục theo dõi và tải kết quả.
+              {t("Nhập lại API key ở trên để tiếp tục theo dõi và tải kết quả.")}
             </p>
           )}
           {anyRunning && (
             <p className="text-sm text-blue-800 bg-blue-50 rounded-lg p-3 mb-3 flex gap-2">
               <Loader2 className="w-4 h-4 animate-spin shrink-0 mt-0.5" />
-              Apify đang quét. Bạn có thể tắt màn hình hoặc chuyển ứng dụng; mở lại trang này là tiếp tục.
+              {t("Apify đang quét. Bạn có thể tắt màn hình hoặc chuyển ứng dụng; mở lại trang này là tiếp tục.")}
             </p>
           )}
           {busy === "fetch" && (
             <p className="text-sm text-stone-700 bg-stone-50 rounded-lg p-3 mb-3 flex gap-2">
-              <Loader2 className="w-4 h-4 animate-spin shrink-0 mt-0.5" /> Đang tải và đọc kết quả…
+              <Loader2 className="w-4 h-4 animate-spin shrink-0 mt-0.5" /> {t("Đang tải và đọc kết quả…")}
             </p>
           )}
 
@@ -820,8 +828,8 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
               return (
                 <li key={r.runId || i} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
                   <span className="font-semibold text-stone-900">{r.keyword}</span>
-                  <span className={"px-2 py-0.5 rounded-full text-xs font-semibold " + st.cls}>{st.label}</span>
-                  <span className="text-stone-500">{r.itemCount !== null ? `${fmt(r.itemCount)} bài` : ""}</span>
+                  <span className={"px-2 py-0.5 rounded-full text-xs font-semibold " + st.cls}>{t(st.label)}</span>
+                  <span className="text-stone-500">{r.itemCount !== null ? t("{v0} bài", { v0: fmt(r.itemCount) }) : ""}</span>
                   {r.usageUsd !== null && <span className="text-stone-400 text-xs">{r.usageUsd.toFixed(3)} USD</span>}
                   {r.runId && (
                     <a
@@ -830,7 +838,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                       rel="noreferrer"
                       className="text-xs text-emerald-700 inline-flex items-center gap-1 ml-auto"
                     >
-                      Xem trên Apify <ExternalLink className="w-3 h-3" />
+                      {t("Xem trên Apify")} <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                   {r.error && <span className="basis-full text-xs text-red-700">{r.error}</span>}
@@ -846,32 +854,32 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
         <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 md:p-6">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <h2 className="font-bold text-stone-900 mr-auto flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-600" /> Kết quả
+              <CheckCircle2 className="w-5 h-5 text-green-600" /> {t("Kết quả")}
             </h2>
             <button
               onClick={onExport}
               disabled={filtered.length === 0}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm disabled:opacity-50"
             >
-              <Download className="w-4 h-4" /> Xuất Excel ({filtered.length} bài)
+              <Download className="w-4 h-4" /> {t("Xuất Excel ({length} bài)", { length: filtered.length })}
             </button>
           </div>
 
           {job.truncated && (
             <p className="text-xs text-amber-800 bg-amber-50 rounded p-2 mb-3">
-              Chỉ hiển thị 5.000 bài đầu tiên. Muốn xem hết, hãy quét ít từ khóa hơn mỗi lần.
+              {t("Chỉ hiển thị 5.000 bài đầu tiên. Muốn xem hết, hãy quét ít từ khóa hơn mỗi lần.")}
             </p>
           )}
 
           {/* Số liệu tổng */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-4">
             {[
-              ["Bài (sau lọc)", fmt(totals.posts)],
-              ["Bài tiếng Việt", fmt(totals.vi)],
-              ["Tổng like", fmt(totals.like)],
-              ["Tổng bình luận", fmt(totals.comment)],
-              ["Tổng chia sẻ", fmt(totals.share)],
-              ["Tổng lượt xem", totals.view ? fmt(totals.view) : "–"],
+              [t("Bài (sau lọc)"), fmt(totals.posts)],
+              [t("Bài tiếng Việt"), fmt(totals.vi)],
+              [t("Tổng like"), fmt(totals.like)],
+              [t("Tổng bình luận"), fmt(totals.comment)],
+              [t("Tổng chia sẻ"), fmt(totals.share)],
+              [t("Tổng lượt xem"), totals.view ? fmt(totals.view) : "–"],
             ].map(([k, v]) => (
               <div key={k} className="rounded-xl bg-stone-50 border border-stone-200 p-3">
                 <div className="text-[11px] text-stone-500">{k}</div>
@@ -880,22 +888,22 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
             ))}
           </div>
           <p className="text-xs text-stone-500 mb-4">
-            Lấy về {fmt(rows.length)} bài (đã gộp bài trùng giữa các từ khóa)
-            {job.skipped ? `, bỏ qua ${job.skipped} mục không đọc được` : ""}. Ngôn ngữ:{" "}
-            {langCounts.map(([l, n]) => `${LANG_VI[l] ?? l} ${n}`).join(" · ")}.
-            {totals.min && ` Ngày đăng từ ${dateVi(totals.min)} đến ${dateVi(totals.max)}.`}
-            {totalUsd > 0 && ` Chi phí Apify: ${totalUsd.toFixed(3)} USD.`}
+            {t("Lấy về {v0} bài (đã gộp bài trùng giữa các từ khóa)", { v0: fmt(rows.length) })}
+            {job.skipped ? t(", bỏ qua {skipped} mục không đọc được", { skipped: job.skipped }) : ""}{t(". Ngôn ngữ:")}
+            {langCounts.map(([l, n]) => `${t(LANG_VI[l] ?? l)} ${n}`).join(" · ")}.
+            {totals.min && t(" Ngày đăng từ {v0} đến {v1}.", { v0: dateVi(totals.min), v1: dateVi(totals.max) })}
+            {totalUsd > 0 && t(" Chi phí Apify: {v0} USD.", { v0: totalUsd.toFixed(3) })}
           </p>
 
           {/* Bộ lọc */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
             <select value={langFilter} onChange={(e) => { setLangFilter(e.target.value as LangFilter); setShown(PAGE); }} className={inputCls}>
-              <option value="vi_unknown">Tiếng Việt + chưa rõ ngôn ngữ</option>
-              <option value="vi">Chỉ tiếng Việt</option>
-              <option value="all">Tất cả ngôn ngữ</option>
+              <option value="vi_unknown">{t("Tiếng Việt + chưa rõ ngôn ngữ")}</option>
+              <option value="vi">{t("Chỉ tiếng Việt")}</option>
+              <option value="all">{t("Tất cả ngôn ngữ")}</option>
             </select>
             <select value={kwFilter} onChange={(e) => { setKwFilter(e.target.value); setShown(PAGE); }} className={inputCls}>
-              <option value="">Mọi từ khóa</option>
+              <option value="">{t("Mọi từ khóa")}</option>
               {job.keywords.map((k) => (
                 <option key={k} value={k}>
                   {k}
@@ -903,17 +911,17 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
               ))}
             </select>
             <select value={sortKey} onChange={(e) => setSortKey(e.target.value as SortKey)} className={inputCls}>
-              <option value="engagement">Tương tác cao nhất (like + bình luận + chia sẻ)</option>
-              <option value="like">Nhiều like nhất</option>
-              <option value="comment">Nhiều bình luận nhất</option>
-              <option value="share">Nhiều chia sẻ nhất</option>
-              <option value="view">Nhiều lượt xem nhất</option>
-              <option value="newest">Mới đăng nhất</option>
+              <option value="engagement">{t("Tương tác cao nhất (like + bình luận + chia sẻ)")}</option>
+              <option value="like">{t("Nhiều like nhất")}</option>
+              <option value="comment">{t("Nhiều bình luận nhất")}</option>
+              <option value="share">{t("Nhiều chia sẻ nhất")}</option>
+              <option value="view">{t("Nhiều lượt xem nhất")}</option>
+              <option value="newest">{t("Mới đăng nhất")}</option>
             </select>
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setShown(PAGE); }}
-              placeholder="Tìm trong nội dung / hashtag"
+              placeholder={t("Tìm trong nội dung / hashtag")}
               className={inputCls}
             />
           </div>
@@ -921,8 +929,8 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
           {/* Tab */}
           <div className="flex gap-1 border-b border-stone-200 mb-3">
             {[
-              ["posts", `Bài viết (${filtered.length})`],
-              ["hashtags", `Hashtag đi kèm (${hashtagStats.length + related.length})`],
+              ["posts", t("Bài viết ({length})", { length: filtered.length })],
+              ["hashtags", t("Hashtag đi kèm ({v0})", { v0: hashtagStats.length + related.length })],
             ].map(([k, l]) => (
               <button
                 key={k}
@@ -939,7 +947,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
 
           {tab === "posts" ? (
             filtered.length === 0 ? (
-              <p className="text-sm text-stone-500 py-6 text-center">Không có bài nào khớp bộ lọc.</p>
+              <p className="text-sm text-stone-500 py-6 text-center">{t("Không có bài nào khớp bộ lọc.")}</p>
             ) : (
               <>
                 <ul className="space-y-2">
@@ -949,11 +957,11 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                         <span className="font-bold text-stone-700">#{i + 1}</span>
                         <span>{platformVi(r.platform)}</span>
                         <span>{dateVi(r.published_at)}</span>
-                        <span>{LANG_VI[r.lang] ?? r.lang}</span>
-                        {r.is_ad && <span className="text-amber-700 font-semibold">Quảng cáo</span>}
-                        <span className="text-stone-400">từ khóa: {r.keywords.join(", ")}</span>
+                        <span>{t(LANG_VI[r.lang] ?? r.lang)}</span>
+                        {r.is_ad && <span className="text-amber-700 font-semibold">{t("Quảng cáo")}</span>}
+                        <span className="text-stone-400">{t("từ khóa: {v0}", { v0: r.keywords.join(", ") })}</span>
                       </div>
-                      <p className="text-sm text-stone-800 whitespace-pre-line line-clamp-4">{r.text || "(không có nội dung chữ)"}</p>
+                      <p className="text-sm text-stone-800 whitespace-pre-line line-clamp-4">{r.text || t("(không có nội dung chữ)")}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm tabular-nums">
                         <span>👍 {fmt(r.like_count)}</span>
                         <span>💬 {fmt(r.comment_count)}</span>
@@ -965,7 +973,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                           rel="noreferrer"
                           className="ml-auto inline-flex items-center gap-1 text-emerald-700 font-semibold"
                         >
-                          Mở bài <ExternalLink className="w-3.5 h-3.5" />
+                          {t("Mở bài")} <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     </li>
@@ -976,7 +984,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                     onClick={() => setShown((s) => s + PAGE)}
                     className="mt-3 w-full py-2.5 rounded-lg border border-stone-300 text-sm font-semibold"
                   >
-                    Xem thêm ({filtered.length - shown} bài)
+                    {t("Xem thêm ({v0} bài)", { v0: filtered.length - shown })}
                   </button>
                 )}
               </>
@@ -984,19 +992,18 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
           ) : (
             <div>
               <p className="text-xs text-stone-500 mb-2">
-                Các hashtag xuất hiện cùng trong những bài đang lọc. Hashtag <strong>“Mới”</strong> chưa có trong danh mục
-                của dự án — ứng viên để đề xuất (kèm bài minh chứng).
+                {t("Các hashtag xuất hiện cùng trong những bài đang lọc. Hashtag")} <strong>{t("“Mới”")}</strong> {t("chưa có trong danh mục của dự án — ứng viên để đề xuất (kèm bài minh chứng).")}
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-left text-stone-500 border-b border-stone-200">
                       <th className="py-2 pr-3">Hashtag</th>
-                      <th className="py-2 pr-3">Trạng thái</th>
-                      <th className="py-2 pr-3 text-right">Số bài</th>
-                      <th className="py-2 pr-3 text-right">Tiếng Việt</th>
+                      <th className="py-2 pr-3">{t("Trạng thái")}</th>
+                      <th className="py-2 pr-3 text-right">{t("Số bài")}</th>
+                      <th className="py-2 pr-3 text-right">{t("Tiếng Việt")}</th>
                       <th className="py-2 pr-3 text-right">Like</th>
-                      <th className="py-2 pr-3 text-right">Bình luận</th>
+                      <th className="py-2 pr-3 text-right">{t("Bình luận")}</th>
                       <th className="py-2 pr-3"></th>
                     </tr>
                   </thead>
@@ -1009,7 +1016,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                             <button
                               className="inline-flex items-center gap-0.5 hover:underline"
                               onClick={() => { setSearch(s.tag); setTab("posts"); setShown(PAGE); }}
-                              title="Xem các bài có hashtag này"
+                              title={t("Xem các bài có hashtag này")}
                             >
                               <Hash className="w-3.5 h-3.5 text-stone-400" />
                               {s.tag}
@@ -1026,7 +1033,7 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                                     : "bg-stone-100 text-stone-600")
                               }
                             >
-                              {status}
+                              {t(status)}
                             </span>
                           </td>
                           <td className="py-1.5 pr-3 text-right tabular-nums">{fmt(s.posts)}</td>
@@ -1036,13 +1043,13 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                           <td className="py-1.5 pr-3 text-right">
                             {status === "Mới" &&
                               (proposedTags.has(s.tag) ? (
-                                <span className="text-xs text-emerald-700 font-semibold">Đã đề xuất</span>
+                                <span className="text-xs text-emerald-700 font-semibold">{t("Đã đề xuất")}</span>
                               ) : (
                                 <button
                                   onClick={() => setProposing(buildTarget(s.tag))}
                                   className="px-2.5 py-1 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800"
                                 >
-                                  Đề xuất
+                                  {t("Đề xuất")}
                                 </button>
                               ))}
                           </td>
@@ -1054,20 +1061,18 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
               </div>
               {related.length > 0 && (
                 <div className="mt-6">
-                  <h3 className="text-sm font-bold text-stone-800 mb-1">Hashtag liên quan do nền tảng gợi ý ({related.length})</h3>
+                  <h3 className="text-sm font-bold text-stone-800 mb-1">{t("Hashtag liên quan do nền tảng gợi ý ({length})", { length: related.length })}</h3>
                   <p className="text-xs text-stone-500 mb-2">
-                    Lấy từ công cụ thống kê hashtag, không gắn với bài cụ thể. Số bài là số nền tảng công bố (toàn cầu
-                    hoặc theo khu vực của công cụ). Hashtag <strong>“Mới”</strong> nên quét thử thêm để có bài minh chứng
-                    trước khi đề xuất.
+                    {t("Lấy từ công cụ thống kê hashtag, không gắn với bài cụ thể. Số bài là số nền tảng công bố (toàn cầu hoặc theo khu vực của công cụ). Hashtag")} <strong>{t("“Mới”")}</strong> {t("nên quét thử thêm để có bài minh chứng trước khi đề xuất.")}
                   </p>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="text-left text-stone-500 border-b border-stone-200">
                           <th className="py-2 pr-3">Hashtag</th>
-                          <th className="py-2 pr-3">Trạng thái</th>
-                          <th className="py-2 pr-3">Thông tin</th>
-                          <th className="py-2 pr-3">Gợi ý từ</th>
+                          <th className="py-2 pr-3">{t("Trạng thái")}</th>
+                          <th className="py-2 pr-3">{t("Thông tin")}</th>
+                          <th className="py-2 pr-3">{t("Gợi ý từ")}</th>
                           <th className="py-2 pr-3"></th>
                         </tr>
                       </thead>
@@ -1093,21 +1098,21 @@ export default function TestScanner({ actors, knownHashtags }: { actors: ActorIn
                                         : "bg-stone-100 text-stone-600")
                                   }
                                 >
-                                  {status}
+                                  {t(status)}
                                 </span>
                               </td>
-                              <td className="py-1.5 pr-3 text-stone-600 tabular-nums">{r.info ?? "–"}</td>
+                              <td className="py-1.5 pr-3 text-stone-600 tabular-nums">{r.info ? r.info.split(" · ").map((x) => t(x)).join(" · ") : "–"}</td>
                               <td className="py-1.5 pr-3 text-stone-500">{r.keywords.join(", ")}</td>
                               <td className="py-1.5 pr-3 text-right">
                                 {status === "Mới" &&
                                   (proposedTags.has(r.tag) ? (
-                                    <span className="text-xs text-emerald-700 font-semibold">Đã đề xuất</span>
+                                    <span className="text-xs text-emerald-700 font-semibold">{t("Đã đề xuất")}</span>
                                   ) : (
                                     <button
                                       onClick={() => setProposing(buildTarget(r.tag))}
                                       className="px-2.5 py-1 rounded-lg bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800"
                                     >
-                                      Đề xuất
+                                      {t("Đề xuất")}
                                     </button>
                                   ))}
                               </td>

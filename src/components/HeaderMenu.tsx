@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n/client";
 
 interface HeaderMenuProps {
   isAdmin: boolean;
@@ -20,6 +21,7 @@ interface HeaderMenuProps {
 }
 
 export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
+  const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -63,10 +65,10 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
           >
             <div className="px-4 py-3 border-b border-stone-100 bg-stone-50/50">
               <p className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-0.5">
-                Tài khoản {isAdmin && "(Admin)"}
+                {t("Tài khoản {v0}", { v0: isAdmin && "(Admin)" })}
               </p>
               <p className="text-sm font-medium text-stone-900 truncate">
-                {userEmail || "Khách"}
+                {userEmail || t("Khách")}
               </p>
             </div>
 
@@ -79,7 +81,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     <Users className="size-4" />
-                    Quản trị Hệ thống (IT)
+                    {t("Quản trị Hệ thống (IT)")}
                   </Link>
                   <Link
                     href="/dashboard/researchers"
@@ -87,7 +89,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     <UserCircle className="size-4" />
-                    Giám sát & Phân công
+                    {t("Giám sát & Phân công")}
                   </Link>
                   <Link
                     href="/dashboard/hashtag-groups"
@@ -95,7 +97,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     <Tags className="size-4" />
-                    Nhóm Từ khóa (Groups)
+                    {t("Nhóm Từ khóa (Groups)")}
                   </Link>
                   <Link
                     href="/dashboard/hashtags"
@@ -103,7 +105,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     <Tags className="size-4" />
-                    Từ khóa (Hashtags)
+                    {t("Từ khóa (Hashtags)")}
                   </Link>
                   <Link
                     href="/dashboard/actors"
@@ -111,7 +113,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
                   >
                     <Database className="size-4" />
-                    Công cụ Cào (Actors)
+                    {t("Công cụ Cào (Actors)")}
                   </Link>
                   <Link
                     href="/dashboard/settings"
@@ -119,7 +121,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                     className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-rose-700 hover:bg-rose-50 transition-colors"
                   >
                     <Settings className="size-4" />
-                    Cấu hình Hệ thống
+                    {t("Cấu hình Hệ thống")}
                   </Link>
                 </>
               )}
@@ -130,7 +132,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                 className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-stone-700 hover:text-indigo-700 hover:bg-indigo-50 transition-colors"
               >
                 <UserCircle className="size-4" />
-                Tài khoản cá nhân
+                {t("Tài khoản cá nhân")}
               </Link>
 
               <form action="/auth/signout" method="post" className="w-full">
@@ -139,7 +141,7 @@ export default function HeaderMenu({ isAdmin, userEmail }: HeaderMenuProps) {
                   className="flex flex-row items-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors w-full text-left"
                 >
                   <LogOut className="size-4" />
-                  Đăng xuất
+                  {t("Đăng xuất")}
                 </button>
               </form>
             </div>

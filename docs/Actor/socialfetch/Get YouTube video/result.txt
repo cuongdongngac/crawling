@@ -1,0 +1,290 @@
+{
+  "data": {
+    "lookupStatus": "found",
+    "video": {
+      "id": "rQ_aD1Ca_qY",
+      "url": "https://www.youtube.com/watch?v=rQ_aD1Ca_qY",
+      "title": "Thu Sầu | Bản Phối Mới Nghẹn Ngào Và Hay Nhất | Hạ Vy AI Bolero | Mùa thu thưa nắng...",
+      "description": "Thu Sầu – sáng tác Lam Phương – là một tình khúc thuộc dòng nhạc vàng, nhạc trữ tình Việt Nam. Phiên bản do Hạ Vy AI Bolero phát hành được phối mới theo phong cách slow ballad kết hợp bolero hiện đại.\n\nCa khúc diễn tả nỗi nhớ, sự chia xa và một mối tình không trọn duyên giữa không gian mùa thu buồn. Bản phối mới giữ tinh thần sâu lắng của tác phẩm, đồng thời sử dụng tiết tấu chậm, hòa âm hiện đại và cách thể hiện giàu cảm xúc.\n\nThông tin ca khúc:\n\nTên bài hát: Thu Sầu\nSáng tác: Lam Phương\nThể loại: Nhạc vàng\nPhong cách bản phối: Vietnamese sentimental slow ballad, bolero hiện đại\nKênh phát hành: Hạ Vy AI Bolero\n\nĐăng ký kênh Hạ Vy AI Bolero để nghe thêm những tình khúc Lam Phương, nhạc vàng và nhạc trữ tình được phối mới.\n\n#ThuSau #LamPhuong #HaVyAIBolero",
+      "descriptionLinks": [
+        "https://www.youtube.com/hashtag/thusau",
+        "https://www.youtube.com/hashtag/lamphuong",
+        "https://www.youtube.com/hashtag/havyaibolero"
+      ],
+      "thumbnailUrl": "https://img.youtube.com/vi/rQ_aD1Ca_qY/maxresdefault.jpg",
+      "publishedAt": "2026-10-11T05:00:30-07:00",
+      "publishDateText": "Oct 11, 2026",
+      "durationMs": 293000,
+      "durationFormatted": "00:04:53",
+      "genre": "Music",
+      "keywords": [
+        "thu sầu",
+        "thu sau",
+        "thu sầu lam phương",
+        "thu sau lam phuong",
+        "thu sầu hạ vy",
+        "thu sầu hạ vy ai bolero",
+        "lam phương",
+        "nhạc lam phương",
+        "nhạc vàng",
+        "nhạc trữ tình",
+        "nhạc xưa",
+        "tình khúc lam phương",
+        "slow ballad",
+        "vietnamese sentimental ballad",
+        "bolero hiện đại",
+        "nhạc bolero mới",
+        "mùa thu thưa nắng gió mang niềm nhớ",
+        "hạ vy ai bolero"
+      ],
+      "isPaidPromotion": false,
+      "isMadeWithAi": true,
+      "aiDisclosure": "Made with AI\nSounds or visuals were altered or fully generated. Learn more"
+    },
+    "channel": {
+      "platform": "youtube",
+      "handle": "havyaibolero",
+      "displayName": "Teach Your Children Wisdom",
+      "profileUrl": "https://www.youtube.com/@havyaibolero",
+      "platformUserId": "UCu-raceC3R4vT1i9I0xEUOw",
+      "subscriberCountText": "6.24K subscribers"
+    },
+    "metrics": {
+      "views": 488431,
+      "likes": 1036,
+      "comments": 106
+    },
+    "chapters": [],
+    "captions": [
+      {
+        "label": "Vietnamese (auto-generated)",
+        "languageCode": "vi",
+        "kind": "asr",
+        "isTranslatable": true
+      }
+    ],
+    "relatedVideos": [
+      {
+        "id": "fpLS-xTU7rk",
+        "url": "https://www.youtube.com/watch?v=fpLS-xTU7rk",
+        "title": "Liên Khúc CHỜ ĐÔNG - Nổi Da Gà Khi Nghe TÌNH CA XƯA Phối Mới AI Ngọt Ngào Sâu Lắng Tâm Hồn",
+        "thumbnailUrl": "https://i.ytimg.com/vi/fpLS-xTU7rk/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLCTr603J1lEVLSa60w1gw7ioP-G3w",
+        "publishedAt": null,
+        "publishedTimeText": "21h ago",
+        "viewCount": 61000,
+        "viewCountText": "61K",
+        "durationSeconds": 6943,
+        "durationText": "1:55:43",
+        "channel": {
+          "displayName": "NHẠC TRỊNH TÂN THỜI",
+          "handle": "nhactrinhtanthoi",
+          "profileUrl": "https://www.youtube.com/@nhactrinhtanthoi",
+          "platformUserId": "UCHAQV96kNRFtrirBXBptrNA"
+        }
+      },
+      {
+        "id": "DoK8RivJTc8",
+        "url": "https://www.youtube.com/watch?v=DoK8RivJTc8",
+        "title": "15 Most Surreal Places in China: Beautiful Enough to Make You Question Reality",
+        "thumbnailUrl": "https://i.ytimg.com/vi/DoK8RivJTc8/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLDs77wEb2pu2EOwblbSbD_slkcouw",
+        "publishedAt": null,
+        "publishedTimeText": "11d ago",
+        "viewCount": 206000,
+        "viewCountText": "206K",
+        "durationSeconds": 2504,
+        "durationText": "41:44",
+        "channel": {
+          "displayName": "Bí Ẩn Lịch Sử Cổ Đại",
+          "handle": "Bianlichsucodai-LS",
+          "profileUrl": "https://www.youtube.com/@Bianlichsucodai-LS",
+          "platformUserId": "UCmjA6qOG4u2rRzlQUYnqXNA"
+        }
+      },
+      {
+        "id": "9T2WQBB0GG4",
+        "url": "https://www.youtube.com/watch?v=9T2WQBB0GG4",
+        "title": "🏆 (No Ads)  Classic Son Cubano, Cuban Love Songs & Latin Jazz | Old Havana Café",
+        "thumbnailUrl": "https://i.ytimg.com/vi/9T2WQBB0GG4/hqdefault.jpg?v=6ac6106f&sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLBEENVGGTxq6mq9xqo3D-to_AnWnA",
+        "publishedAt": null,
+        "publishedTimeText": "4w ago",
+        "viewCount": null,
+        "viewCountText": null,
+        "durationSeconds": null,
+        "durationText": null,
+        "channel": {
+          "displayName": "Niebla Social Club",
+          "handle": "NieblaSocialClub-vim",
+          "profileUrl": "https://www.youtube.com/@NieblaSocialClub-vim",
+          "platformUserId": "UCGmX9rK6ddrp1ZCd6k4QclQ"
+        }
+      },
+      {
+        "id": "mMYSgcwpk1s",
+        "url": "https://www.youtube.com/watch?v=mMYSgcwpk1s",
+        "title": "QUA CƠN MÊ - Không Ngờ AI Hát Nhạc Bolero Xưa HAY Đến Thế | Từng Câu Luyến Láy Nghe Mà NỔI DA GÀ",
+        "thumbnailUrl": "https://i.ytimg.com/vi/mMYSgcwpk1s/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLCNlWZShrq908Z2rq5H8O8NwSpW7Q",
+        "publishedAt": null,
+        "publishedTimeText": "1mo ago",
+        "viewCount": 216000,
+        "viewCountText": "216K",
+        "durationSeconds": 8953,
+        "durationText": "2:29:13",
+        "channel": {
+          "displayName": "Bolero 1999",
+          "handle": "bolero1999",
+          "profileUrl": "https://www.youtube.com/@bolero1999",
+          "platformUserId": "UC3bWsKivURu21IcTYwave2Q"
+        }
+      },
+      {
+        "id": "Bid_G-g2C3U",
+        "url": "https://www.youtube.com/watch?v=Bid_G-g2C3U",
+        "title": "2026 US Election Day: Cập nhật trực tiếp tình hình bầu cử nước Mỹ_Thứ Ba 03 Nov 2026 Tập 2",
+        "thumbnailUrl": "https://i.ytimg.com/vi/Bid_G-g2C3U/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLDyCkZuPnqfUuQ4QPlQ3XdgD8-Wfw",
+        "publishedAt": null,
+        "publishedTimeText": "4h ago",
+        "viewCount": 15000,
+        "viewCountText": "15K",
+        "durationSeconds": 13468,
+        "durationText": "3:44:28",
+        "channel": {
+          "displayName": "Sean Le_Tin Tức Chính Trị Mỹ và Thế Giới",
+          "handle": "seanlechinhtrimy",
+          "profileUrl": "https://www.youtube.com/@seanlechinhtrimy",
+          "platformUserId": "UCyrUYLnUvoZU0XoGrhsNpNA"
+        }
+      },
+      {
+        "id": "jEw4h3UK79A",
+        "url": "https://www.youtube.com/watch?v=jEw4h3UK79A",
+        "title": "Nuôi Mẹ Chồng Bại Liệt Suốt 7 Năm, Vợ Phát Hiện Bà Giả Bệnh Để Lừa Tiền, Còn Chồng Nuôi Tiểu Tam",
+        "thumbnailUrl": "https://i.ytimg.com/vi/jEw4h3UK79A/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLC521saMm6IaAr8SxgbLX2kUmfBgw",
+        "publishedAt": null,
+        "publishedTimeText": "2w ago",
+        "viewCount": 818000,
+        "viewCountText": "818K",
+        "durationSeconds": 11688,
+        "durationText": "3:14:48",
+        "channel": {
+          "displayName": "Vỹ Tiểu Ly Drama",
+          "handle": "V%E1%BB%B9Ti%E1%BB%83uLyDrama",
+          "profileUrl": "https://www.youtube.com/@V%E1%BB%B9Ti%E1%BB%83uLyDrama",
+          "platformUserId": "UC_qop3Yw5cmUSEhryG_k5fA"
+        }
+      },
+      {
+        "id": "q5iWBwDrN7E",
+        "url": "https://www.youtube.com/watch?v=q5iWBwDrN7E",
+        "title": "Cả hai cùng giả nghèo cưới nhau, ai ngờ đều là trùm tỷ đô, khiến đám hãm hối hận quỳ xin",
+        "thumbnailUrl": "https://i.ytimg.com/vi/q5iWBwDrN7E/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLAKwP9YyY3LeBxyCFHX21T7xishBg",
+        "publishedAt": null,
+        "publishedTimeText": "1d ago",
+        "viewCount": 122000,
+        "viewCountText": "122K",
+        "durationSeconds": 7859,
+        "durationText": "2:10:59",
+        "channel": {
+          "displayName": "Tiểu Mộng Drama",
+          "handle": "tieumongdrama444",
+          "profileUrl": "https://www.youtube.com/@tieumongdrama444",
+          "platformUserId": "UCtA1kgE_q4dpYzRjXixSy0Q"
+        }
+      },
+      {
+        "id": "Yp7eof2MLyo",
+        "url": "https://www.youtube.com/watch?v=Yp7eof2MLyo",
+        "title": "Tuyển tập tình khúc nhạc sĩ LAM PHƯƠNG | Bản phối mới",
+        "thumbnailUrl": "https://i.ytimg.com/vi/Yp7eof2MLyo/hqdefault.jpg?sqp=-oaymwFECKgBEF5IWvKriqkDNwgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAHwAQH4Af4JgALQBYoCDAgAEAEYfyBNKCQwD7gC9xg=&rs=AOn4CLACwLCuxBoDNXPZOYE1K7cjVItX2Q",
+        "publishedAt": null,
+        "publishedTimeText": "7d ago",
+        "viewCount": 115000,
+        "viewCountText": "115K",
+        "durationSeconds": 2839,
+        "durationText": "47:19",
+        "channel": {
+          "displayName": "Xam Xi",
+          "handle": "channel/UCZB7yxqB8tj-V7i9ksawU8A",
+          "profileUrl": "https://www.youtube.com/channel/UCZB7yxqB8tj-V7i9ksawU8A",
+          "platformUserId": "UCZB7yxqB8tj-V7i9ksawU8A"
+        }
+      },
+      {
+        "id": "IBbqtMGAAr8",
+        "url": "https://www.youtube.com/watch?v=IBbqtMGAAr8",
+        "title": "BOLERO Trữ Tình Xưa KHÔNG QUẢNG CÁO Hay Nhất 2026 - LK Nhạc Vàng Hải Ngoại Bất Hủ SAY ĐẮM LÒNG NGƯỜI",
+        "thumbnailUrl": "https://i.ytimg.com/vi/IBbqtMGAAr8/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLCYqbgcUcQKhM9TUOi5beN4hAKu7w",
+        "publishedAt": null,
+        "publishedTimeText": "2d ago",
+        "viewCount": 50000,
+        "viewCountText": "50K",
+        "durationSeconds": 7140,
+        "durationText": "1:59:00",
+        "channel": {
+          "displayName": "Nhạc Hải Ngoại Xưa",
+          "handle": "nhacvanghaingoai2026",
+          "profileUrl": "https://www.youtube.com/@nhacvanghaingoai2026",
+          "platformUserId": "UCiGdp6oTo824C6ijtW3vsww"
+        }
+      },
+      {
+        "id": "6IVyLRGSxDg",
+        "url": "https://www.youtube.com/watch?v=6IVyLRGSxDg",
+        "title": "Tuyển Chọn Những Ca Khúc Triệu View | Thanh Hà [Phố Nhạc Việt]",
+        "thumbnailUrl": "https://i.ytimg.com/vi/6IVyLRGSxDg/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLAbFW5rkG3m6k1q4XU68K5JWFlKNg",
+        "publishedAt": null,
+        "publishedTimeText": "1mo ago",
+        "viewCount": 490000,
+        "viewCountText": "490K",
+        "durationSeconds": 3119,
+        "durationText": "51:59",
+        "channel": {
+          "displayName": "PHỐ NHẠC VIỆT",
+          "handle": "channel/UCDs8u9aSRLu_n-eXLTcX_xA",
+          "profileUrl": "https://www.youtube.com/channel/UCDs8u9aSRLu_n-eXLTcX_xA",
+          "platformUserId": "UCDs8u9aSRLu_n-eXLTcX_xA"
+        }
+      },
+      {
+        "id": "TjdJrr7J_9g",
+        "url": "https://www.youtube.com/watch?v=TjdJrr7J_9g",
+        "title": "Ngô Thụy Miên - Những Tình Khúc Vượt Thời Đại - Ai Cover",
+        "thumbnailUrl": "https://i.ytimg.com/vi/TjdJrr7J_9g/hqdefault.jpg?sqp=-oaymwFECKgBEF5IWvKriqkDNwgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAHwAQH4Af4JgALQBYoCDAgAEAEYciBTKDUwD7gC9xg=&rs=AOn4CLB7FusnQBDCdrEX9aJf8M6LbLSE5A",
+        "publishedAt": null,
+        "publishedTimeText": "8d ago",
+        "viewCount": 50000,
+        "viewCountText": "50K",
+        "durationSeconds": 5977,
+        "durationText": "1:39:37",
+        "channel": {
+          "displayName": "KTran",
+          "handle": "ktranMusicChannel",
+          "profileUrl": "https://www.youtube.com/@ktranMusicChannel",
+          "platformUserId": "UCoTCYL7oXFqnF7CFab5W6ew"
+        }
+      },
+      {
+        "id": "uUzKGH8m2Y4",
+        "url": "https://www.youtube.com/watch?v=uUzKGH8m2Y4",
+        "title": "NGƯỜI GIÀU CŨNG KHÓC⭐THANH NHÀN BOLERO GIỌNG CA VÀNG | LK Nhạc Vàng Xưa Bất Hủ CÀNG NGHE CÀNG THẤM",
+        "thumbnailUrl": "https://i.ytimg.com/vi/uUzKGH8m2Y4/hqdefault.jpg?sqp=-oaymwEqCKgBEF5IWvKriqkDHQgBFQAAiEIYAdgBAeIBCggYEAIYBjgBQAG4AvcY&rs=AOn4CLDnrcIl3ZdPx7M36U_LMeIY1Xrd7Q",
+        "publishedAt": null,
+        "publishedTimeText": "8d ago",
+        "viewCount": 48000,
+        "viewCountText": "48K",
+        "durationSeconds": 11699,
+        "durationText": "3:14:59",
+        "channel": {
+          "displayName": "Trạm Nhạc Xưa",
+          "handle": "TramNhacXua68",
+          "profileUrl": "https://www.youtube.com/@TramNhacXua68",
+          "platformUserId": "UCZKeAPzS7ESd_36GPe1Ewfg"
+        }
+      }
+    ]
+  },
+  "meta": {
+    "requestId": "req_c7f1f88b-3f00-422d-bacc-bccfb8835678_pg_4282ba3f",
+    "creditsCharged": 1,
+    "version": "v1"
+  }
+}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { X, Loader2, ExternalLink, Send } from "lucide-react";
 import { submitProposal } from "@/app/actions/proposals";
+import { useT, useLocale } from "@/lib/i18n/client";
 
 export type ProposalTarget = {
   hashtag: string;
@@ -29,6 +30,8 @@ export default function ProposalDialog({
   onClose: () => void;
   onSubmitted: (tag: string) => void;
 }) {
+  const t = useT();
+  const locale = useLocale();
   const [meaning, setMeaning] = useState("");
   const [picked, setPicked] = useState<Set<string>>(() => new Set(target.posts.slice(0, 3).map((p) => p.url)));
   const [crit, setCrit] = useState<Record<CritKey, boolean>>({ critImage: false, critText: false, critTransaction: false });
@@ -56,8 +59,8 @@ export default function ProposalDialog({
     if (!res.ok) return setError(res.error);
     setDone(
       res.data.othersBefore > 0
-        ? `Đã gửi. Lưu ý: đã có ${res.data.othersBefore} người đề xuất #${target.hashtag} trước bạn.`
-        : `Đã gửi đề xuất #${target.hashtag}. Bạn là người đầu tiên đề xuất từ này.`,
+        ? t("Đã gửi. Lưu ý: đã có {othersBefore} người đề xuất #{hashtag} trước bạn.", { othersBefore: res.data.othersBefore, hashtag: target.hashtag })
+        : t("Đã gửi đề xuất #{hashtag}. Bạn là người đầu tiên đề xuất từ này.", { hashtag: target.hashtag }),
     );
   }
 
@@ -69,12 +72,12 @@ export default function ProposalDialog({
       >
         <div className="flex items-start gap-3 mb-4">
           <div className="mr-auto">
-            <h3 className="text-lg font-bold text-stone-900">Đề xuất hashtag #{target.hashtag}</h3>
+            <h3 className="text-lg font-bold text-stone-900">{t("Đề xuất hashtag #{hashtag}", { hashtag: target.hashtag })}</h3>
             <p className="text-xs text-stone-500">
-              {target.platform} · xuất hiện trong {target.postCount} bài của lần quét này
+              {t("{platform} · xuất hiện trong {postCount} bài của lần quét này", { platform: target.platform, postCount: target.postCount })}
             </p>
           </div>
-          <button onClick={onClose} className="p-1 rounded hover:bg-stone-100" aria-label="Đóng">
+          <button onClick={onClose} className="p-1 rounded hover:bg-stone-100" aria-label={t("Đóng")}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -82,30 +85,30 @@ export default function ProposalDialog({
         {done ? (
           <div className="space-y-4">
             <p className="p-3 rounded-lg bg-emerald-50 text-emerald-900 text-sm">{done}</p>
-            <p className="text-sm text-stone-600">Theo dõi kết quả duyệt ở mục “Đề xuất hashtag”.</p>
+            <p className="text-sm text-stone-600">{t("Theo dõi kết quả duyệt ở mục “Đề xuất hashtag”.")}</p>
             <button
               onClick={() => onSubmitted(target.hashtag)}
               className="w-full py-2.5 rounded-xl bg-emerald-700 text-white font-bold"
             >
-              Xong
+              {t("Xong")}
             </button>
           </div>
         ) : (
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-stone-800 mb-1">Nghĩa / cách dùng của từ này</label>
+              <label className="block text-sm font-semibold text-stone-800 mb-1">{t("Nghĩa / cách dùng của từ này")}</label>
               <textarea
                 rows={2}
                 value={meaning}
                 onChange={(e) => setMeaning(e.target.value)}
-                placeholder="Ví dụ: cách gọi lóng của pod, hay đi kèm giá bán…"
+                placeholder={t("Ví dụ: cách gọi lóng của pod, hay đi kèm giá bán…")}
                 className="w-full px-3 py-2.5 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none"
               />
             </div>
 
             <div>
               <div className="text-sm font-semibold text-stone-800 mb-1">
-                Ba tiêu chí <span className="font-normal text-stone-500">(từ 2/3 trở lên là ca nghi ngờ)</span>
+                {t("Ba tiêu chí")} <span className="font-normal text-stone-500">{t("(từ 2/3 trở lên là ca nghi ngờ)")}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {CRITERIA.map((c) => (
@@ -123,20 +126,20 @@ export default function ProposalDialog({
                       onChange={(e) => setCrit((s) => ({ ...s, [c.key]: e.target.checked }))}
                     />
                     <span>
-                      <span className="block text-sm font-semibold">{c.label}</span>
-                      <span className="block text-xs text-stone-500">{c.hint}</span>
+                      <span className="block text-sm font-semibold">{t(c.label)}</span>
+                      <span className="block text-xs text-stone-500">{t(c.hint)}</span>
                     </span>
                   </label>
                 ))}
               </div>
               <p className={"text-xs mt-1 " + (score >= 2 ? "text-red-700 font-semibold" : "text-stone-500")}>
-                Điểm: {score}/3 {score >= 2 ? "— ca nghi ngờ" : ""}
+                {t("Điểm: {score}/3", { score })} {score >= 2 ? t("— ca nghi ngờ") : ""}
               </p>
             </div>
 
             <div>
               <div className="text-sm font-semibold text-stone-800 mb-1">
-                Bài minh chứng <span className="font-normal text-stone-500">(chọn 1–10 bài, đã sắp theo tương tác)</span>
+                {t("Bài minh chứng")} <span className="font-normal text-stone-500">{t("(chọn 1–10 bài, đã sắp theo tương tác)")}</span>
               </div>
               <ul className="space-y-1.5 max-h-64 overflow-y-auto">
                 {target.posts.map((p) => (
@@ -155,13 +158,13 @@ export default function ProposalDialog({
                       }
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs text-stone-800 line-clamp-2">{p.text || "(không có chữ)"}</p>
+                      <p className="text-xs text-stone-800 line-clamp-2">{p.text || t("(không có chữ)")}</p>
                       <p className="text-[11px] text-stone-500 mt-0.5">
                         👍 {p.like ?? "–"} · 💬 {p.comment ?? "–"}
-                        {p.published ? " · " + new Date(p.published).toLocaleDateString("vi-VN") : ""}
+                        {p.published ? " · " + new Date(p.published).toLocaleDateString(locale) : ""}
                       </p>
                     </div>
-                    <a href={p.url} target="_blank" rel="noreferrer" className="text-emerald-700 shrink-0" title="Mở bài">
+                    <a href={p.url} target="_blank" rel="noreferrer" className="text-emerald-700 shrink-0" title={t("Mở bài")}>
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </li>
@@ -169,17 +172,17 @@ export default function ProposalDialog({
               </ul>
             </div>
 
-            {error && <p className="p-3 rounded-lg bg-red-50 text-red-800 text-sm">{error}</p>}
+            {error && <p className="p-3 rounded-lg bg-red-50 text-red-800 text-sm">{t(error)}</p>}
 
             <button
               onClick={submit}
               disabled={busy || picked.size === 0 || score === 0}
               className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold disabled:opacity-50"
             >
-              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Gửi đề xuất
+              {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} {t("Gửi đề xuất")}
             </button>
             <p className="text-[11px] text-stone-500">
-              Phiếu chỉ lưu đường dẫn bài công khai làm minh chứng, không lưu tên tài khoản. Ban nghiên cứu sẽ duyệt và ghi lý do.
+              {t("Phiếu chỉ lưu đường dẫn bài công khai làm minh chứng, không lưu tên tài khoản. Ban nghiên cứu sẽ duyệt và ghi lý do.")}
             </p>
           </div>
         )}

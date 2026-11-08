@@ -52,3 +52,6 @@ apify*.key
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# thư mục tạm (bản sao, file nén) — không đưa lên git
+/_to_delete/

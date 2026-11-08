@@ -3,8 +3,10 @@
 import { adminCreateUser, changeUserRole, changeUserResearcher, deleteUser, resetUserPassword } from "@/app/actions/user";
 import { useState } from "react";
 import { ShieldCheck, ShieldAlert, KeyRound, Trash, Plus, Search, UserCircle, X, ClipboardCheck } from "lucide-react";
+import { useT } from "@/lib/i18n/client";
 
 export default function AdminUserList({ initialUsers }: { initialUsers: any[] }) {
+  const t = useT();
   const [users, setUsers] = useState(initialUsers);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingNew, setIsAddingNew] = useState(false);
@@ -21,38 +23,45 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     const res = await adminCreateUser(formData);
-    if (res.error) alert(res.error);
+    if (res.error) alert(t(res.error));
     else window.location.reload(); // Quick refresh for now
     setLoading(false);
   };
 
   const handleToggleRole = async (userId: string, currentAdmin: boolean) => {
-    if (!confirm(`Bạn muốn ${currentAdmin ? "hủy" : "cấp"} quyền Admin cho user này?`)) return;
+    if (!confirm(currentAdmin ? t("Bạn muốn hủy quyền Admin cho user này?") : t("Bạn muốn cấp quyền Admin cho user này?"))) return;
     const res = await changeUserRole(userId, !currentAdmin);
-    if (res.error) alert(res.error);
+    if (res.error) alert(t(res.error));
     else setUsers(users.map(u => u.id === userId ? { ...u, is_admin: !currentAdmin } : u));
   };
 
   const handleToggleResearcher = async (userId: string, current: boolean) => {
-    if (!confirm(`Bạn muốn ${current ? "gỡ" : "cấp"} vai Nghiên cứu viên cho user này?\n(Nghiên cứu viên xem nội dung, đường dẫn bài, gắn nhãn và duyệt hashtag.)`)) return;
+    if (
+      !confirm(
+        (current ? t("Bạn muốn gỡ vai Nghiên cứu viên cho user này?") : t("Bạn muốn cấp vai Nghiên cứu viên cho user này?")) +
+          "\n" +
+          t("(Nghiên cứu viên xem nội dung, đường dẫn bài, gắn nhãn và duyệt hashtag.)"),
+      )
+    )
+      return;
     const res = await changeUserResearcher(userId, !current);
-    if (res.error) alert(res.error);
+    if (res.error) alert(t(res.error));
     else setUsers(users.map(u => u.id === userId ? { ...u, is_researcher: !current } : u));
   };
 
   const handleDelete = async (userId: string, email: string) => {
-    if (!confirm(`Cảnh báo: Bạn sắp xóa vĩnh viễn user ${email} khỏi hệ thống. Đồng ý?`)) return;
+    if (!confirm(t("Cảnh báo: Bạn sắp xóa vĩnh viễn user {email} khỏi hệ thống. Đồng ý?", { email }))) return;
     const res = await deleteUser(userId);
-    if (res.error) alert(res.error);
+    if (res.error) alert(t(res.error));
     else setUsers(users.filter(u => u.id !== userId));
   };
 
   const handleResetPassword = async (userId: string) => {
-    if (!newPassword || newPassword.length < 6) return alert("Mật khẩu mới phải từ 6 ký tự.");
+    if (!newPassword || newPassword.length < 6) return alert(t("Mật khẩu mới phải từ 6 ký tự."));
     const res = await resetUserPassword(userId, newPassword);
-    if (res.error) alert(res.error);
+    if (res.error) alert(t(res.error));
     else {
-      alert("Đổi mật khẩu thành công!");
+      alert(t("Đổi mật khẩu thành công!"));
       setResetId(null);
       setNewPassword("");
     }
@@ -65,7 +74,7 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <input 
             type="text" 
-            placeholder="Tìm kiếm Email..." 
+            placeholder={t("Tìm kiếm Email...")} 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
@@ -75,7 +84,7 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
           onClick={() => setIsAddingNew(!isAddingNew)}
           className="flex items-center gap-2 px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
         >
-          <Plus className="w-4 h-4" /> Thêm Tài Khoản
+          <Plus className="w-4 h-4" /> {t("Thêm Tài Khoản")}
         </button>
       </div>
 
@@ -83,25 +92,25 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
         <form onSubmit={handleAddUser} className="p-5 bg-amber-50 border-b border-amber-100 flex flex-wrap items-end gap-4">
           <div className="flex-1">
             <label className="block text-xs font-semibold text-stone-700 mb-1">Email</label>
-            <input type="email" name="email" required className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder="Email người dùng" />
+            <input type="email" name="email" required className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder={t("Email người dùng")} />
           </div>
           <div className="flex-1">
-            <label className="block text-xs font-semibold text-stone-700 mb-1">Mật khẩu tạm</label>
-            <input type="password" name="password" minLength={6} required className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder="Tối thiểu 6 ký tự" />
+            <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Mật khẩu tạm")}</label>
+            <input type="password" name="password" minLength={6} required className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder={t("Tối thiểu 6 ký tự")} />
           </div>
           <div className="pb-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" name="is_admin" value="true" className="w-4 h-4 text-amber-600 rounded" />
-              <span className="text-sm font-medium text-stone-700">Quản trị viên (vận hành)</span>
+              <span className="text-sm font-medium text-stone-700">{t("Quản trị viên (vận hành)")}</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer mt-1">
               <input type="checkbox" name="is_researcher" value="true" className="w-4 h-4 text-violet-600 rounded" />
-              <span className="text-sm font-medium text-stone-700">Nghiên cứu viên (dữ liệu, gắn nhãn)</span>
+              <span className="text-sm font-medium text-stone-700">{t("Nghiên cứu viên (dữ liệu, gắn nhãn)")}</span>
             </label>
           </div>
           <div className="flex gap-2 w-full md:w-auto">
-            <button disabled={loading} type="submit" className="flex-1 md:flex-none px-6 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700">Lưu</button>
-            <button type="button" onClick={() => setIsAddingNew(false)} className="flex-1 md:flex-none px-4 py-2 bg-stone-200 text-stone-700 text-sm font-medium rounded-lg hover:bg-stone-300">Hủy</button>
+            <button disabled={loading} type="submit" className="flex-1 md:flex-none px-6 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700">{t("Lưu")}</button>
+            <button type="button" onClick={() => setIsAddingNew(false)} className="flex-1 md:flex-none px-4 py-2 bg-stone-200 text-stone-700 text-sm font-medium rounded-lg hover:bg-stone-300">{t("Hủy")}</button>
           </div>
         </form>
       )}
@@ -110,9 +119,9 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
         <table className="w-full text-left text-sm">
           <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium">
             <tr>
-              <th className="px-6 py-4">Tài Khoản</th>
-              <th className="px-6 py-4">Vai Trò</th>
-              <th className="px-6 py-4 text-right">Thao Tác</th>
+              <th className="px-6 py-4">{t("Tài Khoản")}</th>
+              <th className="px-6 py-4">{t("Vai Trò")}</th>
+              <th className="px-6 py-4 text-right">{t("Thao Tác")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-100">
@@ -131,17 +140,17 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
                   <div className="flex flex-wrap gap-1.5">
                     {user.is_admin && (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold">
-                        <ShieldCheck className="w-3.5 h-3.5" /> Quản trị
+                        <ShieldCheck className="w-3.5 h-3.5" /> {t("Quản trị")}
                       </span>
                     )}
                     {user.is_researcher && (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 text-xs font-semibold">
-                        <ClipboardCheck className="w-3.5 h-3.5" /> Nghiên cứu viên
+                        <ClipboardCheck className="w-3.5 h-3.5" /> {t("Nghiên cứu viên")}
                       </span>
                     )}
                     {!user.is_admin && !user.is_researcher && (
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-medium">
-                        <UserCircle className="w-3.5 h-3.5" /> Cộng tác viên
+                        <UserCircle className="w-3.5 h-3.5" /> {t("Cộng tác viên")}
                       </span>
                     )}
                   </div>
@@ -151,26 +160,26 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
                     <div className="inline-flex items-center gap-2">
                       <input 
                         type="password" 
-                        placeholder="Mật khẩu mới..." 
+                        placeholder={t("Mật khẩu mới...")} 
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         className="w-32 px-2 py-1 text-xs border border-stone-300 rounded"
                       />
-                      <button onClick={() => handleResetPassword(user.id)} className="px-2 py-1 bg-green-600 text-white rounded text-xs">Lưu</button>
-                      <button onClick={() => {setResetId(null); setNewPassword("");}} className="px-2 py-1 bg-stone-200 text-stone-700 rounded text-xs">Hủy</button>
+                      <button onClick={() => handleResetPassword(user.id)} className="px-2 py-1 bg-green-600 text-white rounded text-xs">{t("Lưu")}</button>
+                      <button onClick={() => {setResetId(null); setNewPassword("");}} className="px-2 py-1 bg-stone-200 text-stone-700 rounded text-xs">{t("Hủy")}</button>
                     </div>
                   ) : (
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => handleToggleResearcher(user.id, !!user.is_researcher)} className="p-2 text-stone-500 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition-colors" title={user.is_researcher ? "Gỡ vai Nghiên cứu viên" : "Cấp vai Nghiên cứu viên"}>
+                      <button onClick={() => handleToggleResearcher(user.id, !!user.is_researcher)} className="p-2 text-stone-500 hover:text-violet-700 hover:bg-violet-50 rounded-lg transition-colors" title={user.is_researcher ? t("Gỡ vai Nghiên cứu viên") : t("Cấp vai Nghiên cứu viên")}>
                         <ClipboardCheck className="w-4 h-4" />
                       </button>
-                      <button onClick={() => handleToggleRole(user.id, user.is_admin)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title={user.is_admin ? "Gỡ quyền Quản trị" : "Cấp quyền Quản trị"}>
+                      <button onClick={() => handleToggleRole(user.id, user.is_admin)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title={user.is_admin ? t("Gỡ quyền Quản trị") : t("Cấp quyền Quản trị")}>
                         {user.is_admin ? <ShieldAlert className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4" />}
                       </button>
-                      <button onClick={() => setResetId(user.id)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title="Đổi mật khẩu">
+                      <button onClick={() => setResetId(user.id)} className="p-2 text-stone-500 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title={t("Đổi mật khẩu")}>
                         <KeyRound className="w-4 h-4" />
                       </button>
-                      <button onClick={() => handleDelete(user.id, user.email)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Xóa tài khoản">
+                      <button onClick={() => handleDelete(user.id, user.email)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title={t("Xóa tài khoản")}>
                         <Trash className="w-4 h-4" />
                       </button>
                     </div>

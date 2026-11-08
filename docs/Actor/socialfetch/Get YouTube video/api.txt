@@ -1,0 +1,11 @@
+const response = await fetch(
+  "https://api.socialfetch.dev/v1/youtube/videos?url=https://www.youtube.com/watch?v=rQ_aD1Ca_qY%26list=RDKi7mPYKQ7EU%26index=2",
+  {
+    headers: {
+      "x-api-key": "YOUR_API_KEY"
+    }
+  }
+);
+
+const data = await response.json();
+console.log(data);

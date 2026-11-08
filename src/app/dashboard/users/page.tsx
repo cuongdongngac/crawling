@@ -1,8 +1,10 @@
 import { fetchUsers } from "@/app/actions/user";
 import AdminUserList from "@/components/AdminUserList";
 import { Users } from "lucide-react";
+import { getT } from "@/lib/i18n/server";
 
 export default async function UsersPage() {
+  const t = await getT();
   const users = await fetchUsers();
 
   return (
@@ -14,10 +16,10 @@ export default async function UsersPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Quản lý Người dùng
+              {t("Quản lý Người dùng")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Thêm tài khoản, cấp vai Quản trị / Nghiên cứu viên, đặt lại mật khẩu.
+              {t("Thêm tài khoản, cấp vai Quản trị / Nghiên cứu viên, đặt lại mật khẩu.")}
             </p>
           </div>
         </div>

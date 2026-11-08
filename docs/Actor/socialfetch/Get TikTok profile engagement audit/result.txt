@@ -1,0 +1,230 @@
+{
+  "data": {
+    "lookupStatus": "found",
+    "canCalculateEngagement": true,
+    "profile": {
+      "handle": "dongnhi",
+      "displayName": "Đông Nhi",
+      "bio": "THEATER OF DREAMS - Stream Now 💝👇🏻",
+      "avatarUrl": "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=9640&refresh_token=945d01a8&x-expires=1793955600&x-signature=F57jBI29vTaISuCZ7WnB5GYfzzY%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=useast8",
+      "verified": true,
+      "profileUrl": "https://www.tiktok.com/@dongnhi",
+      "privateAccount": false
+    },
+    "metrics": {
+      "followers": 1479714,
+      "averageEngagementRatePercent": 7.77,
+      "medianEngagementRatePercent": 1.18,
+      "averageLikesPerVideo": 112446,
+      "averageCommentsPerVideo": 321,
+      "averageSharesPerVideo": 2209,
+      "averageViewsPerVideo": 2601867,
+      "commentToLikeRatio": 0,
+      "engagementVolatilityPercent": 148.51,
+      "bestVideoId": "7545513033141849351",
+      "worstVideoId": "7700115810253065473",
+      "qualityLabel": "excellent",
+      "qualityLabelNote": null
+    },
+    "videos": [
+      {
+        "id": "7544387641333140743",
+        "caption": "Khi Elsa nhảy tiktok 😎😎\n#dongnhi #winnieong #nhithangfamily",
+        "createdAt": "2025-08-30T14:37:15.000Z",
+        "likeCount": 160427,
+        "commentCount": 329,
+        "shareCount": 1341,
+        "saveCount": 2938,
+        "viewCount": 5965395,
+        "engagementRatePercent": 10.95,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7544387641333140743",
+        "pinned": true
+      },
+      {
+        "id": "7545513033141849351",
+        "caption": "Đêm nay gia đình nhỏ đi “kéo lưới” ở thủ đô Hà Nội, cảm ơn cô chú đã cổ vũ cho chị hai Winnie lần đầu được hát trên sân khấu nhoa ❤️😘🇻🇳\n#DongNhi #OngCaoThang #WinnieOng #NhiThangFamily #BaiCaTomCa",
+        "createdAt": "2025-09-02T15:24:19.000Z",
+        "likeCount": 443024,
+        "commentCount": 1073,
+        "shareCount": 9746,
+        "saveCount": 8907,
+        "viewCount": 6756397,
+        "engagementRatePercent": 30.67,
+        "isOutlierHigh": true,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7545513033141849351",
+        "pinned": true
+      },
+      {
+        "id": "7496421527085157639",
+        "caption": "Version đặc biệt của “Tự Nhiên” tại showcase mấy nay còn được săn đón hơn bản gốc nữa. Thể theo yêu cầu Nhi gửi đến cả nhà đoạn khoe giọng của Winnie nha!\n#nhithangfamily #dongnhi #winnieong#ưwheaterofdreams #tunhien",
+        "createdAt": "2025-04-23T08:24:13.000Z",
+        "likeCount": 425592,
+        "commentCount": 1046,
+        "shareCount": 8098,
+        "saveCount": 13324,
+        "viewCount": 6134754,
+        "engagementRatePercent": 29.38,
+        "isOutlierHigh": true,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7496421527085157639",
+        "pinned": true
+      },
+      {
+        "id": "7701318189417843988",
+        "caption": "Don't leave me over here dancin' alone @Winnie 🌷 Hannie \n\n#DongNhi #WinnieOng",
+        "createdAt": "2026-10-27T12:07:56.000Z",
+        "likeCount": 14982,
+        "commentCount": 67,
+        "shareCount": 173,
+        "saveCount": 219,
+        "viewCount": 341325,
+        "engagementRatePercent": 1.03,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7701318189417843988",
+        "pinned": false
+      },
+      {
+        "id": "7700820716706352405",
+        "caption": "6 năm yêu thương và còn nhiều hơn thế nữa 💋\nHappy 6th birthday, @Winnie 🌷 Hannie \n#DongNhi #WinnieOng #6thbirthday",
+        "createdAt": "2026-10-26T03:57:34.000Z",
+        "likeCount": 4812,
+        "commentCount": 39,
+        "shareCount": 61,
+        "saveCount": 125,
+        "viewCount": 141385,
+        "engagementRatePercent": 0.33,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7700820716706352405",
+        "pinned": false
+      },
+      {
+        "id": "7700115810253065473",
+        "caption": "Một ngày đặc biệt cùng THE WHOO tại sự kiện ra mắt Cheongidan thế hệ thứ 3 💛\n\n#DongNhi #THEWHOO #Cheongidan #Ngualaohoa #Duongdarangro",
+        "createdAt": "2026-10-24T06:22:05.000Z",
+        "likeCount": 1424,
+        "commentCount": 47,
+        "shareCount": 164,
+        "saveCount": 142,
+        "viewCount": 69377,
+        "engagementRatePercent": 0.11,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7700115810253065473",
+        "pinned": false
+      },
+      {
+        "id": "7695008106014674228",
+        "caption": "Chọn sữa cho con luôn là điều Nhi quan tâm thật kỹ\n#BellamysOrganic #BellamysOrganicVietnam #BellamysOrganicguard #Lactoferin #BellamysOrganicxDongNhi",
+        "createdAt": "2026-10-10T12:01:35.000Z",
+        "likeCount": 12314,
+        "commentCount": 53,
+        "shareCount": 280,
+        "saveCount": 691,
+        "viewCount": 5440927,
+        "engagementRatePercent": 0.85,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7695008106014674228",
+        "pinned": false
+      },
+      {
+        "id": "7694637199182007604",
+        "caption": "Sau này lớn lên tụi con sẽ hiểu.. 🥲\n\n#DongNhi #NhiThangFamily",
+        "createdAt": "2026-10-09T12:02:17.000Z",
+        "likeCount": 6708,
+        "commentCount": 42,
+        "shareCount": 111,
+        "saveCount": 147,
+        "viewCount": 261078,
+        "engagementRatePercent": 0.46,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7694637199182007604",
+        "pinned": false
+      },
+      {
+        "id": "7689833853795470612",
+        "caption": "Ai ở đây đã từng nghe qua giai điệu này rồi ạ\n\n#DongNhi #LipIce",
+        "createdAt": "2026-09-26T13:22:51.000Z",
+        "likeCount": 36106,
+        "commentCount": 410,
+        "shareCount": 1688,
+        "saveCount": 1070,
+        "viewCount": 562445,
+        "engagementRatePercent": 2.58,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7689833853795470612",
+        "pinned": false
+      },
+      {
+        "id": "7689829923103542549",
+        "caption": "Kỵ Sĩ Và Ánh Sao - LipIce\n#DongNhi #LipIce",
+        "createdAt": "2026-09-26T13:07:36.000Z",
+        "likeCount": 19070,
+        "commentCount": 101,
+        "shareCount": 425,
+        "saveCount": 480,
+        "viewCount": 345589,
+        "engagementRatePercent": 1.32,
+        "isOutlierHigh": false,
+        "isOutlierLow": false,
+        "skipReason": null,
+        "videoUrl": "https://www.tiktok.com/@dongnhi/video/7689829923103542549",
+        "pinned": false
+      }
+    ],
+    "sampleCoverage": {
+      "totalRecentVideos": 10,
+      "usableVideos": 10,
+      "skippedVideos": 0,
+      "skippedReasons": {
+        "missingLikes": 0,
+        "missingComments": 0,
+        "missingShares": 0,
+        "missingMultiple": 0
+      }
+    },
+    "formulaDescription": "Engagement rate = (likes + comments + shares) ÷ followers × 100, averaged across recent videos with visible counts.",
+    "dataFreshnessNote": "Based on recent videos between 2025-04-23 and 2026-10-27.",
+    "insight": {
+      "headlineInsight": "Engagement is highly uneven: the 7.77% average is well above the 1.18% median, with the strongest results concentrated in a few videos.",
+      "engagementAssessment": "All 10 recent videos were usable, with no engagement counts missing. The 148.51% volatility and the gap between average and median indicate that the average is lifted by outliers; the three highest listed videos are pinned and have engagement rates from 10.95% to 30.67%, but the data does not show whether pinning caused their performance.",
+      "contentPatternObservations": [
+        "The two top listed videos have engagement rates of 30.67% and 29.38%, with 9,746 and 8,098 shares respectively.",
+        "The third pinned video is at 10.95%, while the two listed non-pinned videos are at 2.58% and 1.32%.",
+        "Listed video views vary widely, from 345,589 to 6,756,397; average views across the 10-video sample are 2,601,867."
+      ],
+      "risksAndCaveats": [
+        "The sample covers only 10 recent videos, so it may not represent longer-term performance.",
+        "The top-videos list includes only five of the 10 sampled videos, limiting comparisons across the full sample.",
+        "The reported comment-to-like ratio is 0 even though listed videos have nonzero comment counts, so that ratio should not be used without validating its calculation."
+      ],
+      "recommendedExperiments": [
+        "Review the two highest-engagement videos for repeatable creative elements, then test one such element in a new video and compare its engagement rate with the 1.18% sample median.",
+        "Test two variations of a format similar to the 10.95% pinned video, changing one creative element between them, and compare engagement rates and shares.",
+        "For a new post, test a clear prompt designed to invite comments; validate comment counts and the reported comment-to-like ratio before evaluating the result."
+      ],
+      "apiUseCaseTeaser": "The Social Fetch API can help track these video-level engagement patterns across a larger set of recent posts and repeat the comparisons over time."
+    }
+  },
+  "meta": {
+    "requestId": "req_38744798-ab7d-44a9-a9e4-535638eff56f_pg_95e3425d",
+    "creditsCharged": 5,
+    "version": "v1"
+  }
+}

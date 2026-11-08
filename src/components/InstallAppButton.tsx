@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Download, Share, PlusSquare, X } from "lucide-react";
+import { useT } from "@/lib/i18n/client";
 
 // Sự kiện Chrome/Edge/Samsung Internet trên Android bắn ra khi web cài được.
 interface BeforeInstallPromptEvent extends Event {
@@ -37,6 +38,7 @@ function subscribe(cb: () => void) {
  * - Đã mở dưới dạng app (standalone) hoặc trình duyệt máy tính không hỗ trợ: không hiện gì.
  */
 export default function InstallAppButton() {
+  const t = useT();
   const platform = useSyncExternalStore<Platform>(subscribe, readPlatform, () => "server");
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
   const [showIosHelp, setShowIosHelp] = useState(false);
@@ -65,7 +67,7 @@ export default function InstallAppButton() {
           onClick={() => setShowIosHelp(true)}
           className="md:hidden inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold"
         >
-          <Download className="w-4 h-4" /> Cài ứng dụng
+          <Download className="w-4 h-4" /> {t("Cài ứng dụng")}
         </button>
         {/* Gắn vào <body>: thanh đầu trang dùng backdrop-blur sẽ "nhốt" phần tử fixed nếu để bên trong */}
         {showIosHelp &&
@@ -79,8 +81,8 @@ export default function InstallAppButton() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start justify-between mb-3">
-                <h3 className="font-bold text-stone-900">Cài lên màn hình chính</h3>
-                <button type="button" onClick={() => setShowIosHelp(false)} aria-label="Đóng">
+                <h3 className="font-bold text-stone-900">{t("Cài lên màn hình chính")}</h3>
+                <button type="button" onClick={() => setShowIosHelp(false)} aria-label={t("Đóng")}>
                   <X className="w-5 h-5 text-stone-500" />
                 </button>
               </div>
@@ -88,21 +90,20 @@ export default function InstallAppButton() {
                 <li className="flex gap-2">
                   <span className="font-bold">1.</span>
                   <span>
-                    Mở trang này bằng <b>Safari</b>, bấm nút <b>Chia sẻ</b>{" "}
-                    <Share className="inline w-4 h-4 -mt-1" /> ở thanh dưới.
+                    {t("Mở trang này bằng")} <b>Safari</b>{t(", bấm nút")} <b>{t("Chia sẻ")}</b>{" "}
+                    <Share className="inline w-4 h-4 -mt-1" /> {t("ở thanh dưới.")}
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <span className="font-bold">2.</span>
                   <span>
-                    Chọn <b>Thêm vào MH chính</b> <PlusSquare className="inline w-4 h-4 -mt-1" />{" "}
-                    rồi bấm <b>Thêm</b>.
+                    {t("Chọn")} <b>{t("Thêm vào MH chính")}</b> <PlusSquare className="inline w-4 h-4 -mt-1" />{t("rồi bấm")} <b>{t("Thêm")}</b>.
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <span className="font-bold">3.</span>
                   <span>
-                    Mở biểu tượng <b>VPHA Quét</b> trên màn hình chính và đăng nhập một lần nữa.
+                    {t("Mở biểu tượng")} <b>{t("VPHA Quét")}</b> {t("trên màn hình chính và đăng nhập một lần nữa.")}
                   </span>
                 </li>
               </ol>
@@ -125,7 +126,7 @@ export default function InstallAppButton() {
       }}
       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold"
     >
-      <Download className="w-4 h-4" /> Cài ứng dụng
+      <Download className="w-4 h-4" /> {t("Cài ứng dụng")}
     </button>
   );
 }

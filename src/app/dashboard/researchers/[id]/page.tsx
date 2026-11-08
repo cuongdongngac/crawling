@@ -4,8 +4,12 @@ import ProfileInfoForm from "@/components/ProfileInfoForm";
 import Link from "next/link";
 import { ArrowLeft, UserCircle, ShieldCheck, Activity } from "lucide-react";
 import ScopeConfigForm from "@/components/ScopeConfigForm";
+import { getT, getLang } from "@/lib/i18n/server";
+import { localeOf } from "@/lib/i18n";
 
 export default async function ResearcherDetailPage(props: any) {
+  const t = await getT();
+  const locale = localeOf(await getLang());
   const params = await props.params;
   const id = params.id;
 
@@ -46,7 +50,7 @@ export default async function ResearcherDetailPage(props: any) {
           href="/dashboard/researchers" 
           className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-stone-900 mb-6 transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> Quay lại danh sách
+          <ArrowLeft className="w-4 h-4" /> {t("Quay lại danh sách")}
         </Link>
 
         {/* Header */}
@@ -67,13 +71,13 @@ export default async function ResearcherDetailPage(props: any) {
           <div className="flex gap-4">
             <div className="bg-stone-50 px-5 py-3 rounded-xl border border-stone-100 text-center">
               <div className="text-2xl font-bold text-stone-900">{runs?.length || 0}</div>
-              <div className="text-xs font-medium text-stone-500 uppercase tracking-wider">Tổng chầu cào</div>
+              <div className="text-xs font-medium text-stone-500 uppercase tracking-wider">{t("Tổng chầu cào")}</div>
             </div>
             <div className="bg-stone-50 px-5 py-3 rounded-xl border border-stone-100 text-center">
               <div className="text-2xl font-bold text-stone-900">
                 {runs?.reduce((sum: number, run: any) => sum + (run.items_count || 0), 0) || 0}
               </div>
-              <div className="text-xs font-medium text-stone-500 uppercase tracking-wider">Bài viết thu về</div>
+              <div className="text-xs font-medium text-stone-500 uppercase tracking-wider">{t("Bài viết thu về")}</div>
             </div>
           </div>
         </div>
@@ -83,19 +87,19 @@ export default async function ResearcherDetailPage(props: any) {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-4 flex items-center gap-2">
-                <UserCircle className="w-5 h-5 text-stone-400" /> Thông tin cộng tác viên
+                <UserCircle className="w-5 h-5 text-stone-400" /> {t("Thông tin cộng tác viên")}
               </h2>
               <ProfileInfoForm userId={user.id} initialName={user.full_name ?? null} initialProvince={user.province ?? null} />
             </div>
             <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-6 flex items-center gap-2">
-                <UserCircle className="w-5 h-5 text-stone-400" /> Phạm vi Phân công (Assigned Scope)
+                <UserCircle className="w-5 h-5 text-stone-400" /> {t("Phạm vi Phân công (Assigned Scope)")}
               </h2>
               
               {isOpsAdmin ? (
                 <div className="p-4 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 text-sm font-medium flex items-center gap-3">
                   <ShieldCheck className="w-5 h-5" /> 
-                  Tài khoản này là Admin, có toàn quyền truy cập tất cả Công cụ và Nhóm từ khóa.
+                  {t("Tài khoản này là Admin, có toàn quyền truy cập tất cả Công cụ và Nhóm từ khóa.")}
                 </div>
               ) : (
                 <ScopeConfigForm userId={user.id} initialScope={user.assigned_scope || { allowed_actors: [], allowed_hashtag_groups: [] }} />
@@ -107,7 +111,7 @@ export default async function ResearcherDetailPage(props: any) {
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-4 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-stone-400" /> Lịch sử Hoạt động
+                <Activity className="w-5 h-5 text-stone-400" /> {t("Lịch sử Hoạt động")}
               </h2>
               
               <div className="space-y-3">
@@ -119,15 +123,15 @@ export default async function ResearcherDetailPage(props: any) {
                         {run.status}
                       </div>
                     </div>
-                    <div className="text-[10px] text-stone-500 mb-2">{new Date(run.started_at).toLocaleString('vi-VN')}</div>
-                    <div className="text-sm font-medium text-stone-900">{run.items_count || 0} bài viết</div>
+                    <div className="text-[10px] text-stone-500 mb-2">{new Date(run.started_at).toLocaleString(locale)}</div>
+                    <div className="text-sm font-medium text-stone-900">{t("{v0} bài viết", { v0: run.items_count || 0 })}</div>
                   </div>
                 )) : (
-                  <div className="text-sm text-stone-500 italic text-center py-4">Chưa có lịch sử chạy công cụ.</div>
+                  <div className="text-sm text-stone-500 italic text-center py-4">{t("Chưa có lịch sử chạy công cụ.")}</div>
                 )}
                 {runs && runs.length > 5 && (
                   <button className="w-full py-2 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
-                    Xem tất cả lịch sử
+                    {t("Xem tất cả lịch sử")}
                   </button>
                 )}
               </div>

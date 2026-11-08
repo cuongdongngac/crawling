@@ -7,6 +7,7 @@ import OverviewDashboard, {
   type StageRow,
   type WeeklyRow,
 } from "@/components/dashboard/OverviewDashboard";
+import { getT } from "@/lib/i18n/server";
 
 // Tổng quan: đọc các view tính sẵn (docs/migrations/2026-10-31_dashboard-views.sql).
 // Số liệu tổng hợp: mọi người đã đăng nhập. Danh sách bài kèm link: chỉ nghiên cứu viên.
@@ -25,6 +26,7 @@ async function fetchAll<T>(sb: SB, view: string, columns: string): Promise<T[]> 
 }
 
 export default async function DashboardPage() {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
   const sb = getServiceClient();
@@ -93,20 +95,20 @@ export default async function DashboardPage() {
             <LayoutDashboard className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Tổng quan</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{t("Tổng quan")}</h1>
             <p className="text-sm text-stone-500 mt-1">
-              Mỗi biểu đồ trả lời một câu hỏi nghiên cứu và đi kèm hạn chế của nó. Hệ thống mô tả xu hướng, không kết luận nguyên nhân.
+              {t("Mỗi biểu đồ trả lời một câu hỏi nghiên cứu và đi kèm hạn chế của nó. Hệ thống mô tả xu hướng, không kết luận nguyên nhân.")}
             </p>
-            <HelpLink slug="thiet-ke/cau-hoi-nghien-cuu" label="Câu hỏi nghiên cứu và biểu đồ" className="mt-1" />
+            <HelpLink slug="thiet-ke/cau-hoi-nghien-cuu" label={t("Câu hỏi nghiên cứu và biểu đồ")} className="mt-1" />
           </div>
         </div>
         {loadError ? (
           <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-900">
-            <p className="font-semibold">Chưa đọc được số liệu tổng quan.</p>
+            <p className="font-semibold">{t("Chưa đọc được số liệu tổng quan.")}</p>
             <p className="mt-1">
-              Kiểm tra đã chạy <code>docs/migrations/2026-10-31_dashboard-views.sql</code> trên Supabase chưa.
+              {t("Kiểm tra đã chạy")} <code>docs/migrations/2026-10-31_dashboard-views.sql</code> {t("trên Supabase chưa.")}
             </p>
-            <p className="mt-2 text-xs text-amber-800">Chi tiết: {loadError}</p>
+            <p className="mt-2 text-xs text-amber-800">{t("Chi tiết: {loadError}", { loadError })}</p>
           </div>
         ) : (
           <OverviewDashboard

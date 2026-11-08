@@ -2,9 +2,11 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/guards";
 import { Hash, Tags } from "lucide-react";
 import HashtagGroupTable from "@/components/HashtagGroupTable";
+import { getT } from "@/lib/i18n/server";
 
 // Danh mục từ khóa là việc của nghiên cứu viên (duyệt, xếp nhóm) — DEC vai trò 02/11/2026.
 export default async function HashtagGroupsPage() {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
   if (!me.isResearcher) redirect("/dashboard");
@@ -17,10 +19,10 @@ export default async function HashtagGroupsPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Nhóm Từ Khóa
+              {t("Nhóm Từ Khóa")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Quản lý các nhóm từ khóa (Hashtag Groups) để phân loại mục đích theo dõi.
+              {t("Quản lý các nhóm từ khóa (Hashtag Groups) để phân loại mục đích theo dõi.")}
             </p>
           </div>
         </div>

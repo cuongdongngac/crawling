@@ -2,9 +2,11 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/guards";
 import { Hash } from "lucide-react";
 import HashtagTable from "@/components/HashtagTable";
+import { getT } from "@/lib/i18n/server";
 
 // Danh mục từ khóa là việc của nghiên cứu viên (duyệt, xếp nhóm) — DEC vai trò 02/11/2026.
 export default async function HashtagsPage() {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
   if (!me.isResearcher) redirect("/dashboard");
@@ -17,10 +19,10 @@ export default async function HashtagsPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Quản lý Từ khóa (Hashtags)
+              {t("Quản lý Từ khóa (Hashtags)")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Thêm từ khóa, cấu hình loại tìm kiếm (FIXED/ADAPTIVE) và gắn thẻ vào nhiều nhóm.
+              {t("Thêm từ khóa, cấu hình loại tìm kiếm (FIXED/ADAPTIVE) và gắn thẻ vào nhiều nhóm.")}
             </p>
           </div>
         </div>

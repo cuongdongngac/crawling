@@ -2,8 +2,10 @@ import { UserCircle } from "lucide-react";
 import ProfileForm from "@/components/ProfileForm";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { getT } from "@/lib/i18n/server";
 
 export default async function ProfilePage() {
+  const t = await getT();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -20,10 +22,10 @@ export default async function ProfilePage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-stone-900 tracking-tight">
-              Tài khoản cá nhân
+              {t("Tài khoản cá nhân")}
             </h1>
             <p className="text-stone-500 mt-1">
-              Quản lý thông tin tài khoản và cập nhật mật khẩu.
+              {t("Quản lý thông tin tài khoản và cập nhật mật khẩu.")}
             </p>
           </div>
         </div>

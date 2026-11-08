@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { Search, Edit2, Save, X, Hash, Plus, Trash, Check } from "lucide-react";
+import { useT } from "@/lib/i18n/client";
 
 export interface HashtagRow {
   hashtag_id: number;
@@ -18,6 +19,7 @@ export interface GroupItem {
 }
 
 export default function HashtagTable() {
+  const t = useT();
   const [hashtags, setHashtags] = useState<HashtagRow[]>([]);
   const [availableGroups, setAvailableGroups] = useState<GroupItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -106,14 +108,14 @@ export default function HashtagTable() {
       setEditingId(null);
       await fetchData(); // Refresh data to sync
     } catch (error: any) {
-      alert("Lỗi khi lưu: " + error.message);
+      alert(t("Lỗi khi lưu: ") + error.message);
     }
     setSaving((prev) => ({ ...prev, [id]: false }));
   };
 
   const handleAddNew = async () => {
     let text = newHashtagForm.hashtag_text.trim();
-    if (!text) return alert("Vui lòng nhập từ khóa!");
+    if (!text) return alert(t("Vui lòng nhập từ khóa!"));
     if (!text.startsWith("#")) text = "#" + text;
 
     setSavingNew(true);
@@ -143,20 +145,20 @@ export default function HashtagTable() {
       setIsAddingNew(false);
       await fetchData();
     } catch (error: any) {
-      alert("Lỗi: " + error.message);
+      alert(t("Lỗi: ") + error.message);
     } finally {
       setSavingNew(false);
     }
   };
 
   const handleDelete = async (id: number, text: string) => {
-    if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn từ khóa "${text}"?`)) return;
+    if (!confirm(t("Bạn có chắc muốn xóa vĩnh viễn từ khóa \"{text}\"?", { text }))) return;
     try {
       const { error } = await supabase.from("hashtags").delete().eq("hashtag_id", id);
       if (error) throw error;
       setHashtags(hashtags.filter((h) => h.hashtag_id !== id));
     } catch (error: any) {
-      alert("Lỗi: " + error.message);
+      alert(t("Lỗi: ") + error.message);
     }
   };
 
@@ -168,7 +170,7 @@ export default function HashtagTable() {
     setFormFn({ ...formObj, selected_groups: newGroups });
   };
 
-  if (loading) return <div className="text-center py-12 text-stone-500">Đang tải danh sách...</div>;
+  if (loading) return <div className="text-center py-12 text-stone-500">{t("Đang tải danh sách...")}</div>;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
@@ -178,7 +180,7 @@ export default function HashtagTable() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
           <input
             type="text"
-            placeholder="Tìm kiếm từ khóa..."
+            placeholder={t("Tìm kiếm từ khóa...")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-4 py-2 text-sm border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none"
@@ -188,7 +190,7 @@ export default function HashtagTable() {
           onClick={() => setIsAddingNew(true)}
           className="flex items-center gap-2 px-4 py-2 bg-stone-900 text-white text-sm font-medium rounded-lg hover:bg-stone-800 transition-colors"
         >
-          <Plus className="w-4 h-4" /> Thêm Từ khóa
+          <Plus className="w-4 h-4" /> {t("Thêm Từ khóa")}
         </button>
       </div>
 
@@ -197,7 +199,7 @@ export default function HashtagTable() {
         <div className="p-5 bg-amber-50 border-b border-amber-100 flex gap-6 items-start">
           <div className="flex-1 grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Từ khóa (Bắt đầu bằng #)</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Từ khóa (Bắt đầu bằng #)")}</label>
               <input
                 type="text"
                 value={newHashtagForm.hashtag_text}
@@ -207,18 +209,18 @@ export default function HashtagTable() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1">Chế độ Tracking</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Chế độ Tracking")}</label>
               <select
                 value={newHashtagForm.keyword_track}
                 onChange={(e) => setNewHashtagForm({ ...newHashtagForm, keyword_track: e.target.value })}
                 className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500"
               >
-                <option value="ADAPTIVE">ADAPTIVE (Mở rộng tự động)</option>
-                <option value="FIXED">FIXED (Cố định)</option>
+                <option value="ADAPTIVE">{t("ADAPTIVE (Mở rộng tự động)")}</option>
+                <option value="FIXED">{t("FIXED (Cố định)")}</option>
               </select>
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-semibold text-stone-700 mb-2">Chọn nhóm (Có thể chọn nhiều)</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-2">{t("Chọn nhóm (Có thể chọn nhiều)")}</label>
               <div className="flex flex-wrap gap-2">
                 {availableGroups.map(g => (
                   <label key={g.group_id} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-stone-300 bg-white cursor-pointer hover:bg-stone-50">
@@ -236,10 +238,10 @@ export default function HashtagTable() {
           </div>
           <div className="flex flex-col gap-2 min-w-[100px]">
             <button onClick={handleAddNew} disabled={savingNew} className="px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700">
-              {savingNew ? "Đang lưu..." : "Lưu"}
+              {savingNew ? t("Đang lưu...") : t("Lưu")}
             </button>
             <button onClick={() => setIsAddingNew(false)} className="px-4 py-2 bg-stone-200 text-stone-700 text-sm font-medium rounded-lg hover:bg-stone-300">
-              Hủy
+              {t("Hủy")}
             </button>
           </div>
         </div>
@@ -250,10 +252,10 @@ export default function HashtagTable() {
         <table className="w-full text-left text-sm">
           <thead className="bg-stone-50 border-b border-stone-200 text-stone-600 font-medium">
             <tr>
-              <th className="px-6 py-3 w-1/4">Từ khóa</th>
+              <th className="px-6 py-3 w-1/4">{t("Từ khóa")}</th>
               <th className="px-6 py-3 w-1/5">Tracking</th>
-              <th className="px-6 py-3 w-1/3">Thuộc nhóm</th>
-              <th className="px-6 py-3 text-right">Thao tác</th>
+              <th className="px-6 py-3 w-1/3">{t("Thuộc nhóm")}</th>
+              <th className="px-6 py-3 text-right">{t("Thao tác")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-100">
@@ -313,7 +315,7 @@ export default function HashtagTable() {
                             {m.group_id}
                           </span>
                         ))}
-                        {tag.hashtag_group_mapping.length === 0 && <span className="text-stone-400 italic text-xs">Chưa gắn nhóm</span>}
+                        {tag.hashtag_group_mapping.length === 0 && <span className="text-stone-400 italic text-xs">{t("Chưa gắn nhóm")}</span>}
                       </div>
                     )}
                   </td>
@@ -321,19 +323,19 @@ export default function HashtagTable() {
                     <div className="flex items-center justify-end gap-2">
                       {isEditing ? (
                         <>
-                          <button onClick={() => handleSave(tag.hashtag_id)} disabled={saving[tag.hashtag_id]} className="p-1.5 bg-green-600 text-white rounded hover:bg-green-700" title="Lưu">
+                          <button onClick={() => handleSave(tag.hashtag_id)} disabled={saving[tag.hashtag_id]} className="p-1.5 bg-green-600 text-white rounded hover:bg-green-700" title={t("Lưu")}>
                             <Save className="w-4 h-4" />
                           </button>
-                          <button onClick={() => { setEditingId(null); setEditForms(p => { const n={...p}; delete n[tag.hashtag_id]; return n; }); }} className="p-1.5 text-stone-500 bg-stone-200 hover:bg-stone-300 rounded" title="Hủy">
+                          <button onClick={() => { setEditingId(null); setEditForms(p => { const n={...p}; delete n[tag.hashtag_id]; return n; }); }} className="p-1.5 text-stone-500 bg-stone-200 hover:bg-stone-300 rounded" title={t("Hủy")}>
                             <X className="w-4 h-4" />
                           </button>
                         </>
                       ) : (
                         <>
-                          <button onClick={() => handleEdit(tag)} className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Sửa">
+                          <button onClick={() => handleEdit(tag)} className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title={t("Sửa")}>
                             <Edit2 className="w-4 h-4" />
                           </button>
-                          <button onClick={() => handleDelete(tag.hashtag_id, tag.hashtag_text)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Xóa">
+                          <button onClick={() => handleDelete(tag.hashtag_id, tag.hashtag_text)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title={t("Xóa")}>
                             <Trash className="w-4 h-4" />
                           </button>
                         </>
@@ -347,7 +349,7 @@ export default function HashtagTable() {
               <tr>
                 <td colSpan={4} className="px-6 py-12 text-center text-stone-500">
                   <Hash className="w-10 h-10 mx-auto text-stone-300 mb-3" />
-                  <p>Chưa có từ khóa nào.</p>
+                  <p>{t("Chưa có từ khóa nào.")}</p>
                 </td>
               </tr>
             )}

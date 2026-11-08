@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { Award } from "lucide-react";
 import { getCurrentUser, getServiceClient } from "@/lib/auth/guards";
 import ActivityBoard, { type ActivityRow, type LogRow } from "@/components/ActivityBoard";
+import { getT } from "@/lib/i18n/server";
 
 function monthStart(ym: string | undefined) {
   const m = /^(\d{4})-(\d{2})$/.exec(ym || "");
@@ -12,6 +13,7 @@ function monthStart(ym: string | undefined) {
 }
 
 export default async function HoatDongPage({ searchParams }: { searchParams: Promise<{ thang?: string }> }) {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
   if (!me.isAdmin) redirect("/dashboard");
@@ -81,16 +83,15 @@ export default async function HoatDongPage({ searchParams }: { searchParams: Pro
             <Award className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Hoạt động cộng tác viên</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{t("Hoạt động cộng tác viên")}</h1>
             <p className="text-sm text-stone-500 mt-1">
-              Căn cứ khen thưởng theo chất lượng: ưu tiên số đề xuất được duyệt và được duyệt khi là người đề xuất sớm
-              nhất. Số lần quét chỉ cho biết có làm việc hay không.
+              {t("Căn cứ khen thưởng theo chất lượng: ưu tiên số đề xuất được duyệt và được duyệt khi là người đề xuất sớm nhất. Số lần quét chỉ cho biết có làm việc hay không.")}
             </p>
           </div>
         </div>
         {error ? (
           <p className="p-4 rounded-xl bg-red-50 text-red-800 text-sm">
-            Không đọc được số liệu: {error.message}. Kiểm tra đã chạy file SQL bổ sung schema chưa.
+            {t("Không đọc được số liệu: {message}. Kiểm tra đã chạy file SQL bổ sung schema chưa.", { message: error.message })}
           </p>
         ) : (
           <ActivityBoard month={ym} rows={rows} logs={logRows} />

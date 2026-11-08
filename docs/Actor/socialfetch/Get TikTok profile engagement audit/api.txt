@@ -1,0 +1,11 @@
+const response = await fetch(
+  "https://api.socialfetch.dev/v1/tiktok/profiles/https%3A%2F%2Fwww.tiktok.com%2F%40dongnhi%2Fvideo%2F7701318189417843988/engagement",
+  {
+    headers: {
+      "x-api-key": "YOUR_API_KEY"
+    }
+  }
+);
+
+const data = await response.json();
+console.log(data);

@@ -4,8 +4,10 @@ import { Radar } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import TestScanner from "@/components/TestScanner";
 import { SCAN_ACTORS } from "@/lib/scrapers/catalog";
+import { getT } from "@/lib/i18n/server";
 
 export default async function QuetThuPage() {
+  const t = await getT();
   const supabase = await createClient();
   const {
     data: { user },
@@ -39,12 +41,12 @@ export default async function QuetThuPage() {
             <Radar className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Quét thử</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{t("Quét thử")}</h1>
             <p className="text-sm text-stone-500 mt-1">
-              Quét bằng API key Apify của bạn, xem và đánh giá kết quả, xuất Excel. Kết quả{" "}
-              <strong>không</strong> ghi vào cơ sở dữ liệu của dự án.
+              {t("Quét bằng API key Apify của bạn, xem và đánh giá kết quả, xuất Excel. Kết quả")}
+              <strong>{t("không")}</strong> {t("ghi vào cơ sở dữ liệu của dự án.")}
             </p>
-            <HelpLink slug="cong-tac-vien/quet-thu" label="Hướng dẫn quét thử" className="mt-1" />
+            <HelpLink slug="cong-tac-vien/quet-thu" label={t("Hướng dẫn quét thử")} className="mt-1" />
           </div>
         </div>
         <TestScanner actors={actors} knownHashtags={knownHashtags} />

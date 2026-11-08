@@ -2,8 +2,10 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Rocket } from "lucide-react";
 import ScrapingStudio from "@/components/ScrapingStudio";
+import { getT } from "@/lib/i18n/server";
 
 export default async function ScrapingPage() {
+  const t = await getT();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -90,7 +92,7 @@ export default async function ScrapingPage() {
               Scraping Studio
             </h1>
             <p className="text-stone-500 mt-1">
-              Phòng điều khiển chiến dịch cào dữ liệu. Bạn chỉ nhìn thấy các công cụ và từ khóa được Admin cấp quyền.
+              {t("Phòng điều khiển chiến dịch cào dữ liệu. Bạn chỉ nhìn thấy các công cụ và từ khóa được Admin cấp quyền.")}
             </p>
           </div>
         </div>

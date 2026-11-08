@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Save, Tags, Database } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n/client";
 
 export default function ScopeConfigForm({ 
   userId, 
@@ -13,6 +14,7 @@ export default function ScopeConfigForm({
   userId: string, 
   initialScope: { allowed_actors: string[], allowed_hashtag_groups: string[] } 
 }) {
+  const t = useT();
   const router = useRouter();
   const [scope, setScope] = useState(initialScope || { allowed_actors: [], allowed_hashtag_groups: [] });
   const [groups, setGroups] = useState<any[]>([]);
@@ -64,21 +66,21 @@ export default function ScopeConfigForm({
     setSaving(true);
     const res = await updateAssignedScope(userId, scope);
     if (res.error) {
-      alert(res.error);
+      alert(t(res.error));
       setSaving(false);
     } else {
       router.push("/dashboard/researchers");
     }
   };
 
-  if (loading) return <div className="text-sm text-stone-500 py-4">Đang tải cấu hình...</div>;
+  if (loading) return <div className="text-sm text-stone-500 py-4">{t("Đang tải cấu hình...")}</div>;
 
   return (
     <div className="space-y-8">
       {/* Hashtag Groups */}
       <div>
         <h3 className="text-sm font-bold text-stone-900 mb-3 flex items-center gap-2">
-          <Tags className="w-4 h-4 text-amber-600" /> Nhóm Từ khóa được phép theo dõi
+          <Tags className="w-4 h-4 text-amber-600" /> {t("Nhóm Từ khóa được phép theo dõi")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {groups.map(g => {
@@ -101,14 +103,14 @@ export default function ScopeConfigForm({
               </label>
             )
           })}
-          {groups.length === 0 && <div className="text-xs text-stone-500 italic col-span-full">Chưa có dữ liệu Nhóm từ khóa trong hệ thống.</div>}
+          {groups.length === 0 && <div className="text-xs text-stone-500 italic col-span-full">{t("Chưa có dữ liệu Nhóm từ khóa trong hệ thống.")}</div>}
         </div>
       </div>
 
       {/* Actors */}
       <div>
         <h3 className="text-sm font-bold text-stone-900 mb-3 flex items-center gap-2">
-          <Database className="w-4 h-4 text-indigo-600" /> Công cụ thu thập (Apify Actors) được phép dùng
+          <Database className="w-4 h-4 text-indigo-600" /> {t("Công cụ thu thập (Apify Actors) được phép dùng")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {actors.map(a => {
@@ -131,7 +133,7 @@ export default function ScopeConfigForm({
               </label>
             )
           })}
-          {actors.length === 0 && <div className="text-xs text-stone-500 italic col-span-full">Chưa có cấu hình Actor nào trong hệ thống.</div>}
+          {actors.length === 0 && <div className="text-xs text-stone-500 italic col-span-full">{t("Chưa có cấu hình Actor nào trong hệ thống.")}</div>}
         </div>
       </div>
 
@@ -141,7 +143,7 @@ export default function ScopeConfigForm({
           disabled={saving}
           className="flex items-center gap-2 px-6 py-2.5 bg-stone-900 text-white font-medium text-sm rounded-xl hover:bg-stone-800 disabled:opacity-50 transition-colors shadow-sm"
         >
-          <Save className="w-4 h-4" /> {saving ? "Đang lưu..." : "Lưu Phân Công"}
+          <Save className="w-4 h-4" /> {saving ? t("Đang lưu...") : t("Lưu Phân Công")}
         </button>
       </div>
     </div>

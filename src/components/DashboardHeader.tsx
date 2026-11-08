@@ -1,6 +1,7 @@
 import HeaderMenu from "./HeaderMenu";
 import InstallAppButton from "./InstallAppButton";
 import HelpLink from "./HelpLink";
+import LanguageSwitch from "./LanguageSwitch";
 
 interface DashboardHeaderProps {
   isAdmin: boolean;
@@ -13,6 +14,7 @@ export default function DashboardHeader({ isAdmin, userEmail }: DashboardHeaderP
       <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-end gap-3">
         {/* Tên ứng dụng cho điện thoại (thanh bên bị ẩn trên màn hình nhỏ) */}
         <span className="md:hidden mr-auto font-bold text-stone-900 tracking-tight">VPHA M&amp;E</span>
+        <LanguageSwitch />
         <InstallAppButton />
         <HelpLink label="Trợ giúp" className="hidden sm:inline-flex" />
         <HelpLink label="" className="sm:hidden p-1" />

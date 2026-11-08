@@ -1,0 +1,962 @@
+{
+  "data": {
+    "lookupStatus": "found",
+    "video": {
+      "id": "7701318189417843988",
+      "url": "https://www.tiktok.com/@dongnhi/video/7701318189417843988",
+      "caption": "Don't leave me over here dancin' alone @Winnie 🌷 Hannie \n\n#DongNhi #WinnieOng ",
+      "createdAt": "2026-10-27T12:07:56.000Z",
+      "region": "VN",
+      "durationMs": 16160,
+      "mediaType": "video",
+      "isAd": false
+    },
+    "author": {
+      "platformUserId": "6540626371999629313",
+      "secUid": "MS4wLjABAAAADAQGas9i0EhLhAuKucKivF392QmsZXHhTS0UK2q80dYMaiCNuDfYfsUWYJK_D0oF",
+      "handle": "dongnhi",
+      "nickname": "Đông Nhi",
+      "verified": true,
+      "avatarUrl": "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:1080:1080:q70.heic?dr=8837&refresh_token=ca7b9bfc&x-expires=1793869200&x-signature=vgUuf5QavUJUbLAtkpOVamNFQ2g%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+      "signature": "THEATER OF DREAMS - Stream Now 💝👇🏻",
+      "region": "VN"
+    },
+    "music": {
+      "id": "7701318214128454407",
+      "title": "original sound - dongnhi",
+      "author": "Đông Nhi",
+      "playUrl": "https://v16m.tiktokcdn-us.com/a988f05bc7f00f60d5231a8881370bf5/6af43666/video/tos/alisg/tos-alisg-v-27dcd7/os17IirKBBiz6w69LMoAfiVyoAo0OMt5EEcOLD/?a=1233&bti=OTg7QGo5QHM6OjZALTAzYCMvcCMxNDNg&&bt=125&ft=aERpiq4fmbdPD12s6BkI3wUWC3xAMeF~O5&mime_type=audio_mpeg&rc=ZDk8ZTk3Zjw0ZGdoOWU8aUBpamV1dWw5cjo8ZTMzODU8NEA2LWMzYGMvXmExMDUzYDNeYSMyaTZwMmRjNWRhLS1kMS1zcw%3D%3D&vvpl=1&l=20261104093254B903FD7953B96B0788B0&btag=e000b8000&shp=d05b14bd&shcp=-",
+      "coverUrl": "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:1080:1080:q70.heic?dr=8837&refresh_token=e14b1e35&x-expires=1793869200&x-signature=%2FaevPowMwdvck9klG%2BXJgOmKbpc%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+      "durationSec": 16,
+      "isOriginal": true
+    },
+    "metrics": {
+      "views": 341333,
+      "likes": 14980,
+      "comments": 67,
+      "shares": 173,
+      "saves": 219
+    },
+    "media": {
+      "downloadUrl": "https://api16-normal-useast5.tiktokv.us/aweme/v1/play/?video_id=v14044g50000dbg96ovog65msfjp1csg&line=0&watermark=0&logo_name=tiktok_m&source=AWEME_DETAIL&file_id=a57dcc262ee441a99141aa3fb354d3fa&item_id=7701318189417843988&signaturev3=dmlkZW9faWQ7ZmlsZV9pZDtpdGVtX2lkLjhiY2QyNDhlNzU2NDVhZDU5MjBjNmU1ZmMzZWEwYmNi&shp=d05b14bd&shcp=-",
+      "downloadWithoutWatermarkUrl": "https://v16m.tiktokcdn-us.com/899dea3cf20ba417c7b4fc25647988ab/6aeb5036/video/tos/alisg/tos-alisg-pve-0037c001/oIjgEoz5DGKw5oCBfkLfAbRIjAbnA2HeIVCV5S/?a=1233&bti=OUBzOTg7QGo6OjZAL3AjLTAzYCMxNDNg&&bt=2776&ft=aERpiq4fmbdPD12s6BkI3wUWC3xAMeF~O5&mime_type=video_mp4&rc=ZDY3NmlkNDQ8NDdoOWZnOEBpamZzaXA5cnI8ZTMzODczNEBjYTJfMF4xNl4xYi8vYDReYSNwLmdwMmRzM2RhLS1kMTFzcw%3D%3D&vvpl=1&l=20261104093254B903FD7953B96B0788B0&btag=e000b8000",
+      "thumbnailUrl": "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-p-0037/o0AlUZBrJAEqBi9guzPXnYBIGEl0wAADCiAva~tplv-tiktokx-cropcenter-q:300:400:q70.heic?dr=8596&refresh_token=9540e07d&x-expires=1793869200&x-signature=b179y2figoFTiVKcfA2mOZ6U7M0%3D&t=bacd0480&ps=933b5bde&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=cover&biz_tag=tt_video&s=AWEME_DETAIL",
+      "dimensions": {
+        "width": 576,
+        "height": 1024
+      }
+    },
+    "transcript": null,
+    "downloads": [],
+    "details": {
+      "added_sound_music_info": {
+        "album": "",
+        "allow_offline_music_to_detail_page": false,
+        "artists": [],
+        "audition_duration": 16,
+        "author": "Đông Nhi",
+        "author_deleted": false,
+        "author_position": null,
+        "avatar_medium": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c",
+          "url_list": [
+            "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:720:720:q70.heic?dr=8836&refresh_token=07ae9e3b&x-expires=1793869200&x-signature=q%2BjHAg5OpsDFn4Fje0ml7lCiCa0%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+            "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:720:720:q70.heic?dr=8836&refresh_token=18ec7a2e&x-expires=1793869200&x-signature=XBPldgLp%2FS87zPYiFwqee2rMHcY%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "avatar_thumb": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c",
+          "url_list": [
+            "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:100:100:q70.heic?dr=8835&refresh_token=aeb15563&x-expires=1793869200&x-signature=nohq7mj3vbATGHpoUxvtXavxAvA%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+            "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:100:100:q70.heic?dr=8835&refresh_token=821d24a6&x-expires=1793869200&x-signature=Xx7PUdFOpR2iThdCYWGg7W%2B4LbQ%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "binded_challenge_id": 0,
+        "can_be_stitched": true,
+        "can_not_reuse": false,
+        "collect_stat": 0,
+        "commercial_right_type": 2,
+        "cover_large": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c",
+          "url_list": [
+            "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:1080:1080:q70.heic?dr=8837&refresh_token=e14b1e35&x-expires=1793869200&x-signature=%2FaevPowMwdvck9klG%2BXJgOmKbpc%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+            "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:1080:1080:q70.heic?dr=8837&refresh_token=ca7b9bfc&x-expires=1793869200&x-signature=vgUuf5QavUJUbLAtkpOVamNFQ2g%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "cover_medium": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c",
+          "url_list": [
+            "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:720:720:q70.heic?dr=8836&refresh_token=07ae9e3b&x-expires=1793869200&x-signature=q%2BjHAg5OpsDFn4Fje0ml7lCiCa0%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+            "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:720:720:q70.heic?dr=8836&refresh_token=18ec7a2e&x-expires=1793869200&x-signature=XBPldgLp%2FS87zPYiFwqee2rMHcY%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "cover_thumb": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c",
+          "url_list": [
+            "https://p19-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:100:100:q70.heic?dr=8835&refresh_token=aeb15563&x-expires=1793869200&x-signature=nohq7mj3vbATGHpoUxvtXavxAvA%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL",
+            "https://p16-common-sign.tiktokcdn-us.com/tos-alisg-avt-0068/2a83fc935a899a72c7a166ea0404544c~tplv-tiktokx-cropcenter-q:100:100:q70.heic?dr=8835&refresh_token=821d24a6&x-expires=1793869200&x-signature=Xx7PUdFOpR2iThdCYWGg7W%2B4LbQ%3D&t=223449c4&ps=87d6e48a&shp=d05b14bd&shcp=1d1a97fc&idc=useast5&sc=avatar&s=AWEME_DETAIL"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "create_time": 1793102879,
+        "dmv_auto_show": false,
+        "duration": 16,
+        "duration_high_precision": {
+          "audition_duration_precision": 16.195875,
+          "duration_precision": 16.195875,
+          "shoot_duration_precision": 16.195875,
+          "video_duration_precision": 16.195875
+        },
+        "external_song_info": [],
+        "extra": "{\"aed_music_dur\":16.194,\"amplitude_peak\":0,\"beats\":{},\"can_read\":true,\"can_reuse\":true,\"erase_type\":0,\"erase_uid\":0,\"extract_item_id\":7701318189417843988,\"fg_top_song_id\":7689295963484260362,\"from_user_id\":7577955016603812877,\"full_song_beat_info\":{},\"full_song_beats\":{},\"has_edited\":0,\"is_batch_take_down_music\":false,\"is_ugc_mapping\":true,\"is_used\":1,\"loudness_lufs\":0,\"music_vid\":\"v10942g50000dbg987fog65isr9rlb5g\",\"owner_id\":6540626371999629313,\"resource_status\":0,\"review_unshelve_reason\":0,\"reviewed\":0,\"schedule_search_time\":0,\"sh_tag\":0,\"similar_top_song_id\":7689295963484260362}",
+        "has_commerce_right": true,
+        "has_commerce_right_strict": false,
+        "has_human_voice": false,
+        "id": "7701318214128454407",
+        "id_str": "7701318214128454407",
+        "is_audio_url_with_cookie": false,
+        "is_author_artist": false,
+        "is_commerce_music": true,
+        "is_commerce_music_strict": false,
+        "is_matched_metadata": false,
+        "is_original": false,
+        "is_original_sound": true,
+        "is_pgc": false,
+        "is_play_music": false,
+        "is_shooting_allow": true,
+        "language": "English",
+        "log_extra": "{\"meta_song_matched_type\":\"not_found\",\"ttm_matched_type\":\"\",\"ttm_track_id\":\"\",\"matched_meta_song_id\":\"\",\"vid\":\"\",\"owner_id\":\"\"}",
+        "lyric_short_position": null,
+        "meme_song_info": {},
+        "mid": "7701318214128454407",
+        "multi_bit_rate_play_info": null,
+        "music_group_use_count": 0,
+        "music_ugid": "7701318214128454407",
+        "music_ugid_use_count": 0,
+        "mute_share": false,
+        "offline_desc": "",
+        "owner_handle": "dongnhi",
+        "owner_id": "6540626371999629313",
+        "owner_nickname": "Đông Nhi",
+        "play_url": {
+          "data_size": 0,
+          "height": 720,
+          "uri": "https://v16m.tiktokcdn-us.com/a988f05bc7f00f60d5231a8881370bf5/6af43666/video/tos/alisg/tos-alisg-v-27dcd7/os17IirKBBiz6w69LMoAfiVyoAo0OMt5EEcOLD/?a=1233&bti=OTg7QGo5QHM6OjZALTAzYCMvcCMxNDNg&&bt=125&ft=aERpiq4fmbdPD12s6BkI3wUWC3xAMeF~O5&mime_type=audio_mpeg&rc=ZDk8ZTk3Zjw0ZGdoOWU8aUBpamV1dWw5cjo8ZTMzODU8NEA2LWMzYGMvXmExMDUzYDNeYSMyaTZwMmRjNWRhLS1kMS1zcw%3D%3D&vvpl=1&l=20261104093254B903FD7953B96B0788B0&btag=e000b8000&shp=d05b14bd&shcp=-",
+          "url_key": "af69cb668e3d4ad1a92cf4c66bf9069a",
+          "url_list": [
+            "https://v16m.tiktokcdn-us.com/a988f05bc7f00f60d5231a8881370bf5/6af43666/video/tos/alisg/tos-alisg-v-27dcd7/os17IirKBBiz6w69LMoAfiVyoAo0OMt5EEcOLD/?a=1233&bti=OTg7QGo5QHM6OjZALTAzYCMvcCMxNDNg&&bt=125&ft=aERpiq4fmbdPD12s6BkI3wUWC3xAMeF~O5&mime_type=audio_mpeg&rc=ZDk8ZTk3Zjw0ZGdoOWU8aUBpamV1dWw5cjo8ZTMzODU8NEA2LWMzYGMvXmExMDUzYDNeYSMyaTZwMmRjNWRhLS1kMS1zcw%3D%3D&vvpl=1&l=20261104093254B903FD7953B96B0788B0&btag=e000b8000&shp=d05b14bd&shcp=-",
+            "https://v19.tiktokcdn-us.com/c6fac109bff00b64fdbd6e9b60a98a8f/6af43666/video/tos/alisg/tos-alisg-v-27dcd7/os17IirKBBiz6w69LMoAfiVyoAo0OMt5EEcOLD/?a=1233&bti=OTg7QGo5QHM6OjZALTAzYCMvcCMxNDNg&&bt=125&ft=aERpiq4fmbdPD12s6BkI3wUWC3xAMeF~O5&mime_type=audio_mpeg&rc=ZDk8ZTk3Zjw0ZGdoOWU8aUBpamV1dWw5cjo8ZTMzODU8NEA2LWMzYGMvXmExMDUzYDNeYSMyaTZwMmRjNWRhLS1kMS1zcw%3D%3D&vvpl=1&l=20261104093254B903FD7953B96B0788B0&btag=e000b8000&shp=d05b14bd&shcp=-",
+            "https://api16-normal-useast5.tiktokv.us/aweme/v1/play/?video_id=v10942g50000dbg987fog65isr9rlb5g&line=0&is_play_url=1&source=AWEME_DETAIL&file_id=af69cb668e3d4ad1a92cf4c66bf9069a&item_id=7701318214128454407&signaturev3=dmlkZW9faWQ7ZmlsZV9pZDtpdGVtX2lkLjIyNDRlZDZkYjhjMmQ1ZDg4NTRlZTMwZTU4Y2I5ZDBk&shp=d05b14bd&shcp=-"
+          ],
+          "url_prefix": null,
+          "width": 720
+        },
+        "position": null,
+        "prevent_download": false,
+        "preview_end_time": 0,
+        "preview_start_time": 0,
+        "recommend_status": 100,
+        "same_group_id_v3": "7689317956250568738",
+        "search_highlight": null,
+        "sec_uid": "MS4wLjABAAAADAQGas9i0EhLhAuKucKivF392QmsZXHhTS0UK2q80dYMaiCNuDfYfsUWYJK_D0oF",
+        "shoot_duration": 16,
+        "sim_group_id_v3": 200176386,
+        "source_platform": 24,
+        "status": 1,
+        "style_value": [
+          153
+        ],
+        "tag_list": null,
+        "tag_list_v2": null,
+        "theme_tags": [
+          "Summer",
+          "Dance"
+        ],
+        "theme_value": [
+          3,
+          1
+        ],
+        "title": "original sound - dongnhi",
+        "tt_to_dsp_song_infos": [],
+        "uncert_artists": null,
+        "user_count": 0,
+        "video_duration": 16
+      },
+      "ai_remix_info": {
+        "has_entrance": false
+      },
+      "aigc_info": {
+        "aigc_label_type": 0,
+        "created_by_ai": false
+      },
+      "anchors": null,
+      "anchors_extras": "",
+      "animated_image_info": {
+        "effect": 0,
+        "type": 0
+      },
+      "author_user_id": "6540626371999629313",
+      "aweme_acl": {
+        "download_general": {
+          "code": 0,
+          "mute": false,
+          "show_type": 2,
+          "transcode": 3
+        },
+        "download_mask_panel": {
+          "code": 0,
+          "mute": false,
+          "show_type": 2,
+          "transcode": 3
+        },
+        "platform_list": null,
+        "press_action_list": null,
+        "share_action_list": null,
+        "share_general": {
+          "code": 0,
+          "mute": false,
+          "show_type": 2,
+          "transcode": 3
+        },
+        "share_list_status": 0
+      },
+      "aweme_type": 0,
+      "banners": null,
+      "behind_the_song_music_ids": null,
+      "behind_the_song_video_music_ids": null,
+      "bodydance_score": 0,
+      "bottom_products": null,
+      "branded_content_accounts": null,
+      "c2pa_info": {
+        "aigc_src": "",
+        "c2pa_extra_data": "{\"aigc_percentage_type\":0}",
+        "dedup_err": "",
+        "dedup_src": "",
+        "first_aigc_src": "",
+        "first_src": "",
+        "is_capcut": false,
+        "is_tiktok": false,
+        "last_aigc_src": "",
+        "last_src": "",
+        "total_audio": 0,
+        "total_err": 0,
+        "total_img": 0,
+        "total_src": 0,
+        "total_vid": 0,
+        "upload_dur": 0
+      },
+      "cc_template_info": {
+        "author_name": "",
+        "clip_count": 0,
+        "desc": "",
+        "duration_milliseconds": 0,
+        "related_music_id": "",
+        "template_id": ""
+      },
+      "cha_list": [
+        {
+          "author": {
+            "account_labels": null,
+            "ad_cover_url": null,
+            "advance_feature_item_order": null,
+            "advanced_feature_info": null,
+            "bold_fields": null,
+            "can_message_follow_status_list": null,
+            "can_set_geofencing": null,
+            "cha_list": null,
+            "cover_url": null,
+            "events": null,
+            "followers_detail": null,
+            "geofencing": null,
+            "homepage_bottom_toast": null,
+            "item_list": null,
+            "mutual_relation_avatars": null,
+            "need_points": null,
+            "platform_sync_info": null,
+            "relative_users": null,
+            "search_highlight": null,
+            "shield_edit_field_info": null,
+            "type_label": null,
+            "user_profile_guide": null,
+            "user_tags": null,
+            "white_cover_url": null
+          },
+          "banner_list": null,
+          "cha_attrs": null,
+          "cha_name": "dongnhi",
+          "cid": "204096",
+          "collect_stat": 0,
+          "connect_music": [],
+          "desc": "",
+          "extra_attr": {
+            "is_live": false
+          },
+          "hashtag_profile": "",
+          "is_challenge": 0,
+          "is_commerce": false,
+          "is_pgcshow": false,
+          "schema": "aweme://aweme/challenge/detail?cid=204096",
+          "search_highlight": null,
+          "share_info": {
+            "bool_persist": 0,
+            "now_invitation_card_image_urls": null,
+            "share_desc": "Check out #dongnhi on TikTok!",
+            "share_desc_info": "Check out #dongnhi on TikTok!",
+            "share_quote": "",
+            "share_signature_desc": "",
+            "share_signature_url": "",
+            "share_title": "It is a becoming a big trend on TikTok now! Click here: dongnhi",
+            "share_title_myself": "",
+            "share_title_other": "",
+            "share_url": "https://www.tiktok.com/tag/dongnhi?_r=1&name=dongnhi&u_code=f0i65ib052gl3f&_d=f0i65h5gk9l14e&share_challenge_id=204096&sharer_language=en&source=h5_m"
+          },
+          "show_items": null,
+          "sub_type": 0,
+          "type": 1,
+          "use_count": 0,
+          "user_count": 0,
+          "view_count": 0
+        }
+      ],
+      "challenge_position": null,
+      "cmt_swt": false,
+      "collect_stat": 0,
+      "comment_at_tako_info": {
+        "show_tako_account": 0
+      },
+      "comment_config": {
+        "comment_panel_show_tab_config": {
+          "comment_tab_info_config": [
+            {
+              "priority": 100,
+              "tab_id": 2,
+              "tab_name": "like_list"
+            },
+            {
+              "priority": 101,
+              "tab_id": 3,
+              "tab_name": "view_list"
+            },
+            {
+              "priority": -100,
+              "tab_id": 4,
+              "tab_name": "story2viewer_list"
+            },
+            {
+              "priority": 102,
+              "tab_id": 5,
+              "tab_name": "video_auth_page"
+            }
+          ],
+          "max_tab_count": 3
+        },
+        "comment_top_bar_component": [
+          {
+            "action": {
+              "click_hot_area_type": 2,
+              "schema": "//search"
+            },
+            "biz_id": "5546165591986595122",
+            "biz_type": 10,
+            "desc_prefix": {
+              "content": "Search:"
+            },
+            "desc_suffix": {
+              "content": "phốt ca sĩ đông nhi"
+            },
+            "extra": "",
+            "name": "search_keywords",
+            "tail_icon": {
+              "is_local": true,
+              "local_type": 1
+            },
+            "template_type": 2,
+            "tracer_info": ""
+          }
+        ],
+        "emoji_recommend_list": [
+          {
+            "emoji": "😁",
+            "emoji_id": "smiley01_lol",
+            "emoji_id_score": 11,
+            "score": 11
+          },
+          {
+            "emoji": "🥰",
+            "emoji_id": "smiley01_heartwarm",
+            "emoji_id_score": 10,
+            "score": 10
+          },
+          {
+            "emoji": "😂",
+            "emoji_id": "smiley01_tears_of_joy",
+            "emoji_id_score": 9,
+            "score": 9
+          },
+          {
+            "emoji": "😳",
+            "emoji_id": "smiley01_innocent",
+            "emoji_id_score": 8,
+            "score": 8
+          },
+          {
+            "emoji": "😏",
+            "emoji_id": "smiley01_snicker",
+            "emoji_id_score": 7,
+            "score": 7
+          },
+          {
+            "emoji": "😅",
+            "emoji_id": "smiley01_embarrassed",
+            "emoji_id_score": 6,
+            "score": 6
+          },
+          {
+            "emoji": "🥺",
+            "emoji_id": "smiley01_teary_eyed",
+            "emoji_id_score": 5,
+            "score": 5
+          },
+          {
+            "emoji": "😌",
+            "emoji_id": "smiley01_cool",
+            "emoji_id_score": 4,
+            "score": 4
+          },
+          {
+            "emoji": "😬",
+            "emoji_id": "heart01_red_heart",
+            "emoji_id_score": 3,
+            "score": 3
+          },
+          {
+            "emoji": "😊",
+            "emoji_id": "gesture01_pray",
+            "emoji_id_score": 2,
+            "score": 2
+          },
+          {
+            "emoji": "😎",
+            "emoji_id": "smiley01_starstruck",
+            "emoji_id_score": 1,
+            "score": 1
+          }
+        ],
+        "has_visual_comment": true,
+        "long_press_recommend_list": null,
+        "preload": {
+          "preds": "{\"item_post_comment\":0.0001962892541887248}"
+        },
+        "quick_comment": {
+          "enabled": false,
+          "rec_level": 0
+        },
+        "quick_comment_emoji_recommend_list": null,
+        "social_quick_comment": {
+          "enabled": false,
+          "rec_metrics": {
+            "non_social_enabled": "false",
+            "p_comment": "0",
+            "p_skip": "0",
+            "p_stay_time": "0"
+          }
+        },
+        "zero_comment_button_config": {
+          "background_url": {
+            "url_list": [
+              "https://sf16-muse-va.ibytedtos.com/obj/search-static-maliva/maliva/gn6gf8xt1757574524464"
+            ],
+            "url_prefix": null
+          },
+          "background_url_for_black": {
+            "url_list": [
+              "https://sf16-muse-va.ibytedtos.com/obj/search-static-maliva/maliva/x9tcc9941757574581693"
+            ],
+            "url_prefix": null
+          },
+          "image_type": 1,
+          "zero_comment_button_enable": true,
+          "zero_comment_button_main_text": "Start the conversation",
+          "zero_comment_button_text": "Comment"
+        }
+      },
+      "comment_topbar_info": null,
+      "commerce_config_data": null,
+      "commerce_info": {
+        "adv_promotable": false,
+        "auction_ad_invited": false,
+        "branded_content_type": 0,
+        "is_diversion_ad": 0,
+        "organic_log_extra": "{\"req_id\":\"20261104093254B903FD7953B96B0788B0\"}",
+        "with_comment_filter_words": false
+      },
+      "content_desc": "[\"Don't leave me over here dancin' alone @Winnie \\ud83c\\udf37 Hannie \",\"\",\"#DongNhi #WinnieOng \"]",
+      "content_desc_extra": [
+        {
+          "end": 56,
+          "line_idx": 0,
+          "sec_uid": "MS4wLjABAAAAD4ye2EIsVA5-oiTquxbKczod6Zr-Ktd5RpF0KyN2AfCDc2CSrZtnP2lwBXq3NSfA",
+          "start": 39,
+          "tag_id": "953",
+          "type": 0,
+          "user_id": "6622980423046643713"
+        },
+        {
+          "end": 8,
+          "hashtag_id": "204096",
+          "hashtag_name": "dongnhi",
+          "is_commerce": false,
+          "line_idx": 2,
+          "start": 0,
+          "tag_id": "962",
+          "type": 1
+        },
+        {
+          "end": 19,
+          "hashtag_id": "1688368055241729",
+          "hashtag_name": "winnieong",
+          "is_commerce": false,
+          "line_idx": 2,
+          "start": 9,
+          "tag_id": "1108",
+          "type": 1
+        }
+      ],
+      "content_level": 1,
+      "content_model": {
+        "base": {
+          "status": {
+            "rate_info": {
+              "minor_risk": {
+                "p0": 1,
+                "p1": 1
+              }
+            }
+          }
+        },
+        "custom_biz": {
+          "aweme_trace": "20261104093254B903FD7953B96B0788B0",
+          "high_quality_boost_info": {
+            "description": "",
+            "is_high_quality_post": false,
+            "link": ""
+          },
+          "high_quality_boost_info_v2": {}
+        },
+        "standard_biz": {
+          "ai_comment_photo": {
+            "enable_comment": true
+          },
+          "creator_analytics": {
+            "creator_analytics_entrance_status": 1
+          },
+          "e_commerce": {
+            "ttec_content_tag": {
+              "recommendation_tag_consumer_str": "",
+              "recommendation_tag_creator_str": ""
+            }
+          },
+          "interaction": {
+            "collect": {
+              "creation_ideas_info": {
+                "eligible": false
+              }
+            }
+          },
+          "local_alliance_info": {
+            "alliance_item_label_text": "",
+            "alliance_item_label_type": 0
+          },
+          "penalty_context": {
+            "arb_content_safety_status": 102,
+            "aweme_type": 0,
+            "conclu_calculated_time": 1793784774786,
+            "conclu_lifecycle_reason": 1101,
+            "conclu_lifecycle_status": 1100,
+            "conclu_refine_reason": 1101,
+            "display_penalty_type": 0,
+            "display_policy": 0,
+            "display_ui_type": 0,
+            "ec_global_verdict": 1,
+            "is_visitor_owner": false,
+            "reviewed": 0,
+            "status": 102,
+            "tns_status": 102,
+            "video_status": 10
+          },
+          "tts_voice_info": {
+            "tts_voice_attr": "[]",
+            "tts_voice_reuse_params": ""
+          },
+          "vc_filter_info": {
+            "vc_filter_attr": "[]"
+          }
+        }
+      },
+      "content_original_type": 1,
+      "content_size_type": 1,
+      "content_type": "video",
+      "cover_labels": null,
+      "creation_info": {
+        "creation_used_functions": [
+          "select_music",
+          "high_quality_upload"
+        ]
+      },
+      "creator_ai_comment": {
+        "eligible_video": false,
+        "has_ai_topic": false,
+        "not_eligible_reason": 213
+      },
+      "disable_search_trending_bar": false,
+      "distance": "",
+      "distribute_type": 1,
+      "ecosystem_perception_enhancement": null,
+      "follow_up_publish_from_id": -1,
+      "geofencing": null,
+      "geofencing_regions": null,
+      "green_screen_materials": null,
+      "group_id": "7701318189417843988",
+      "group_id_list": {
+        "GroupdIdList0": [
+          "7701318189417843988"
+        ],
+        "GroupdIdList1": [
+          "7701318189417843988"
+        ]
+      },
+      "has_danmaku": false,
+      "has_promote_entry": 1,
+      "has_vs_entry": false,
+      "have_dashboard": false,
+      "hybrid_label": null,
+      "image_infos": null,
+      "interact_permission": {
+        "allow_adding_as_post": {
+          "status": 0
+        },
+        "allow_adding_to_story": 0,
+        "allow_create_sticker": {
+          "status": 0
+        },
+        "allow_story_switch_to_post": {
+          "status": 1
+        },
+        "duet": 0,
+        "duet_privacy_setting": 0,
+        "stitch": 0,
+        "stitch_privacy_setting": 0,
+        "upvote": 0
+      },
+      "interaction_stickers": null,
+      "is_ads": false,
+      "is_close_friends_only": false,
+      "is_description_translatable": true,
+      "is_hash_tag": 1,
+      "is_nff_or_nr": false,
+      "is_on_this_day": 0,
+      "is_paid_content": false,
+      "is_pgcshow": false,
+      "is_preview": 0,
+      "is_relieve": false,
+      "is_text_sticker_translatable": false,
+      "is_title_translatable": false,
+      "is_top": 0,
+      "is_vr": false,
+      "item_allow_ai_remix": 2,
+      "item_comment_settings": 0,
+      "item_duet": 0,
+      "item_react": 0,
+      "item_stitch": 0,
+      "label_top": {
+        "height": 720,
+        "uri": "tiktok-obj/1598708589477025.PNG",
+        "url_list": [
+          "https://p16-common.tiktokcdn-us.com/tiktok-obj/1598708589477025.PNG~tplv-tiktokx-origin.image?dr=9580&t=4d5b0474&ps=933b5bde&shp=d05b14bd&shcp=34ff8df6&idc=useast5",
+          "https://p19-common.tiktokcdn-us.com/tiktok-obj/1598708589477025.PNG~tplv-tiktokx-origin.image?dr=9580&t=4d5b0474&ps=933b5bde&shp=d05b14bd&shcp=34ff8df6&idc=useast5",
+          "https://p16-common.tiktokcdn-us.com/tiktok-obj/1598708589477025.PNG~tplv-tiktokx-origin.jpeg?dr=9580&t=4d5b0474&ps=933b5bde&shp=d05b14bd&shcp=34ff8df6&idc=useast5"
+        ],
+        "url_prefix": null,
+        "width": 720
+      },
+      "label_top_text": null,
+      "long_video": null,
+      "main_arch_common": "",
+      "mask_infos": [],
+      "meme_reg_info": {},
+      "misc_info": "{}",
+      "muf_comment_info_v2": null,
+      "music_begin_time_in_ms": 0,
+      "music_end_time_in_ms": 16129,
+      "music_selected_from": "original",
+      "music_title_style": 1,
+      "music_volume": "0.000000",
+      "need_trim_step": false,
+      "need_vs_entry": false,
+      "nickname_position": null,
+      "no_selected_music": false,
+      "operator_boost_info": null,
+      "origin_comment_ids": null,
+      "origin_volume": "50.000000",
+      "original_client_text": {
+        "markup_text": "Don't leave me over here dancin' alone <m id=\"953\">@Winnie 🌷 Hannie</m> <br><br><h id=\"962\">#DongNhi</h> <h id=\"1108\">#WinnieOng</h> ",
+        "text_extra": [
+          {
+            "sec_uid": "MS4wLjABAAAAD4ye2EIsVA5-oiTquxbKczod6Zr-Ktd5RpF0KyN2AfCDc2CSrZtnP2lwBXq3NSfA",
+            "tag_id": "953",
+            "type": 0,
+            "user_id": "6622980423046643713"
+          },
+          {
+            "hashtag_id": "204096",
+            "hashtag_name": "dongnhi",
+            "is_commerce": false,
+            "tag_id": "962",
+            "type": 1
+          },
+          {
+            "hashtag_id": "1688368055241729",
+            "hashtag_name": "winnieong",
+            "is_commerce": false,
+            "tag_id": "1108",
+            "type": 1
+          }
+        ]
+      },
+      "paid_content_info": {
+        "paid_collection_id": 0
+      },
+      "picked_users": [],
+      "playlist_blocked": false,
+      "poi_re_tag_signal": 0,
+      "position": null,
+      "prevent_download": false,
+      "products_info": null,
+      "promote": {
+        "extra": "{\"is_self_post\":false,\"page_source\":\"aweme_detail\",\"share_panel_icon_text_key\":\"\",\"store_country_code\":\"US\",\"traffic_level\":0}",
+        "is_show_video_view": false,
+        "promote_traffic_tag": {
+          "need_track": false,
+          "traffic_level": 0,
+          "version": "2025v1"
+        },
+        "video_view_count": 0,
+        "video_view_schema": ""
+      },
+      "promote_capcut_toggle": 0,
+      "promote_icon_text": "Promote",
+      "promote_toast": "",
+      "promote_toast_key": "",
+      "question_list": null,
+      "quick_reply_emojis": [
+        "😍",
+        "😂",
+        "😳"
+      ],
+      "rate": 12,
+      "reference_tts_voice_ids": null,
+      "reference_voice_filter_ids": null,
+      "retry_type": 0,
+      "right_products": null,
+      "risk_infos": {
+        "content": "",
+        "risk_sink": false,
+        "type": 0,
+        "vote": false,
+        "warn": false
+      },
+      "search_highlight": null,
+      "share_info": {
+        "bool_persist": 0,
+        "now_invitation_card_image_urls": null,
+        "share_desc": "Check out Đông Nhi's video! #TikTok",
+        "share_desc_info": "TikTok: Make Every Second CountCheck out Đông Nhi’s video! #TikTok > ",
+        "share_link_desc": "",
+        "share_quote": "",
+        "share_signature_desc": "",
+        "share_signature_url": "",
+        "share_title": "Check out Đông Nhi’s video! #TikTok > ",
+        "share_title_myself": "",
+        "share_title_other": "",
+        "share_url": "https://www.tiktok.com/@dongnhi/video/7701318189417843988?_r=1&u_code=f0i65ib052gl3f&preview_pb=0&sharer_language=en&_d=f0i65h5gk9l14e&share_item_id=7701318189417843988&source=h5_m",
+        "whatsapp_desc": "Download TikTok and watch more fun videos:"
+      },
+      "shoot_tab_name": "photo",
+      "smart_search_info": {
+        "ai_overview_intent_type": 0,
+        "ask_tako_intent_type": 0,
+        "find_similar_intent_type": 0,
+        "related_videos_intent_type": 0,
+        "title_smart_search_panel_type": 0
+      },
+      "social_interaction_blob": {
+        "auxiliary_model_content": "ChIKBPCfmI0KBPCfmIIKBPCfmLMaBAoAEgA="
+      },
+      "solaria_profile": {
+        "profile": "{\"PACK_VOD:audio_effect_info_android_v2\":\"{\\\"29\\\": 0.001782106089845864, \\\"30\\\": 0.001417187178430727, \\\"32\\\": 0.0009415393521500356, \\\"34\\\": -6.831915174382277e-06}\",\"PACK_VOD:audio_effect_info_ios\":\"{\\\"5\\\": 4.501136732965378, \\\"1\\\": 4.5010253405019, \\\"0\\\": 4.502648853743907}\",\"PACK_VOD:audio_effect_info_ios_v2\":\"{\\\"35\\\": 0.0007877310963440645, \\\"36\\\": 0.0015213842320041427}\",\"PACK_VOD:audio_loudness_info_android\":\"{\\\"1\\\": 0.0003165399453730239, \\\"2\\\": 9.738460720286591e-05, \\\"-1\\\": 0.00031436220692792477}\",\"PACK_VOD:audio_loudness_info_android_v2\":\"{\\\"1\\\": -0.00014642728417112375, \\\"-1\\\": -0.00017466865920719252}\",\"PACK_VOD:audio_loudness_info_ios\":\"{\\\"1\\\": 0.0002693328450530368, \\\"2\\\": 0.0005928851190042699, \\\"-1\\\": -3.1975559581112334e-05}\",\"PACK_VOD:audio_loudness_info_ios_v3\":\"{\\\"0\\\": 0.00048804718222133755, \\\"1\\\": 0.0006329314492999073, \\\"2\\\": 0.0008442833495344874}\",\"PACK_VOD:audio_meta\":\"{\\\"adf0f3bd660940a6fcf991f213b06208\\\":{\\\"Md5\\\":\\\"adf0f3bd660940a6fcf991f213b06208\\\",\\\"normal\\\":{\\\"base_metrics\\\":{\\\"do\\\":-0.0002,\\\"tacm\\\":[0.94],\\\"drr\\\":7.4,\\\"be\\\":[16.1,14141.9],\\\"il\\\":-14.4,\\\"rcd\\\":[0.1],\\\"mp\\\":-3.07,\\\"ocf\\\":[-5.8142,-2.996,-10.3049,-10.7996,-14.603,-18.1731,-21.5998,-26.0161,-33.2723,-51.8816]}}},\\\"b3d19016e6465dcc7b2eb5cf1c934214\\\":{\\\"Md5\\\":\\\"b3d19016e6465dcc7b2eb5cf1c934214\\\",\\\"normal\\\":{\\\"base_metrics\\\":{\\\"mp\\\":-3.99,\\\"ocf\\\":[-5.8368,-2.9961,-10.2025,-10.8096,-14.632,-18.2199,-21.7744,-26.0742,-32.881,-51.7827],\\\"do\\\":-0.0002,\\\"drr\\\":7.5,\\\"rcd\\\":[0.1],\\\"be\\\":[16.1,13856.6],\\\"il\\\":-14.4,\\\"tacm\\\":[0.94]}}},\\\"src\\\":{\\\"src\\\":{\\\"base_metrics\\\":{\\\"il\\\":-14.2,\\\"mp\\\":-4.89,\\\"be\\\":[10.8,13964.3],\\\"ocf\\\":[-5.4238,-3.2035,-10.6507,-10.6309,-14.5021,-17.8098,-21.4964,-25.8485,-31.896,-52.5178],\\\"do\\\":-0.0002,\\\"tacm\\\":[0.9],\\\"drr\\\":7.2,\\\"rcd\\\":[0]},\\\"ts\\\":[\\\"tag_01010226\\\",\\\"tag_02010333\\\",\\\"tag_01010231\\\",\\\"tag_01010305\\\",\\\"tag_01010405\\\"],\\\"trs\\\":[0.8,0.36,0.29,0.28,0.24]}},\\\"42277fe873a4e5808eb831b25d875e55\\\":{\\\"Md5\\\":\\\"42277fe873a4e5808eb831b25d875e55\\\",\\\"normal\\\":{\\\"base_metrics\\\":{\\\"mp\\\":-2.63,\\\"ocf\\\":[-5.8351,-3.0077,-10.2529,-10.7572,-14.4378,-18.1684,-21.8036,-26.6541,-33.525,-54.5406],\\\"be\\\":[16.1,13442.1],\\\"do\\\":-0.0001,\\\"il\\\":-14.4,\\\"tacm\\\":[0.94],\\\"drr\\\":7.7,\\\"rcd\\\":[0.1]}}},\\\"a7c6e45a0ac330f37413fcbcd2c1a02f\\\":{\\\"Md5\\\":\\\"a7c6e45a0ac330f37413fcbcd2c1a02f\\\",\\\"normal\\\":{\\\"base_metrics\\\":{\\\"mp\\\":-3.25,\\\"ocf\\\":[-5.804,-3.0407,-10.6988,-10.5424,-14.1675,-17.4307,-21.1746,-25.675,-32.2411,-51.9457],\\\"do\\\":-0.0002,\\\"il\\\":-14.4,\\\"tacm\\\":[0.9],\\\"drr\\\":7.3,\\\"rcd\\\":[0],\\\"be\\\":[16.1,13975]}}}}\",\"play_time_prob_dist\":\"\",\"union_high_value_text_rect\":\"{}\"}"
+      },
+      "sort_label": "",
+      "status": {
+        "allow_comment": true,
+        "allow_share": true,
+        "aweme_id": "7701318189417843988",
+        "download_status": 0,
+        "in_reviewing": false,
+        "is_delete": false,
+        "is_prohibited": false,
+        "private_status": 0,
+        "review_result": {
+          "review_status": 0
+        },
+        "reviewed": 1,
+        "self_see": false,
+        "violation_display_status": 2
+      },
+      "story_remix_info": {
+        "is_support_remix": false
+      },
+      "suggest_words": {
+        "feed_query_enable_videosug": false,
+        "suggest_words": [
+          {
+            "hint_text": "Search:",
+            "qrec_virtual_enable": "",
+            "scene": "comment_top",
+            "words": [
+              {
+                "penetrate_info": "{\"video_id\":\"\",\"predict_ctr_score\":0.00570803415030241,\"is_ramandan_promotion\":\"\",\"recall_reason\":\"video_top_counter_recall\",\"ecom_intent\":\"0\",\"poi_card_id_list\":\"\",\"sug_user_id\":\"\",\"lvl1_category_id\":\"\",\"word_type_version_map\":\"\",\"direct_to_tako\":\"\",\"generate_time\":\"0\",\"lvl3_cate_list\":\"\",\"hot_level\":\"0\",\"visualize_sug_product_id\":\"\",\"words_type_to_dmp_list\":\"\",\"ecom_trigger_info_map\":\"\",\"word_type_list\":\"\",\"is_time_sensitive\":\"0\",\"ecom_trigger_info\":\"\",\"words_type_to_voucher_ids\":\"\"}",
+                "rich_sug_info": {
+                  "sug_icon_type": "",
+                  "sug_icon_uri": "",
+                  "sug_reason": "",
+                  "sug_reason_type": ""
+                },
+                "word": "phốt ca sĩ đông nhi",
+                "word_id": "5546165591986595122",
+                "word_record": {
+                  "is_personalized": true,
+                  "qrec_json_info": "{\"is_four_vertical\":0,\"words_channel_source\":2}",
+                  "words_label": "",
+                  "words_lang": "vi"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "support_danmaku": false,
+      "survey_info": null,
+      "tako_bubble_info": {
+        "tako_bubble_enable": false
+      },
+      "text_extra": [
+        {
+          "end": 56,
+          "sec_uid": "MS4wLjABAAAAD4ye2EIsVA5-oiTquxbKczod6Zr-Ktd5RpF0KyN2AfCDc2CSrZtnP2lwBXq3NSfA",
+          "start": 39,
+          "tag_id": "953",
+          "type": 0,
+          "user_id": "6622980423046643713"
+        },
+        {
+          "end": 66,
+          "hashtag_id": "204096",
+          "hashtag_name": "dongnhi",
+          "is_commerce": false,
+          "start": 58,
+          "tag_id": "962",
+          "type": 1
+        },
+        {
+          "end": 77,
+          "hashtag_id": "1688368055241729",
+          "hashtag_name": "winnieong",
+          "is_commerce": false,
+          "start": 67,
+          "tag_id": "1108",
+          "type": 1
+        }
+      ],
+      "text_sticker_major_lang": "un",
+      "title_language": "un",
+      "tns_ue_feed_info": {
+        "footnote": {
+          "can_add_footnote": 0,
+          "pending_count": 0
+        }
+      },
+      "ttec_suggest_words": {
+        "ttec_suggest_words": null
+      },
+      "tts_voice_ids": null,
+      "ttt_product_recall_type": -2,
+      "uniqid_position": null,
+      "upvote_info": {
+        "friends_recall_info": "{}",
+        "repost_initiate_score": 0,
+        "user_upvoted": false
+      },
+      "upvote_preload": {
+        "need_pull_upvote_info": false
+      },
+      "used_full_song": false,
+      "user_digged": 0,
+      "video_control": {
+        "allow_download": false,
+        "allow_duet": true,
+        "allow_dynamic_wallpaper": true,
+        "allow_music": true,
+        "allow_react": true,
+        "allow_stitch": true,
+        "draft_progress_bar": 1,
+        "prevent_download_type": 2,
+        "share_type": 0,
+        "show_progress_bar": 1,
+        "timer_status": 1
+      },
+      "video_labels": [],
+      "video_text": [],
+      "visual_search_info": {
+        "enable_pre_upload_image_type": 0,
+        "fallback_vtag_enable": false,
+        "fallback_vtag_enable_type": 0,
+        "long_press_entrance_enable": false,
+        "long_press_entrance_enable_type": 0,
+        "screenshot_entrance_enable": 0,
+        "visual_search_intent_level": 0,
+        "vtag_enable": false,
+        "vtag_enable_type": 0
+      },
+      "voice_filter_ids": null,
+      "with_promotional_music": false,
+      "without_watermark": false,
+      "is_eligible_for_commission": false,
+      "is_paid_partnership": false,
+      "shop_product_url": null
+    }
+  },
+  "meta": {
+    "requestId": "req_1ce7242c-7872-490a-9fa7-93bef4af1554_pg_ef531a8f",
+    "creditsCharged": 1,
+    "version": "v1"
+  }
+}

@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import { Lightbulb } from "lucide-react";
 import { getCurrentUser, getServiceClient } from "@/lib/auth/guards";
 import ProposalList, { type ProposalRow } from "@/components/ProposalList";
+import { getT } from "@/lib/i18n/server";
 
 export default async function DeXuatPage() {
+  const t = await getT();
   const me = await getCurrentUser();
   if (!me) redirect("/login");
 
@@ -74,11 +76,11 @@ export default async function DeXuatPage() {
             <Lightbulb className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">Đề xuất hashtag</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-stone-900 tracking-tight">{t("Đề xuất hashtag")}</h1>
             <p className="text-sm text-stone-500 mt-1">
               {me.isResearcher
-                ? "Duyệt các phiếu đề xuất từ cộng tác viên. Mọi quyết định cần ghi lý do; duyệt sẽ thêm hashtag vào danh mục (Track 2)."
-                : "Các phiếu bạn đã gửi và kết quả duyệt. Gửi phiếu mới từ tab “Hashtag đi kèm” trong Quét thử."}
+                ? t("Duyệt các phiếu đề xuất từ cộng tác viên. Mọi quyết định cần ghi lý do; duyệt sẽ thêm hashtag vào danh mục (Track 2).")
+                : t("Các phiếu bạn đã gửi và kết quả duyệt. Gửi phiếu mới từ tab “Hashtag đi kèm” trong Quét thử.")}
             </p>
             <HelpLink
               slug={me.isResearcher ? "nghien-cuu/duyet-de-xuat" : "cong-tac-vien/de-xuat-hashtag"}
@@ -88,7 +90,7 @@ export default async function DeXuatPage() {
         </div>
         {error ? (
           <p className="p-4 rounded-xl bg-red-50 text-red-800 text-sm">
-            Không đọc được phiếu đề xuất: {error.message}. Kiểm tra đã chạy file SQL bổ sung schema chưa.
+            {t("Không đọc được phiếu đề xuất: {message}. Kiểm tra đã chạy file SQL bổ sung schema chưa.", { message: error.message })}
           </p>
         ) : (
           <ProposalList rows={rows} isAdmin={me.isResearcher} groups={groups} />

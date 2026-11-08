@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { AlertTriangle, ExternalLink, Table2 } from "lucide-react";
+import { useT, useLocale } from "@/lib/i18n/client";
 
 // ---------------------------------------------------------------
 // Kiểu dữ liệu (khớp các view trong docs/migrations/2026-10-31_dashboard-views.sql)
@@ -79,11 +80,18 @@ const STAGES = [
   { type: "TREND", label: "Nhiệt kế từ khóa", tool: "Social Fetch", unit: "lượt tra" },
 ];
 
-const fmt = (n: number | null | undefined) => (n === null || n === undefined ? "–" : Math.round(n).toLocaleString("vi-VN"));
-const usd = (n: number | null | undefined) =>
-  n === null || n === undefined ? "chưa ghi" : n.toLocaleString("vi-VN", { maximumFractionDigits: 2 }) + " USD";
-const pct = (a: number, b: number) => (b > 0 ? ((100 * a) / b).toLocaleString("vi-VN", { maximumFractionDigits: 1 }) + "%" : "–");
-const dateVi = (iso: string | null | undefined) => (iso ? new Date(iso).toLocaleDateString("vi-VN") : "–");
+// Định dạng số/ngày theo ngôn ngữ giao diện.
+function useFmt() {
+  const t = useT();
+  const locale = useLocale();
+  return {
+    fmt: (n: number | null | undefined) => (n === null || n === undefined ? "–" : Math.round(n).toLocaleString(locale)),
+    usd: (n: number | null | undefined) =>
+      n === null || n === undefined ? t("chưa ghi") : n.toLocaleString(locale, { maximumFractionDigits: 2 }) + " USD",
+    pct: (a: number, b: number) => (b > 0 ? ((100 * a) / b).toLocaleString(locale, { maximumFractionDigits: 1 }) + "%" : "–"),
+    dateVi: (iso: string | null | undefined) => (iso ? new Date(iso).toLocaleDateString(locale) : "–"),
+  };
+}
 const DAY = 86400000;
 const addDays = (ymd: string, d: number) => new Date(Date.parse(ymd + "T00:00:00Z") + d * DAY).toISOString().slice(0, 10);
 const shortDate = (ymd: string) => {
@@ -95,13 +103,16 @@ type Metric = "related" | "total";
 
 // ---------------------------------------------------------------
 export default function OverviewDashboard({ weekly, stages, growth, groups, intervention, interventionAssumed }: Props) {
+  const t = useT();
+  const { fmt, pct } = useFmt();
   const [platform, setPlatform] = useState<"ALL" | "TIKTOK" | "FACEBOOK">("ALL");
   const [metric, setMetric] = useState<Metric>("related");
   const [showTable, setShowTable] = useState(false);
 
   // Thời điểm có dữ liệu mới nhất (lần chạy gần nhất) — để biết tuần cuối đã đủ 7 ngày chưa
   const dataUntil = stages.reduce<string>((m, r) => (r.last_run_at && r.last_run_at > m ? r.last_run_at : m), "");
-  const groupName = (id: string) => groups.find((g) => g.id === id)?.name ?? GROUP_FALLBACK_NAME[id] ?? id;
+  // Tên nhóm là nhãn cố định của dự án -> dịch luôn khi xem bằng tiếng Anh.
+  const groupName = (id: string) => t(groups.find((g) => g.id === id)?.name ?? GROUP_FALLBACK_NAME[id] ?? id);
   const isMock = weekly.some((r) => r.mock > 0);
   const rows = useMemo(() => weekly.filter((r) => platform === "ALL" || r.platform === platform), [weekly, platform]);
   const stageRows = useMemo(() => stages.filter((r) => platform === "ALL" || r.platform === platform), [stages, platform]);
@@ -147,28 +158,28 @@ export default function OverviewDashboard({ weekly, stages, growth, groups, inte
         <div className="flex gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm text-red-900">
           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold">Đang hiển thị DỮ LIỆU GIẢ để thử giao diện.</p>
-            <p>Mọi con số dưới đây là mô phỏng — không trích dẫn, không đưa vào báo cáo.</p>
+            <p className="font-bold">{t("Đang hiển thị DỮ LIỆU GIẢ để thử giao diện.")}</p>
+            <p>{t("Mọi con số dưới đây là mô phỏng — không trích dẫn, không đưa vào báo cáo.")}</p>
           </div>
         </div>
       )}
 
       {/* Bộ lọc: một hàng, áp cho mọi phần bên dưới */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-stone-500 mr-1">Nền tảng:</span>
+        <span className="text-sm text-stone-500 mr-1">{t("Nền tảng:")}</span>
         {(["ALL", "TIKTOK", "FACEBOOK"] as const).map((p) => (
           <button key={p} className={btn(platform === p)} onClick={() => setPlatform(p)}>
-            {p === "ALL" ? "Tất cả" : PLATFORM_VI[p]}
+            {p === "ALL" ? t("Tất cả") : PLATFORM_VI[p]}
           </button>
         ))}
       </div>
 
       {/* Số liệu chính */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Stat label="Bài đã phát hiện" value={fmt(totals.total)} note="toàn kỳ" />
-        <Stat label="Bài liên quan" value={fmt(totals.related)} note={pct(totals.related, totals.total - totals.pending) + " số bài đã sàng lọc"} />
-        <Stat label="Không liên quan" value={fmt(totals.unrelated)} note="giữ lại, không đo tiếp" />
-        <Stat label="Chờ sàng lọc / chưa rõ" value={fmt(totals.pending + totals.unclear)} note="chờ AI hoặc nghiên cứu viên" />
+        <Stat label={t("Bài đã phát hiện")} value={fmt(totals.total)} note={t("toàn kỳ")} />
+        <Stat label={t("Bài liên quan")} value={fmt(totals.related)} note={pct(totals.related, totals.total - totals.pending) + t(" số bài đã sàng lọc")} />
+        <Stat label={t("Không liên quan")} value={fmt(totals.unrelated)} note={t("giữ lại, không đo tiếp")} />
+        <Stat label={t("Chờ sàng lọc / chưa rõ")} value={fmt(totals.pending + totals.unclear)} note={t("chờ AI hoặc nghiên cứu viên")} />
       </div>
 
       {/* Q1 */}
@@ -176,22 +187,22 @@ export default function OverviewDashboard({ weekly, stages, growth, groups, inte
         <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
           <div>
             <h2 className="text-lg font-bold text-stone-900">
-              {metric === "related" ? "Bài liên quan mới mỗi tuần" : "Mọi bài tìm được mỗi tuần (trước sàng lọc)"}, theo nhóm hashtag
+              {metric === "related" ? t("Bài liên quan mới mỗi tuần") : t("Mọi bài tìm được mỗi tuần (trước sàng lọc)")}{t(", theo nhóm hashtag")}
             </h2>
             <p className="text-sm text-stone-500">
-              Câu hỏi 1: thị trường thích ứng thế nào trước và sau mốc chính sách?
+              {t("Câu hỏi 1: thị trường thích ứng thế nào trước và sau mốc chính sách?")}
             </p>
           </div>
           <div className="flex gap-2">
-            <button className={btn(metric === "related")} onClick={() => setMetric("related")}>Bài liên quan</button>
-            <button className={btn(metric === "total")} onClick={() => setMetric("total")}>Tất cả bài</button>
-            <button className={btn(showTable)} onClick={() => setShowTable((v) => !v)} title="Xem bảng số liệu">
-              <Table2 className="w-4 h-4 inline -mt-0.5" /> Bảng
+            <button className={btn(metric === "related")} onClick={() => setMetric("related")}>{t("Bài liên quan")}</button>
+            <button className={btn(metric === "total")} onClick={() => setMetric("total")}>{t("Tất cả bài")}</button>
+            <button className={btn(showTable)} onClick={() => setShowTable((v) => !v)} title={t("Xem bảng số liệu")}>
+              <Table2 className="w-4 h-4 inline -mt-0.5" /> {t("Bảng")}
             </button>
           </div>
         </div>
         {weeks.length === 0 ? (
-          <p className="text-sm text-stone-500 py-10 text-center">Chưa có bài nào.</p>
+          <p className="text-sm text-stone-500 py-10 text-center">{t("Chưa có bài nào.")}</p>
         ) : (
           <>
             <WeeklyLineChart
@@ -206,8 +217,7 @@ export default function OverviewDashboard({ weekly, stages, growth, groups, inte
           </>
         )}
         <p className="text-xs text-stone-500 mt-3">
-          <strong>Hạn chế:</strong> chỉ là thị trường hiện diện qua hashtag công khai, không phải toàn bộ thị trường; số bài phụ thuộc nỗ lực quét
-          (giữ ổn định) và thuật toán tìm kiếm của nền tảng; mô tả xu hướng, không chứng minh nguyên nhân.
+          <strong>{t("Hạn chế:")}</strong> {t("chỉ là thị trường hiện diện qua hashtag công khai, không phải toàn bộ thị trường; số bài phụ thuộc nỗ lực quét (giữ ổn định) và thuật toán tìm kiếm của nền tảng; mô tả xu hướng, không chứng minh nguyên nhân.")}
         </p>
       </section>
 
@@ -269,6 +279,9 @@ function WeeklyLineChart({
   interventionAssumed: boolean;
   lastPartial: boolean;
 }) {
+  const t = useT();
+  const locale = useLocale();
+  const { fmt } = useFmt();
   const W = 1000, H = 340, ML = 44, MR = 150, MT = 18, MB = 34;
   const iw = W - ML - MR, ih = H - MT - MB;
   const maxV = niceMax(Math.max(1, ...series.flatMap((s) => s.values)));
@@ -322,25 +335,27 @@ function WeeklyLineChart({
   return (
     <div className="mt-3 overflow-x-auto -mx-1 px-1">
     <div className="relative min-w-[720px]">
-      <svg ref={ref} viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none" role="img" aria-label="Biểu đồ đường số bài mỗi tuần theo nhóm hashtag">
+      <svg ref={ref} viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none" role="img" aria-label={t("Biểu đồ đường số bài mỗi tuần theo nhóm hashtag")}>
         {ticksY.map((v) => (
           <g key={v}>
             <line x1={ML} x2={ML + iw} y1={y(v)} y2={y(v)} stroke="#e7e5e4" strokeWidth="1" />
             <text x={ML - 8} y={y(v) + 4} textAnchor="end" fontSize="12" fill="#78716c">
-              {Math.round(v).toLocaleString("vi-VN")}
+              {Math.round(v).toLocaleString(locale)}
             </text>
           </g>
         ))}
         {ticksX.map((i) => (
           <text key={i} x={x(i)} y={H - 10} textAnchor="middle" fontSize="12" fill="#78716c">
-            {`T${Number(weeks[i].slice(5, 7))}/${weeks[i].slice(2, 4)}`}
+            {locale === "vi-VN"
+              ? `T${Number(weeks[i].slice(5, 7))}/${weeks[i].slice(2, 4)}`
+              : new Date(weeks[i] + "T00:00:00Z").toLocaleDateString("en-GB", { month: "short", year: "2-digit", timeZone: "UTC" })}
           </text>
         ))}
         {ix !== null && (
           <g>
             <line x1={ix} x2={ix} y1={MT - 4} y2={MT + ih} stroke="#44403c" strokeWidth="1.5" strokeDasharray="5 4" />
             <text x={ix + 6} y={MT + 8} fontSize="12" fill="#44403c" fontWeight="600">
-              {interventionAssumed ? "Mốc chính sách (giả định)" : "Mốc chính sách"}
+              {interventionAssumed ? t("Mốc chính sách (giả định)") : t("Mốc chính sách")}
             </text>
           </g>
         )}
@@ -353,7 +368,7 @@ function WeeklyLineChart({
           </g>
         ))}
         {nSolid < weeks.length && (
-          <text x={x(weeks.length - 1) - 4} y={MT + ih - 6} textAnchor="end" fontSize="11" fill="#a8a29e">tuần chưa đủ →</text>
+          <text x={x(weeks.length - 1) - 4} y={MT + ih - 6} textAnchor="end" fontSize="11" fill="#a8a29e">{t("tuần chưa đủ →")}</text>
         )}
         {ends.map(({ s, yy }) => (
           <g key={s.id}>
@@ -388,8 +403,8 @@ function WeeklyLineChart({
           style={tipLeftPct > 60 ? { right: `${100 - tipLeftPct + 1}%` } : { left: `${tipLeftPct + 1}%` }}
         >
           <p className="text-xs text-stone-500 mb-1">
-            Tuần từ {shortDate(weeks[hover])}
-            {hover === weeks.length - 1 && nSolid < weeks.length ? " (chưa đủ 7 ngày)" : ""}
+            {t("Tuần từ {v0}", { v0: shortDate(weeks[hover]) })}
+            {hover === weeks.length - 1 && nSolid < weeks.length ? t(" (chưa đủ 7 ngày)") : ""}
           </p>
           {series.map((s) => (
             <p key={s.id} className="flex items-center gap-2 whitespace-nowrap">
@@ -408,17 +423,19 @@ function WeeklyLineChart({
 }
 
 function WeeklyTable({ weeks, series }: { weeks: string[]; series: Series[] }) {
+  const t = useT();
+  const { fmt } = useFmt();
   const order = weeks.map((w, i) => ({ w, i })).reverse();
   return (
     <div className="mt-3 max-h-72 overflow-auto rounded-lg border border-stone-200">
       <table className="w-full min-w-[640px] text-sm">
         <thead className="sticky top-0 bg-stone-50">
           <tr className="text-left text-stone-500">
-            <th className="py-2 px-3">Tuần từ</th>
+            <th className="py-2 px-3">{t("Tuần từ")}</th>
             {series.map((s) => (
               <th key={s.id} className="py-2 px-3 text-right">{s.name}</th>
             ))}
-            <th className="py-2 px-3 text-right">Cộng</th>
+            <th className="py-2 px-3 text-right">{t("Cộng")}</th>
           </tr>
         </thead>
         <tbody>
@@ -439,6 +456,8 @@ function WeeklyTable({ weeks, series }: { weeks: string[]; series: Series[] }) {
 
 // Điều hành theo khâu: mỗi khâu một dòng — số lần chạy, lỗi, khối lượng, chi phí
 function StagePanel({ rows }: { rows: StageRow[] }) {
+  const t = useT();
+  const { fmt, usd, pct, dateVi } = useFmt();
   const lastWeek = rows.reduce((m, r) => (r.week_start > m ? r.week_start : m), "");
   const from4 = lastWeek ? addDays(lastWeek, -21) : "";
   const agg = STAGES.map((st) => {
@@ -459,31 +478,31 @@ function StagePanel({ rows }: { rows: StageRow[] }) {
   });
   return (
     <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 md:p-6">
-      <h2 className="text-lg font-bold text-stone-900">Vận hành theo khâu</h2>
+      <h2 className="text-lg font-bold text-stone-900">{t("Vận hành theo khâu")}</h2>
       <p className="text-sm text-stone-500">
-        Mỗi khâu một công cụ, một nhật ký, một khoản chi phí — nhìn vào là biết khâu nào đang nghẽn. 4 tuần gần nhất tính từ tuần có dữ liệu mới nhất.
+        {t("Mỗi khâu một công cụ, một nhật ký, một khoản chi phí — nhìn vào là biết khâu nào đang nghẽn. 4 tuần gần nhất tính từ tuần có dữ liệu mới nhất.")}
       </p>
       <div className="overflow-x-auto mt-3">
         <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="text-left text-stone-500 border-b border-stone-200">
-              <th className="py-2 pr-3">Khâu</th>
-              <th className="py-2 pr-3 text-right">Lần chạy (4 tuần)</th>
-              <th className="py-2 pr-3 text-right">Khối lượng (4 tuần)</th>
-              <th className="py-2 pr-3 text-right">Lỗi (toàn kỳ)</th>
-              <th className="py-2 pr-3 text-right">Chi phí (4 tuần)</th>
-              <th className="py-2 pr-3 text-right">Lần chạy gần nhất</th>
+              <th className="py-2 pr-3">{t("Khâu")}</th>
+              <th className="py-2 pr-3 text-right">{t("Lần chạy (4 tuần)")}</th>
+              <th className="py-2 pr-3 text-right">{t("Khối lượng (4 tuần)")}</th>
+              <th className="py-2 pr-3 text-right">{t("Lỗi (toàn kỳ)")}</th>
+              <th className="py-2 pr-3 text-right">{t("Chi phí (4 tuần)")}</th>
+              <th className="py-2 pr-3 text-right">{t("Lần chạy gần nhất")}</th>
             </tr>
           </thead>
           <tbody>
             {agg.map((a) => (
               <tr key={a.type} className="border-b border-stone-100">
                 <td className="py-2 pr-3">
-                  <p className="font-semibold text-stone-900">{a.label}</p>
+                  <p className="font-semibold text-stone-900">{t(a.label)}</p>
                   <p className="text-xs text-stone-500">{a.tool} · {a.type}</p>
                 </td>
-                <td className="py-2 pr-3 text-right tabular-nums">{a.runs ? fmt(a.runs4) : "chưa chạy"}</td>
-                <td className="py-2 pr-3 text-right tabular-nums">{a.runs ? `${fmt(a.items4)} ${a.unit}` : "–"}</td>
+                <td className="py-2 pr-3 text-right tabular-nums">{a.runs ? fmt(a.runs4) : t("chưa chạy")}</td>
+                <td className="py-2 pr-3 text-right tabular-nums">{a.runs ? `${fmt(a.items4)} ${t(a.unit)}` : "–"}</td>
                 <td className="py-2 pr-3 text-right tabular-nums">
                   {a.runs ? (
                     <span className={a.failed > 0 ? "text-red-700 font-semibold" : ""}>
@@ -499,36 +518,38 @@ function StagePanel({ rows }: { rows: StageRow[] }) {
         </table>
       </div>
       <p className="text-xs text-stone-500 mt-3">
-        Quét thử của cộng tác viên không nằm ở đây (xem trang Hoạt động). &ldquo;Chưa ghi&rdquo; chi phí: lần chạy chưa lưu chi phí thật từ nhà cung cấp.
+        {t("Quét thử của cộng tác viên không nằm ở đây (xem trang Hoạt động). “Chưa ghi” chi phí: lần chạy chưa lưu chi phí thật từ nhà cung cấp.")}
       </p>
     </section>
   );
 }
 
 function GrowthPanel({ growth, groupName, isMock }: { growth: GrowthRow[] | null; groupName: (id: string) => string; isMock: boolean }) {
+  const t = useT();
+  const { fmt, dateVi } = useFmt();
   return (
     <section className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 md:p-6">
-      <h2 className="text-lg font-bold text-stone-900">Bài tăng tương tác mạnh nhất (khoảng 7 ngày gần nhất)</h2>
+      <h2 className="text-lg font-bold text-stone-900">{t("Bài tăng tương tác mạnh nhất (khoảng 7 ngày gần nhất)")}</h2>
       <p className="text-sm text-stone-500">
-        Câu hỏi 3: bài nào đang có biểu hiện tương tác mạnh nhất? Chỉ tính bài liên quan hoặc chưa rõ, còn tồn tại, có lần đo trong 14 ngày qua.
+        {t("Câu hỏi 3: bài nào đang có biểu hiện tương tác mạnh nhất? Chỉ tính bài liên quan hoặc chưa rõ, còn tồn tại, có lần đo trong 14 ngày qua.")}
       </p>
       {growth === null ? (
         <p className="text-sm text-stone-600 mt-3 rounded-lg bg-stone-50 p-3">
-          Danh sách bài kèm đường dẫn chỉ dành cho nghiên cứu viên, theo nguyên tắc hạn chế người xem dữ liệu liên kết.
+          {t("Danh sách bài kèm đường dẫn chỉ dành cho nghiên cứu viên, theo nguyên tắc hạn chế người xem dữ liệu liên kết.")}
         </p>
       ) : growth.length === 0 ? (
-        <p className="text-sm text-stone-500 py-6 text-center">Chưa có bài nào đủ hai lần đo cách nhau từ 6 ngày.</p>
+        <p className="text-sm text-stone-500 py-6 text-center">{t("Chưa có bài nào đủ hai lần đo cách nhau từ 6 ngày.")}</p>
       ) : (
         <div className="overflow-x-auto mt-3">
           <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="text-left text-stone-500 border-b border-stone-200">
                 <th className="py-2 pr-3">#</th>
-                <th className="py-2 pr-3">Bài</th>
-                <th className="py-2 pr-3 text-right">Tăng thêm</th>
-                <th className="py-2 pr-3 text-right">Mỗi ngày</th>
-                <th className="py-2 pr-3 text-right">Tương tác hiện tại</th>
-                <th className="py-2 pr-3 text-right">Số lần đo</th>
+                <th className="py-2 pr-3">{t("Bài")}</th>
+                <th className="py-2 pr-3 text-right">{t("Tăng thêm")}</th>
+                <th className="py-2 pr-3 text-right">{t("Mỗi ngày")}</th>
+                <th className="py-2 pr-3 text-right">{t("Tương tác hiện tại")}</th>
+                <th className="py-2 pr-3 text-right">{t("Số lần đo")}</th>
                 <th className="py-2 pr-3"></th>
               </tr>
             </thead>
@@ -538,10 +559,10 @@ function GrowthPanel({ growth, groupName, isMock }: { growth: GrowthRow[] | null
                   <td className="py-2 pr-3 font-bold text-stone-700">{i + 1}</td>
                   <td className="py-2 pr-3 max-w-md">
                     <p className="text-xs text-stone-500">
-                      {PLATFORM_VI[g.platform] ?? g.platform} · {g.group_id ? groupName(g.group_id) : "chưa xếp nhóm"} · đăng {dateVi(g.published_at)}
-                      {g.relevance === "UNCLEAR" && <span className="ml-1 text-amber-700 font-semibold">· chưa rõ, chờ xác minh</span>}
+                      {PLATFORM_VI[g.platform] ?? g.platform} · {g.group_id ? groupName(g.group_id) : t("chưa xếp nhóm")} {t("· đăng {v0}", { v0: dateVi(g.published_at) })}
+                      {g.relevance === "UNCLEAR" && <span className="ml-1 text-amber-700 font-semibold">{t("· chưa rõ, chờ xác minh")}</span>}
                     </p>
-                    <p className="text-stone-800 line-clamp-2">{g.text_preview || "(không có nội dung chữ)"}</p>
+                    <p className="text-stone-800 line-clamp-2">{g.text_preview || t("(không có nội dung chữ)")}</p>
                   </td>
                   <td className="py-2 pr-3 text-right tabular-nums font-semibold">+{fmt(g.gain)}</td>
                   <td className="py-2 pr-3 text-right tabular-nums">{fmt(g.gain_per_day)}</td>
@@ -549,7 +570,7 @@ function GrowthPanel({ growth, groupName, isMock }: { growth: GrowthRow[] | null
                   <td className="py-2 pr-3 text-right tabular-nums">{fmt(g.n_snapshots)}</td>
                   <td className="py-2 pr-3 text-right">
                     <a href={g.post_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-emerald-700 font-semibold whitespace-nowrap">
-                      Mở <ExternalLink className="w-3.5 h-3.5" />
+                      {t("Mở")} <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </td>
                 </tr>
@@ -559,8 +580,7 @@ function GrowthPanel({ growth, groupName, isMock }: { growth: GrowthRow[] | null
         </div>
       )}
       <p className="text-xs text-stone-500 mt-3">
-        <strong>Lưu ý:</strong> tương tác = like + bình luận + chia sẻ. Đây là danh sách <em>đề xuất xem xét</em> — nghiên cứu viên phải xem từng bài trước khi đưa vào
-        danh sách chuyển tuyến.{isMock && " Với dữ liệu giả, đường dẫn bài là giả và không mở được."}
+        <strong>{t("Lưu ý:")}</strong> {t("tương tác = like + bình luận + chia sẻ. Đây là danh sách")} <em>{t("đề xuất xem xét")}</em> {t("— nghiên cứu viên phải xem từng bài trước khi đưa vào danh sách chuyển tuyến.")}{isMock && t(" Với dữ liệu giả, đường dẫn bài là giả và không mở được.")}
       </p>
     </section>
   );

@@ -2,8 +2,10 @@ import { Settings } from "lucide-react";
 import SettingsForm from "@/components/SettingsForm";
 import HelpLink from "@/components/HelpLink";
 import { getSystemSettings } from "@/app/actions/system-settings";
+import { getT } from "@/lib/i18n/server";
 
 export default async function SettingsPage() {
+  const t = await getT();
   const s = await getSystemSettings();
 
   return (
@@ -14,8 +16,8 @@ export default async function SettingsPage() {
             <Settings className="w-6 h-6 text-indigo-700" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">Cấu hình Hệ thống</h1>
-            <p className="text-stone-500 mt-1">Khoá kết nối Apify và OpenRouter dùng cho quét chính thức.</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">{t("Cấu hình Hệ thống")}</h1>
+            <p className="text-stone-500 mt-1">{t("Khoá kết nối Apify, Social Fetch và OpenRouter dùng cho quét chính thức.")}</p>
             <HelpLink slug="quan-tri/cau-hinh" className="mt-1" />
           </div>
         </div>
