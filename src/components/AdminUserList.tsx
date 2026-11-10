@@ -96,7 +96,7 @@ export default function AdminUserList({ initialUsers }: { initialUsers: any[] })
           </div>
           <div className="flex-1">
             <label className="block text-xs font-semibold text-stone-700 mb-1">{t("Mật khẩu tạm")}</label>
-            <input type="password" name="password" minLength={6} required className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder={t("Tối thiểu 6 ký tự")} />
+            <input type="password" name="password" minLength={6} className="w-full px-3 py-2 text-sm border border-stone-300 rounded-lg" placeholder={t("Để trống nếu dùng đăng nhập Google")} />
           </div>
           <div className="pb-2">
             <label className="flex items-center gap-2 cursor-pointer">

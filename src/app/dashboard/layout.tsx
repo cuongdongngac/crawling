@@ -40,6 +40,11 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
+  // Chỉ tài khoản do quản trị viên tạo trước (có hồ sơ) mới vào được.
+  if (!profile) {
+    redirect("/login?error=not_invited");
+  }
+
   const isAdmin = profile?.is_admin === true;
   // Vai nghiên cứu viên (dữ liệu, kết luận) — độc lập với quản trị (vận hành).
   // Chưa chạy migration 2026-11-02 (chưa có cột) thì tạm coi quản trị viên là nghiên cứu viên như trước.

@@ -14,8 +14,8 @@ Từ khóa chung như “vape” trả về nội dung toàn cầu. Dùng từ l
 ### Hệ thống có biết tôi quét gì không?
 Có ghi nhật ký hoạt động (thời điểm, từ khóa, số bài, chi phí) để đánh giá theo chất lượng đề xuất. **Không** lưu nội dung bài của quét thử và **không** lưu API key.
 
-### Tôi quên mật khẩu / không đăng nhập được?
-Liên hệ điều phối viên tỉnh hoặc quản trị viên để được cấp lại.
+### Tôi đăng nhập bằng gì?
+Đăng nhập bằng **tài khoản Google** đã được quản trị viên cấp quyền — không cần nhớ mật khẩu. Nếu báo “chưa được cấp quyền”, liên hệ điều phối viên tỉnh hoặc quản trị viên để được thêm tài khoản.
 
 ### Trên iPhone, vì sao phải đăng nhập lại sau khi cài?
 Ứng dụng cài từ Safari giữ phiên đăng nhập riêng. Chỉ cần đăng nhập một lần trong ứng dụng.

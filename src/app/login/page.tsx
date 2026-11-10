@@ -1,100 +1,80 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { ArrowLeft, KeyRound, Mail, Shield } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Shield } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n/client";
 import LanguageSwitch from "@/components/LanguageSwitch";
 
+function GoogleLogo() {
+  return (
+    <svg className="w-5 h-5 shrink-0" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z" />
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.3-.4-3.5z" />
+    </svg>
+  );
+}
+
 function LoginForm() {
   const t = useT();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
+
   const searchParams = useSearchParams();
   const setupSuccess = searchParams.get("setup") === "success";
+  const err = searchParams.get("error");
 
-  const router = useRouter();
   const supabase = createClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGoogle = async () => {
     setLoading(true);
-    setError(null);
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        queryParams: { prompt: "select_account" },
+      },
     });
-
-    if (error) {
-      setError(t("Sai email hoặc mật khẩu."));
-      setLoading(false);
-    } else {
-      window.location.href = "/dashboard";
-    }
+    if (error) setLoading(false);
   };
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit}>
+    <div className="space-y-5">
       {setupSuccess && (
         <div className="bg-emerald-50 text-emerald-800 text-sm p-4 rounded-lg border border-emerald-200 font-medium text-center">
           {t("Khởi tạo Admin thành công! Vui lòng đăng nhập.")}
         </div>
       )}
-      
-      {error && (
+
+      {err === "not_invited" && (
         <div className="bg-red-50 text-red-700 text-sm p-3 rounded-lg border border-red-100 text-center">
-          {t(error)}
+          {t("Tài khoản Google này chưa được cấp quyền truy cập. Vui lòng liên hệ quản trị viên.")}
         </div>
       )}
 
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Email</label>
-          <div className="relative flex items-center">
-            <Mail className="absolute left-3.5 w-5 h-5 text-stone-400" />
-            <input
-              type="email"
-              required
-              className="w-full pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+      {err === "oauth" && (
+        <div className="bg-red-50 text-red-700 text-sm p-3 rounded-lg border border-red-100 text-center">
+          {t("Đăng nhập bằng Google thất bại. Vui lòng thử lại.")}
         </div>
+      )}
 
-        <div>
-          <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">{t("Mật khẩu")}</label>
-          <div className="relative flex items-center">
-            <KeyRound className="absolute left-3.5 w-5 h-5 text-stone-400" />
-            <input
-              type="password"
-              required
-              className="w-full pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
-              placeholder={t("Nhập mật khẩu")}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
+      <Button
+        type="button"
+        onClick={handleGoogle}
+        disabled={loading}
+        className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-6 rounded-xl transition-all shadow-md hover:shadow-lg gap-2.5"
+      >
+        <GoogleLogo />
+        {loading ? t("Đang chuyển hướng tới Google...") : t("Đăng nhập bằng Google")}
+      </Button>
 
-      <div className="pt-2">
-        <Button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-stone-900 hover:bg-stone-800 text-white font-bold py-6 rounded-xl transition-all shadow-md hover:shadow-lg"
-        >
-          {loading ? t("Đang xử lý...") : t("Đăng nhập")}
-        </Button>
-      </div>
-    </form>
+      <p className="text-xs text-stone-500 text-center leading-relaxed">
+        {t("Dùng tài khoản Google đã được quản trị viên cấp quyền. Hệ thống không cho tự đăng ký.")}
+      </p>
+    </div>
   );
 }
 

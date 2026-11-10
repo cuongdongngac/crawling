@@ -82,17 +82,19 @@ export default function SetupPage() {
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                 placeholder="admin@vpha.org"
               />
+              <p className="text-xs text-stone-500 mt-1">
+                {t("Dùng email Google của quản trị viên để đăng nhập.")}
+              </p>
             </div>
             
             <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1">{t("Mật khẩu")}</label>
+              <label className="block text-sm font-semibold text-stone-700 mb-1">{t("Mật khẩu tạm")}</label>
               <input
                 type="password"
                 name="password"
-                required
                 minLength={6}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
-                placeholder={t("Tối thiểu 6 ký tự")}
+                placeholder={t("Để trống nếu dùng đăng nhập Google")}
               />
             </div>
           </div>

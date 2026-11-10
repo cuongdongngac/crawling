@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { requireAdmin, PROVINCES } from "@/lib/auth/guards";
+import { randomPassword } from "@/lib/auth/password";
 
 async function getAdminClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -18,12 +19,13 @@ async function getAdminClient() {
 
 export async function adminCreateUser(formData: FormData) {
   const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
+  // Đăng nhập bằng Google: mật khẩu chỉ là chỗ dữ liệu bắt buộc, không ai dùng.
+  const password = formData.get("password")?.toString() || randomPassword();
   const isAdminStr = formData.get("is_admin")?.toString();
   const isAdmin = isAdminStr === "true";
   const isResearcher = formData.get("is_researcher")?.toString() === "true";
 
-  if (!email || !password) return { error: "Email và mật khẩu là bắt buộc." };
+  if (!email) return { error: "Email là bắt buộc." };
 
   try {
     await requireAdmin(); // chỉ quản trị viên
@@ -112,8 +114,8 @@ export async function resetUserPassword(userId: string, newPassword: string) {
   try {
     await requireAdmin(); // chỉ quản trị viên
     const adminClient = await getAdminClient();
-    const { error } = await adminClient.auth.admin.updateUserById(userId, { 
-      password: newPassword 
+    const { error } = await adminClient.auth.admin.updateUserById(userId, {
+      password: newPassword
     });
 
     if (error) return { error: error.message };

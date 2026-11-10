@@ -2,11 +2,12 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
+import { randomPassword } from "@/lib/auth/password";
 
 export async function checkHasUsers() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceRoleKey) return false;
-  
+
   const { createClient: createAdminClient } = await import("@supabase/supabase-js");
   const adminClient = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,21 +18,22 @@ export async function checkHasUsers() {
   const { count, error } = await adminClient
     .from("profiles")
     .select("*", { count: "exact", head: true });
-    
+
   if (error) {
     console.error("Error checking users:", error);
     return false;
   }
-  
+
   return (count || 0) > 0;
 }
 
 export async function setupFirstAdmin(formData: FormData) {
   const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
+  // Đăng nhập bằng Google: mật khẩu chỉ là chỗ dữ liệu bắt buộc, không ai dùng.
+  const password = formData.get("password")?.toString() || randomPassword();
 
-  if (!email || !password) {
-    return { error: "Email và mật khẩu là bắt buộc." };
+  if (!email) {
+    return { error: "Email là bắt buộc." };
   }
 
   // 1. Kiểm tra lại lần cuối xem bảng có trống không

@@ -14,8 +14,8 @@ A generic keyword like "vape" returns global content. Use Vietnamese slang/hasht
 ### Does the system know what I scanned?
 It logs activity (time, keywords, number of posts, cost) to assess based on suggestion quality. It does **not** store post content from trial scans and does **not** store the API key.
 
-### I forgot my password / can't sign in?
-Contact the provincial coordinator or an administrator to have it reset.
+### How do I sign in?
+Sign in with the **Google account** an administrator has granted access to — there is no password to remember. If you see "not granted access", contact the provincial coordinator or an administrator to add your account.
 
 ### On iPhone, why do I have to sign in again after installing?
 An app installed from Safari keeps its own sign-in session. You only need to sign in once in the app.
