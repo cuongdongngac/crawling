@@ -49,6 +49,7 @@ const hashAuthor = authorHash;
 // Pipeline dùng chung: lọc ngôn ngữ + dedupe (giống CLI test-adapter-core.js)
 const { runPostPipeline } = require("./lib/post-pipeline.cjs");
 const { resolvePublishedAt } = require("./lib/resolve-published-at.cjs");
+const { clusterKey } = require("./lib/content-cluster.cjs");
 // Ngôn ngữ giữ lại mặc định. "other" = caption chỉ toàn hashtag không dấu (vd "#vape #pod"),
 // giữ lại để không mất bài Việt gõ không dấu. Ghi đè bằng apify_actors.default_config.allow_langs.
 const DEFAULT_ALLOW_LANGS = ["vi", "other"];
@@ -656,6 +657,7 @@ async function ingestRun(run, cfgRuntime, parsedItems) {
         published_at: pub.iso,
         raw_text: n.raw_text,
         raw_payload: n.raw_payload,
+        content_cluster_id: clusterKey(n.raw_text || ""),
         is_flagged: !pub.valid,
         flag_reason: pub.valid ? null : "published_at thiếu/không hợp lệ — cần kiểm chứng ngày đăng",
       });
