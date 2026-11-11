@@ -137,6 +137,81 @@ adapters["clockwork/tiktok-scraper"] = {
   },
 };
 
+// ---------------- TikTok Hashtag (actor chuyên hashtag, quét chính) ----------------
+// Port từ src/lib/scrapers/adapters/clockworks-tiktok-hashtag.adapter.ts
+adapters["clockworks/tiktok-hashtag-scraper"] = {
+  validate(cfg) {
+    return cfg.hashtags && cfg.hashtags.length ? [] : ["TikTok Hashtag Scraper yêu cầu ít nhất 1 hashtag."];
+  },
+  buildInput(cfg) {
+    const d = cfg.default_config || {};
+    const hashtagTexts = (cfg.hashtags || []).map((h) => String(h.hashtag_text || "").replace(/^#+/, ""));
+    const maxItems = Math.min(Math.max(cfg.max_items_runtime ?? d.maxItems ?? 50, 1), 1000);
+    const input = {
+      hashtags: hashtagTexts,
+      maxItems,
+      shouldDownloadVideos: d.shouldDownloadVideos ?? false,
+      shouldDownloadCovers: d.shouldDownloadCovers ?? false,
+      enableCoversOutput: d.enableCoversOutput ?? false,
+      enableWatermarkVideo: d.enableWatermarkVideo ?? false,
+      maxConcurrency: d.maxConcurrency ?? 5,
+      proxy: d.proxy ?? { useApifyProxy: true, apifyProxyGroups: ["RESIDENTIAL"] },
+      ...(d.extra || {}),
+    };
+    return { input, warnings: [] };
+  },
+  parseOne(raw, idx, cfg) {
+    const search_ids = (cfg.hashtags || []).map((h) => h.hashtag_id);
+    const fallback = {
+      normalized: null,
+      caption_hashtags: [],
+      search_hashtag_ids: search_ids,
+      discovery_order: idx + 1,
+    };
+    if (!raw || typeof raw !== "object") return fallback;
+    if (!raw.webVideoUrl && !raw.id) return fallback;
+    const authorId = raw.authorMeta?.id ?? raw.authorMeta?.secUid ?? raw.authorMeta?.uniqueId;
+    if (!authorId) return fallback;
+    const caption = String(raw.text ?? raw.desc ?? "");
+    const captionTags = extractTags(caption);
+    if (Array.isArray(raw.hashtags)) {
+      for (const tagObj of raw.hashtags) {
+        const name = String(tagObj?.name ?? tagObj ?? "");
+        if (!name) continue;
+        const norm = ("#" + name.trim().toLowerCase()).replace(/^##+/, "#");
+        if (norm.length > 1 && !captionTags.includes(norm)) captionTags.push(norm);
+      }
+    }
+    const url = raw.webVideoUrl ?? `https://www.tiktok.com/@${raw.authorMeta?.name ?? "u"}/video/${raw.id}`;
+    return {
+      normalized: {
+        post_url: url,
+        platform: "TIKTOK",
+        native_post_id: String(raw.id),
+        author_native_id: String(authorId),
+        author_display: raw.authorMeta?.nickName ?? raw.authorMeta?.name ?? null,
+        author_avatar: raw.authorMeta?.avatar ?? raw.authorMeta?.originalAvatarUrl ?? null,
+        published_at: raw.createTimeISO
+          ? String(raw.createTimeISO)
+          : raw.createTime
+            ? new Date(Number(raw.createTime) * 1000).toISOString()
+            : null,
+        raw_text: caption,
+        raw_payload: raw,
+        metrics: {
+          view_count: safeNum(raw.playCount),
+          like_count: safeNum(raw.diggCount),
+          comment_count: safeNum(raw.commentCount),
+          share_count: safeNum(raw.shareCount),
+        },
+      },
+      caption_hashtags: captionTags,
+      search_hashtag_ids: search_ids,
+      discovery_order: idx + 1,
+    };
+  },
+};
+
 // ---------------- Facebook Page ----------------
 adapters["apify/facebook-pages-scraper"] = {
   // (không dùng hàm validate nữa — gộp cảnh báo vào buildInput 1 lần không lặp)

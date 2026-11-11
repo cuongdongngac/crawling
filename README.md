@@ -1,6 +1,6 @@
 # VPHA Social Listening M&E (Web)
 
-Hệ thống **Monitory & Evaluation (M&E)** giám sát thông tin về thuốc lá điện tử (e-cig / vape) trên mạng xã hội theo phương pháp **Interrupted Time Series (ITS)** quanh ngày Nghị định 13/2023/NĐ-CP cấm có hiệu lực.
+Hệ thống **Monitory & Evaluation (M&E)** giám sát thông tin về thuốc lá điện tử (e-cig / vape) trên mạng xã hội theo phương pháp **Interrupted Time Series (ITS)** quanh các mốc cấm (NQ 173/2024, NĐ 371/2025, NĐ 90/2026). Lưu ý: Nghị định 13/2023 là về bảo vệ dữ liệu cá nhân, không phải lệnh cấm.
 
 > **Triết lý dự án (đã thống nhất):**
 >
