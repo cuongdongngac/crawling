@@ -48,6 +48,7 @@ const hashPostId = postId;
 const hashAuthor = authorHash;
 // Pipeline dùng chung: lọc ngôn ngữ + dedupe (giống CLI test-adapter-core.js)
 const { runPostPipeline } = require("./lib/post-pipeline.cjs");
+const { resolvePublishedAt } = require("./lib/resolve-published-at.cjs");
 // Ngôn ngữ giữ lại mặc định. "other" = caption chỉ toàn hashtag không dấu (vd "#vape #pod"),
 // giữ lại để không mất bài Việt gõ không dấu. Ghi đè bằng apify_actors.default_config.allow_langs.
 const DEFAULT_ALLOW_LANGS = ["vi", "other"];
@@ -558,9 +559,7 @@ async function ingestRun(run, cfgRuntime, parsedItems) {
     if (!n.post_url) continue;
     const pid = postId(n.post_url);
     const ahash = authorHash(n.platform, n.author_native_id);
-    const nowPubISO = n.published_at && !Number.isNaN(new Date(n.published_at).getTime())
-      ? n.published_at
-      : new Date().toISOString();
+    const pub = resolvePublishedAt(n.published_at);
 
     // ----- posts -----
     const { error: selErr } = await supabase
@@ -579,10 +578,11 @@ async function ingestRun(run, cfgRuntime, parsedItems) {
         platform: n.platform,
         post_url: n.post_url,
         author_hash: ahash,
-        published_at: nowPubISO,
+        published_at: pub.iso,
         raw_text: n.raw_text,
         raw_payload: n.raw_payload,
-        is_flagged: false,
+        is_flagged: !pub.valid,
+        flag_reason: pub.valid ? null : "published_at thiếu/không hợp lệ — cần kiểm chứng ngày đăng",
       });
       if (!insErr) {
         insertedPosts += 1;
